@@ -1,0 +1,198 @@
+---
+title: "Exploratory Spatial Data Analysis"
+author: "Alessandro Samuel-Rosa"
+date: "4 July 2016"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Conventional Soil Map
+
+The conventional soil map that we want to model and extrapolate to poorly accessible areas, taken as our 
+target stochastic variable *C*, was submitted to a topology check. All gaps (n = 8) and invalid geometries 
+(n = 17) were manually fixed, except for the missfit between the soil map boundary and the boundary of the 
+accessible area. The resulting, topologically correct, soil map is shown below.
+
+```{r}
+# Load soil map
+soil_map <- raster::shapefile("/home/lgcs-mds/projects/urucu/data/vector/MCS_Simplif_Poligon_correct.shp")
+soil_map$UM <- as.factor(soil_map$UM)
+map <- sp::spplot(
+  soil_map, "UM", col.regions = c("firebrick1", "deepskyblue", "lightgray", "khaki"), col = NA,
+  main = "Conventional target soil map", aspect = "iso", scales = list(draw = TRUE))
+names(map$legend) <- "inside"
+map$legend$inside$x <- 0.50
+map$legend$inside$y <- 0.15
+map$legend$inside$args$key$space <- "left"
+map
+```
+
+The area covered by each soil mapping unit in the target conventional soil map is show below. Mapping unit 
+CXal has the largest area, while PACd has the smallest area.
+
+```{r}
+soil_map_areas <- data.frame(area = rgeos::gArea(soil_map, byid = TRUE), um = soil_map$UM)
+soil_map_areas$area <- soil_map_areas$area / 10000
+barplot(c(by(soil_map_areas$area, soil_map_areas$um, sum)),
+        main = "Area of each mapping unit (ha)")
+```
+
+# Field Calibration Points
+
+The database contains three datasets with field soil calibration data. The first is composed of data
+from n = 119 complete soil profile description. The second contains soil data from n = 199 boreholes,
+one of which lies outside the accessible area. Both of these datasets were used as calibration soil
+data to build the conventional soil map. The third dataset is composed of soil data from n = 66 
+boreholes. This last dataset was originaly used for validating the conventional soil map.
+
+```{r}
+# Load accessible area
+area <- raster::shapefile("/home/lgcs-mds/projects/urucu/data/vector/Lim10000Detal.shp")
+
+# Complete soil profile descriptions (n = 119)
+profiles <- raster::shapefile("/home/lgcs-mds/projects/urucu/data/vector/Perfis.shp")
+sp::spplot(
+  area, 1, aspect = "iso", scales = list(draw = TRUE), colorkey = FALSE, col.regions = "gray",
+  main = "Complete soil profile descriptions (n = 119)",
+  panel = function(x, y, ...) {
+    sp::panel.polygonsplot(x, y, ...)
+    lattice::panel.points(sp::coordinates(profiles), pch = 21, cex = 0.5)
+    })
+
+# Borehole soil descriptions (n = 199)
+# Identify point lying outside the accessible area
+boreholes <- raster::shapefile("/home/lgcs-mds/projects/urucu/data/vector/Tradagens.shp")
+in_or_out <- which(is.na(sp::over(boreholes, area)$OBJECTID))
+sp::spplot(
+  area, 1, aspect = "iso", scales = list(draw = TRUE), colorkey = FALSE, col.regions = "gray",
+  main = "Borehole soil descriptions (n = 199)",
+  panel = function(x, y, ...) {
+    sp::panel.polygonsplot(x, y, ...)
+    lattice::panel.points(sp::coordinates(boreholes), pch = 21, cex = 0.5)
+    lattice::panel.points(sp::coordinates(boreholes[in_or_out, 1:2]), pch = 20, cex = 0.5, col = "red")
+    })
+
+# Boreholes used for validation (n = 66)
+validation <- raster::shapefile("/home/lgcs-mds/projects/urucu/data/vector/Tradagens_Validacao.shp")
+sp::spplot(
+  area, 1, aspect = "iso", scales = list(draw = TRUE), colorkey = FALSE, col.regions = "gray",
+  main = "Boreholes used for validation (n = 66)",
+  panel = function(x, y, ...) {
+    sp::panel.polygonsplot(x, y, ...)
+    lattice::panel.points(sp::coordinates(validation), pch = 21, cex = 0.5)
+    })
+```
+
+For the purpose of our study, I propose removing the point lying outside the accessible area. Merging the 
+three datasets would result in a final calibration dataset with n = 383 points.
+
+```{r}
+# Field calibration dataset (n = 383)
+field <- 
+  as.data.frame(
+    rbind(sp::coordinates(profiles), sp::coordinates(boreholes)[-in_or_out, ], 
+          sp::coordinates(validation)))
+sp::coordinates(field) <- ~ coords.x1 + coords.x2
+sp::proj4string(field) <- sp::proj4string(profiles)
+sp::spplot(
+  area, 1, aspect = "iso", scales = list(draw = TRUE), colorkey = FALSE, col.regions = "gray",
+  main = "Field calibration dataset (n = 383)",
+  panel = function(x, y, ...) {
+    sp::panel.polygonsplot(x, y, ...)
+    lattice::panel.points(sp::coordinates(field), pch = 21, cex = 0.5)
+    })
+```
+
+The number of field calibration sample points in each soil mapping unit us shown below.
+
+```{r}
+field_cal <- sp::over(field, soil_map)
+plot(field_cal$UM, ylim = c(0, 180), main = "Points per mapping unit", cex.axis = 0.8)
+text(1:4, summary(field_cal$UM) + 10, summary(field_cal$UM))
+```
+
+# Random Calibration Points
+
+In one of the scenarios that we simulate, the conventional target soil map is all that we have available. In 
+order to model it and extrapolate its spatial structure to poorly accessible areas, we use a stratified random
+sample composed of n ~ 2000 points.
+
+```{r}
+# Stratified random sample (n ~ 2000)
+set.seed(2001)
+random <- sp::spsample(soil_map, n = 2000, type = "stratified")
+sp::spplot(
+  area, 1, aspect = "iso", scales = list(draw = TRUE), colorkey = FALSE, col.regions = "gray",
+  main = "Stratified random sample (n ~ 2000)",
+  panel = function(x, y, ...) {
+    sp::panel.polygonsplot(x, y, ...)
+    lattice::panel.points(sp::coordinates(random), pch = 21, cex = 0.1)
+    })
+```
+
+The resulting number of sample points alocated in each soil mapping unit is shown below. The larger the area
+covered by a mapping unit, the larger the number of sample points.
+
+```{r}
+random_cal <- sp::over(random, soil_map)
+plot(random_cal$UM, ylim = c(0, 1000), main = "Points per mapping unit")
+text(1:4, summary(random_cal$UM) + 50, summary(random_cal$UM))
+```
+
+# Expert Calibration Points
+
+The last calibration dataset is composed of soil data from n = 847 points manually located by an expert on the
+computer screen. The spatial distribution of these sample points is shown below.
+
+```{r}
+# Expert calibration points (n = 847)
+expert <- raster::shapefile("/home/lgcs-mds/projects/urucu/data/vector/Trein_Classes.shp")
+
+# See how many are outside the accessible area
+in_or_out <- sp::over(expert, area)
+sp::spplot(
+  area, 1, aspect = "iso", scales = list(draw = TRUE), colorkey = FALSE, col.regions = "gray",
+  main = "Expert calibration points (n = 847)",
+  panel = function(x, y, ...) {
+    sp::panel.polygonsplot(x, y, ...)
+    lattice::panel.points(sp::coordinates(expert), pch = 21, cex = 0.5)
+    lattice::panel.points(sp::coordinates(expert[which(is.na(in_or_out$OBJECTID)), ]),
+                          pch = 20, cex = 0.5, col = "red")
+    
+    })
+in_or_out <- length(which(is.na(in_or_out$OBJECTID))) / length(in_or_out$OBJECTID)
+```
+
+This dataset has some features that require our attention. First, `r round(in_or_out * 100)` percent of the 
+points lie outside the accessible area (red points above). Second, the expert assigned the sample points to
+five classes, while our target variable (the conventional soil map) has only four classes (mapping units). A
+visual inspection of the soil map and classes attributed to the sample points suggest that classes 2 and 3 are 
+equivalent to GXvd.
+
+```{r}
+sp::spplot(
+  soil_map, "UM", aspect = "iso", scales = list(draw = FALSE), colorkey = FALSE, 
+  col.regions = c("firebrick1", "deepskyblue", "lightgray", "khaki"), col = NA,
+  main = "Zoom in the expert calibration points", ylim = c(9460143, 9461942), xlim = c(240125, 243075),
+  panel = function(x, y, ...) {
+    sp::panel.polygonsplot(x, y, ...)
+    lattice::panel.points(sp::coordinates(expert), pch = 20)
+    lattice::panel.text(sp::coordinates(expert)[, 1], sp::coordinates(expert)[, 2], 
+                        expert@data$MDS, pos = 2)
+    })
+```
+
+If the match between attributes classes and my guesses are correct, then we can compute the number of points
+per mapping unit. Again, the number of points is correlated with the area of the mapping unit.
+
+```{r}
+expert$UM <- as.factor(expert$MDS)
+levels(random_cal$UM)
+levels(expert$UM) <- levels(random_cal$UM)[c(1, 2, 2, 3, 4)]
+plot(expert$UM, ylim = c(0, 320), main = "Points per mapping unit")
+text(1:4, summary(expert$UM) + 25, summary(expert$UM))
+
+```

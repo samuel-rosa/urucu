@@ -201,37 +201,89 @@ text(1:4, summary(expert$UM) + 25, summary(expert$UM))
 
 # Covariates
 
-Covariate data matches the description presented by @Villela2013. However, there are two details worth 
-mentioning. First, it appears that the aspect data was used by @Villela2013 as is, i.e. without linearising its
-values. Linearisation is necessary because aspect is a circular variable, where its minimum (0º) and maximum
-(360º) values have the same physical meaning. Linearisation can be done using the following equation:
+There are p = 11 covariates in the database: elevation,  slope,  curvature, plan curvature, profile curvature,
+downslope flow length, upslope flow length, flow accumulation, flow direction, aspect and topographic wetness
+index. All covariate data in my possession matches the description presented by @Villela2013. However, there 
+are some details worth mentioning regarding the data structure and the selection of the covariates.
+
+## Aspect and flow direction data
+
+It appears that the **aspect** data was used as is, i.e. without linearising its values. Linearisation is 
+necessary because aspect is a circular variable: its minimum (0º) and maximum (360º) values have the 
+same physical meaning. Linearisation can be done using the following equation:
 
 $$northerness = |180 - aspect|$$
 
-were northerness is a variable that indicates the degree of exposition of a surface to the north. I am not 
-aware if and how this could affect the results of our study.
+were **northerness** is a variable that indicates the degree of exposition of a surface to the north. Another 
+solution is to transform the aspect data to categories, i.e. classes of orientation. It is not clear in the
+thesis if the aspect data was used as a continuous or as a categorical covariate.
 
-The second point is the presence of (possibly) spurious artefacts in the digital elevation model. This can be 
-seen in the curvature and aspect data below. The first is polluted with noise resulting from the use of 
-contour lines to generate the digital elevation model, i.e. the presence of stairs along the slope. This noise
-is a typical feature of digital elevation models produced using contour lines. In general, the solution is to
-use a smoothing filter to remove the noise from the digital elevation model before deriving terrain attributes.
+The reason for using aspect as a covariate is the hypothesis that it could determine the availability of water
+in the environment. I am not sure if this holds for the Amazon region, specially in a study area with a range
+in elevation values of 46-84 m. In general, aspect data has a marked influence on soil and other environmental
+features in higher latitudes, beyond the tropics. As such, I believe there is no pedological basis for using 
+it as a covariate in our study: I suggest dropping it from our dataset.
+
+It is not clear how **flow direction** data was used in the analysis. It appears that this covariate was used
+as is, i.e. taking its finite set of eight integer values (1, 2, 4, 8, 16, 32, 64, and 128) as a continuous
+covariate, when the correct approach would be to use this covariate as a categorical covariate. However, like
+aspect, I believe there is no pedological basis for using flow direction as a covariate in our study. Actually,
+I think flow direction is used more to derive other, more pedologically sound, covariates, than as a covariate 
+itself. As such, I suggest dropping flow direction from our dataset.
+
+Finally, the northerness data gives evidence of the presence of (possibly spurious) depressions in the digital
+elevation model at places of high elevation (see figure bellow). I believe that these depressions were created
+due to the presence of contour lines with erroneous elevation values at some of the higher parts of the
+landscape. As such, higher elevations may present high values of the topographic wetness index. These 
+depressions in the digital elevation model could represent true, existing depressions. However, I am not aware
+of the existence of such depressions at higher elevations in the study area.
+
+![Artefacts in elevation data as suggested by northerness data. The transect (red line) shows the change in 
+elevation values in a depression. ](~/projects/urucu/res/fig/north_sinks.png)
+
+## Curvature data
+
+Three covariates describing the landscape curvature were used in the study: horizontal, vertical and compound.
+Because these covariates describe very similar features of the landscape, their correlation is generally very 
+high. As a consequence, it is common to use only one of them as a covariate in soil prediction models. 
+Eliminating redundant covariates is an important step in model calibration to avoid the undesirable 
+consequences of multicollinearity. Stepwise procedures are inefficient in dealing with multi-collinear 
+covariates. Due to the multiple comparisons, stepwise procedures do not prevent a poor covariate from entering
+the model -- the chance of including a covariate with low discriminatory power is much larger than 
+significance level (5%). As such, I suggest using only **compound curvature** as a covariate in our study.
+
+Curvature data gives further evidence for the presence of possibly spurious artefacts in the digital elevation
+model (see figure below). There is a considerable amount of noise in the form of stairs along the slopes 
+resulting from the use of contour lines to generate the digital elevation model. This noise is a typical 
+feature of digital elevation models produced using contour lines. In general, the solution is to use a 
+smoothing filter to remove the noise from the digital elevation model before deriving terrain attributes. I am
+not aware if or how these artefacts could damage the performance of our soil prediction models. However, it 
+could be the reason for the noise (salt-and-pepper) observed in the spatial predictions made by @Villela2013,
+which were later removed using a majority filter.
 
 ![Noise in curvature data caused by the use of contour lines to compute the digital elevation model. The 
 solution is to use a smoothing filter to remove the noise from the digital elevation model before deriving 
 terrain attributes.](~/projects/urucu/res/fig/curvature_contours.png)
 
-Northerness data gives evidence of the presence of (possibly spurious) depressions in the digital elevation
-model at places of high elevation. Analysing the northerness and curvature data, I believe that these 
-depressions were created due to the presence of contour lines with erroneous elevation values at some of the 
-higher parts of the landscape. As such, higher elevations may present high values of the topographic wetness 
-index. However, these depressions in the digital elevation model could also represent true, existing 
-depressions. I am not aware of the existence of depressions at higher elevations in the study area.
+## Flow length and accumulation
 
-![Artefacts in elevation data as suggested by northerness data. The transect (red line) is shown in the next 
-figure.](~/projects/urucu/res/fig/northerness_artefacts.png)
+Covariates **flow accumulation** and **upslope flow path length** are strongly correlated, the difference
+being that the latter is more efficient in highlighting larger water channels at the lowermost positions of 
+the landscape. Despite of that, both are proxies of the same environmental condition: the potential that the
+different parts of the landscape have of accumulating water. Being strongly correlated, it would be wise to
+include only one of these three covariates in our soil prediction models. As such, I suggest we keep only that
+with the largest pedological meaning and/or correlation with the dependent variable.
 
-![Transect showing the change in elevation values in a depression.](~/projects/urucu/res/fig/sinks.png)
+## Covariates to enter soil prediction models
 
-In both cases, I am not aware if and how these artefacts could damage the performance of our soil prediction 
-models.
+I suggest we use the same set of covariates to enter our soil prediction models. Selection should be done 
+using empirical evidence and pedological knowledge. Accordingly, the following set of covariates could be used:
+
+* elevation
+* slope
+* downslope flow path length
+* compound curvature
+* flow accumulation or upslope flow path length
+* topographic wetness index
+
+

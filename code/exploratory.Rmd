@@ -3,6 +3,7 @@ title: "Exploratory Spatial Data Analysis"
 author: "Alessandro Samuel-Rosa"
 date: "4 July 2016"
 output: pdf_document
+bibliography: /home/lgcs-mds/Dropbox/jabref/biblio.bib
 ---
 
 ```{r setup, include=FALSE}
@@ -13,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 The conventional soil map that we want to model and extrapolate to poorly accessible areas, taken as our 
 target stochastic variable *C*, was submitted to a topology check. All gaps (n = 8) and invalid geometries 
-(n = 17) were manually fixed, except for the missfit between the soil map boundary and the boundary of the 
+(n = 17) were manually fixed, except for the misfit between the soil map boundary and the boundary of the 
 accessible area. The resulting, topologically correct, soil map is shown below.
 
 ```{r}
@@ -46,7 +47,7 @@ The database contains three datasets with field soil calibration data. The first
 from n = 119 complete soil profile description. The second contains soil data from n = 199 boreholes,
 one of which lies outside the accessible area. Both of these datasets were used as calibration soil
 data to build the conventional soil map. The third dataset is composed of soil data from n = 66 
-boreholes. This last dataset was originaly used for validating the conventional soil map.
+boreholes. This last dataset was originally used for validating the conventional soil map.
 
 ```{r}
 # Load accessible area
@@ -133,7 +134,7 @@ sp::spplot(
     })
 ```
 
-The resulting number of sample points alocated in each soil mapping unit is shown below. The larger the area
+The resulting number of sample points allocated in each soil mapping unit is shown below. The larger the area
 covered by a mapping unit, the larger the number of sample points.
 
 ```{r}
@@ -194,5 +195,43 @@ levels(random_cal$UM)
 levels(expert$UM) <- levels(random_cal$UM)[c(1, 2, 2, 3, 4)]
 plot(expert$UM, ylim = c(0, 320), main = "Points per mapping unit")
 text(1:4, summary(expert$UM) + 25, summary(expert$UM))
-
 ```
+
+\newpage
+
+# Covariates
+
+Covariate data matches the description presented by @Villela2013. However, there are two details worth 
+mentioning. First, it appears that the aspect data was used by @Villela2013 as is, i.e. without linearising its
+values. Linearisation is necessary because aspect is a circular variable, where its minimum (0º) and maximum
+(360º) values have the same physical meaning. Linearisation can be done using the following equation:
+
+$$northerness = |180 - aspect|$$
+
+were northerness is a variable that indicates the degree of exposition of a surface to the north. I am not 
+aware if and how this could affect the results of our study.
+
+The second point is the presence of (possibly) spurious artefacts in the digital elevation model. This can be 
+seen in the curvature and aspect data below. The first is polluted with noise resulting from the use of 
+contour lines to generate the digital elevation model, i.e. the presence of stairs along the slope. This noise
+is a typical feature of digital elevation models produced using contour lines. In general, the solution is to
+use a smoothing filter to remove the noise from the digital elevation model before deriving terrain attributes.
+
+![Noise in curvature data caused by the use of contour lines to compute the digital elevation model. The 
+solution is to use a smoothing filter to remove the noise from the digital elevation model before deriving 
+terrain attributes.](~/projects/urucu/res/fig/curvature_contours.png)
+
+Northerness data gives evidence of the presence of (possibly spurious) depressions in the digital elevation
+model at places of high elevation. Analysing the northerness and curvature data, I believe that these 
+depressions were created due to the presence of contour lines with erroneous elevation values at some of the 
+higher parts of the landscape. As such, higher elevations may present high values of the topographic wetness 
+index. However, these depressions in the digital elevation model could also represent true, existing 
+depressions. I am not aware of the existence of depressions at higher elevations in the study area.
+
+![Artefacts in elevation data as suggested by northerness data. The transect (red line) is shown in the next 
+figure.](~/projects/urucu/res/fig/northerness_artefacts.png)
+
+![Transect showing the change in elevation values in a depression.](~/projects/urucu/res/fig/sinks.png)
+
+In both cases, I am not aware if and how these artefacts could damage the performance of our soil prediction 
+models.

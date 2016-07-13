@@ -39,7 +39,8 @@ system("r.info map=aspect")
 # Upslope flow path length
 system(paste("r.in.gdal input=", dir, "comdrenmon.tif output=upslope", sep = ""))
 system("r.info map=upslope")
-system(paste("r.in.gdal input=", dir, "ln_comdrenmon.tif output=ln_upslope", sep = ""))
+cmd <- paste("r.in.gdal --overwrite input=", dir, "ln_comdrenmon.tif output=ln_upslope", sep = "")
+system(cmd)
 system("r.info map=ln_upslope")
 
 # Curvature

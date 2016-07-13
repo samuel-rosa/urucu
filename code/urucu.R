@@ -58,9 +58,90 @@ spgrass6::writeVECT(SDF = cal_field, vname = "cal_field")
 spgrass6::writeVECT(SDF = cal_random, vname = "cal_random")
 spgrass6::writeVECT(SDF = cal_expert, vname = "cal_expert")
 
-# Covariates
-# There are p = 11 covariates:
-# - elevation,  slope,  curvature, plan curvatura, profile curvature, downslope frow length, upslope flow
-#   length, flow accumulation, flow direction, aspect and topographic wetness index.
+# Setup database of calibration points
+maps <- c("aspect", "elevation", "upslope", "ln_upslope", "curvature", "profile_curvature", "plan_curvature",
+          "slope", "downslope", "accumulation", "ln_accumulation", "twi", "northerness",
+          "flow_direction")
+cols <- paste(maps, c(rep("DOUBLE PRECISION", length(maps) - 1), "INT"))
+cols <- paste(cols, collapse = ",")
+cols_samp <- substring(maps, first = 1, last = 10)
 
-# Build Grass GIS database
+# Field calibration
+pts <- "cal_field"
+system(paste("v.info -c ", pts))
+cmd <- paste("v.db.addcol map=", pts, " columns='", cols, "'", sep = "")
+system(cmd)
+system(paste("v.info -c ", pts))
+cmd <- paste("v.what.rast vect=", pts, " raster=", maps, " column=", cols_samp, sep = "")
+lapply(cmd, system)
+system(paste("v.info -c ", pts))
+rm(cmd, pts)
+
+# Random calibration
+pts <- "cal_random"
+system(paste("v.info -c ", pts))
+cmd <- paste("v.db.addcol map=", pts, " columns='", cols, "'", sep = "")
+system(cmd)
+system(paste("v.info -c ", pts))
+cmd <- paste("v.what.rast vect=", pts, " raster=", maps, " column=", cols_samp, sep = "")
+lapply(cmd, system)
+system(paste("v.info -c ", pts))
+rm(cmd, pts)
+
+# Expert calibration
+pts <- "cal_expert"
+system(paste("v.info -c ", pts))
+cmd <- paste("v.db.addcol map=", pts, " columns='", cols, "'", sep = "")
+system(cmd)
+system(paste("v.info -c ", pts))
+cmd <- paste("v.what.rast vect=", pts, " raster=", maps, " column=", cols_samp, sep = "")
+lapply(cmd, system)
+system(paste("v.info -c ", pts))
+rm(cmd, pts)
+
+rm(cols, maps)
+
+# Calibrate soil prediction models ############################################################################
+
+form <- formula(paste("UM ~ ", paste(cols_samp[c(2, 5, 8, 9, 11, 12)], collapse = " + ")))
+
+# Field calibration points
+# Villela2013: 
+# - Calibration: 85.07 %
+# - Validation: 
+cal_field <- spgrass6::readVECT("cal_field")
+cal_field$flow_direc <- as.factor(cal_field$flow_direc)
+cal_field$UM <- as.factor(cal_field$UM)
+
+str(cal_field)
+head(cal_field@data)
+nrow(na.omit(cal_field@data)) - nrow(cal_field@data)
+which(sapply(lapply(cal_field@data, is.na), any))
+
+fit_field <- MASS::lda(form, data = cal_field@data, prior = rep(1, nlevels(cal_field$UM))/nlevels(cal_field$UM))
+fit_field_fitted <- predict(fit_field, newdata = cal_field@data, prior = fit_field$prior)
+sum(diag(table(data.frame(obs = cal_field$UM, fit = fit_field_fitted$class)))) / length(cal_field$UM)
+
+# Expert calibration points
+# - Calibration: 93.89 %
+# - Validation: 
+cal_expert <- spgrass6::readVECT("cal_expert")
+str(cal_expert)
+cal_expert$flow_direc <- as.factor(cal_expert$flow_direc)
+cal_expert$UM <- as.factor(cal_expert$UM)
+fit_expert <- 
+  MASS::lda(form, data = cal_expert@data, prior = rep(1, nlevels(cal_expert$UM))/nlevels(cal_expert$UM))
+fit_expert_fitted <- predict(fit_expert, newdata = cal_expert@data, prior = fit_expert$prior)
+sum(diag(table(data.frame(obs = cal_expert$UM, fit = fit_expert_fitted$class)))) / length(cal_expert$UM)
+
+# Random calibration points
+# - Calibration: 76.11 %
+# - Validation: 
+cal_random <- spgrass6::readVECT("cal_random")
+str(cal_random)
+cal_random$flow_direc <- as.factor(cal_random$flow_direc)
+cal_random$UM <- as.factor(cal_random$UM)
+fit_random <- 
+  MASS::lda(form, data = cal_random@data, prior = rep(1, nlevels(cal_random$UM))/nlevels(cal_random$UM))
+fit_random_fitted <- predict(fit_random, newdata = cal_random@data, prior = fit_random$prior)
+sum(diag(table(data.frame(obs = cal_random$UM, fit = fit_random_fitted$class)))) / length(cal_random$UM)

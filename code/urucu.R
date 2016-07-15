@@ -118,9 +118,28 @@ head(cal_field@data)
 nrow(na.omit(cal_field@data)) - nrow(cal_field@data)
 which(sapply(lapply(cal_field@data, is.na), any))
 
-fit_field <- MASS::lda(form, data = cal_field@data, prior = rep(1, nlevels(cal_field$UM))/nlevels(cal_field$UM))
-fit_field_fitted <- predict(fit_field, newdata = cal_field@data, prior = fit_field$prior)
-sum(diag(table(data.frame(obs = cal_field$UM, fit = fit_field_fitted$class)))) / length(cal_field$UM)
+fit_field <- MASS::lda(
+  form, data = cal_field@data, prior = rep(1, nlevels(cal_field$UM))/nlevels(cal_field$UM), na.action = na.omit)
+fit_field_fitted <- predict(fit_field, newdata = na.omit(cal_field@data), prior = fit_field$prior)
+sum(diag(table(data.frame(obs = na.omit(cal_field@data)$UM, fit = fit_field_fitted$class)))) / 
+  nrow(na.omit(cal_field@data))
+
+# Random calibration points
+# - Calibration: 76.11 %
+# - Validation: 
+cal_random <- spgrass6::readVECT("cal_random")
+cal_random$flow_direc <- as.factor(cal_random$flow_direc)
+cal_random$UM <- as.factor(cal_random$UM)
+
+str(cal_random)
+head(cal_random@data)
+nrow(na.omit(cal_random@data)) - nrow(cal_random@data)
+which(sapply(lapply(cal_random@data, is.na), any))
+
+fit_random <- 
+  MASS::lda(form, data = cal_random@data, prior = rep(1, nlevels(cal_random$UM))/nlevels(cal_random$UM))
+fit_random_fitted <- predict(fit_random, newdata = cal_random@data, prior = fit_random$prior)
+sum(diag(table(data.frame(obs = cal_random$UM, fit = fit_random_fitted$class)))) / length(cal_random$UM)
 
 # Expert calibration points
 # - Calibration: 93.89 %
@@ -133,15 +152,3 @@ fit_expert <-
   MASS::lda(form, data = cal_expert@data, prior = rep(1, nlevels(cal_expert$UM))/nlevels(cal_expert$UM))
 fit_expert_fitted <- predict(fit_expert, newdata = cal_expert@data, prior = fit_expert$prior)
 sum(diag(table(data.frame(obs = cal_expert$UM, fit = fit_expert_fitted$class)))) / length(cal_expert$UM)
-
-# Random calibration points
-# - Calibration: 76.11 %
-# - Validation: 
-cal_random <- spgrass6::readVECT("cal_random")
-str(cal_random)
-cal_random$flow_direc <- as.factor(cal_random$flow_direc)
-cal_random$UM <- as.factor(cal_random$UM)
-fit_random <- 
-  MASS::lda(form, data = cal_random@data, prior = rep(1, nlevels(cal_random$UM))/nlevels(cal_random$UM))
-fit_random_fitted <- predict(fit_random, newdata = cal_random@data, prior = fit_random$prior)
-sum(diag(table(data.frame(obs = cal_random$UM, fit = fit_random_fitted$class)))) / length(cal_random$UM)

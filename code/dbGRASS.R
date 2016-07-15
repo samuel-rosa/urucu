@@ -23,6 +23,102 @@ spgrass6::initGRASS(
   override = TRUE, pid = Sys.getpid())
 system("g.region -d")
 
+# PROCESS ELEVATION DATA ######################################################################################
+dir <- "/home/lgcs-mds/projects/urucu/data/grid/"
+
+# Load raw elevation data
+system(paste("r.in.gdal input=", dir, "mdehc5x5.tif output=mdehc5x5", sep = ""))
+
+# Remove stair-like artifacts sing four window sizes
+size <- c(3, 7, 15, 31)
+cmd <- paste("r.neighbors --o in=mdehc5x5 out=mdehc5x5.smooth.", size, " method=average size=", size, sep = "")
+lapply(cmd, system)
+
+# Derive a profile curvature raster surface from each dem and from the original dem
+# Open data in QGIS to check which was the most efficient filter
+cmd <- paste("r.slope.aspect elevation=mdehc5x5.smooth.", size, " pcurv=pcurv.", size, sep = "")
+parallel::mclapply(cmd, system, mc.cores = 2)
+cmd <- paste("r.slope.aspect elevation=mdehc5x5 pcurv=pcurv", sep = "")
+system(cmd)
+
+# Use the dem filtered using a window size of 3 cells
+
+# Fill sinks repeatedly to guarantee the quality of results
+cmd <- paste(
+  "r.fill.dir --o input=mdehc5x5.smooth.", size[1], " elevation=mdehc5x5.fill.", size[1], 
+  " direction=mdehc5x5.dir.", size[1], " type=answers", sep = "")
+parallel::mclapply(cmd, system, mc.cores = 2)
+cmd <- paste(
+  "r.fill.dir --o input=mdehc5x5.fill.", size[1], " elevation=mdehc5x5.filled.", size[1], 
+  " direction=mdehc5x5.direc.", size[1], " type=answers", sep = "")
+parallel::mclapply(cmd, system, mc.cores = 2)
+cmd <- paste(
+  "r.fill.dir --o input=mdehc5x5.filled.", size[1], " elevation=mdehc5x5.filled2.", size[1], 
+  " direction=mdehc5x5.direc2.", size[1], " type=answers", sep = "")
+parallel::mclapply(cmd, system, mc.cores = 2)
+cmd <- paste(
+  "r.fill.dir --o input=mdehc5x5.filled2.", size[1], " elevation=mdehc5x5.filled3.", size[1], 
+  " direction=mdehc5x5.direc3.", size[1], " type=answers", sep = "")
+parallel::mclapply(cmd, system, mc.cores = 2)
+cmd <- paste(
+  "r.fill.dir --o input=mdehc5x5.filled3.", size[1], " elevation=mdehc5x5.filled4.", size[1], 
+  " direction=mdehc5x5.direc4.", size[1], " type=answers", sep = "")
+parallel::mclapply(cmd, system, mc.cores = 2)
+cmd <- paste(
+  "r.fill.dir --o input=mdehc5x5.filled4.", size[1], " elevation=mdehc5x5.filled5.", size[1], 
+  " direction=mdehc5x5.direc5.", size[1], " type=answers", sep = "")
+parallel::mclapply(cmd, system, mc.cores = 2)
+
+# Export saga grid
+cmd <- paste(
+  "r.out.gdal input=mdehc5x5.filled5.", size[1], " output=/home/lgcs-mds/tmp/tmp_mde_filled.sgrd", sep = "")
+system(cmd)
+
+# Look for flat areas
+# Open in QGIS to check results
+cmd <- paste("saga_cmd ta_preprocessor 0 -DEM /home/lgcs-mds/tmp/tmp_mde_filled.sgrd",
+             "-FLATS /home/lgcs-mds/tmp/flats.sgrd")
+system(cmd)
+
+# Derive a profile curvature raster surface from the selected dem
+# Open data in QGIS to check the efficiency of the algorithm. Compare with location of 
+# flat surfaces.
+cmd <- paste("r.slope.aspect elevation=mdehc5x5.filled5.", size[1], " pcurv=pcurv.filled5.", size[1], sep = "")
+parallel::mclapply(cmd, system, mc.cores = 2)
+
+# Remove flat surfaces
+RSAGA::rsaga.get.usage(lib = "ta_morphometry", module = 4)
+cmd <- paste(
+  "saga_cmd ta_preprocessor 4 -ELEV /home/lgcs-mds/tmp/tmp_mde_filled.sgrd ", 
+  "-FILLED /home/lgcs-mds/tmp/tmp_mde_sinkless.sgrd ",
+  "-WSHED /home/lgcs-mds/tmp/tmp_mde_watershed.sgrd ", sep = "")
+system(cmd)
+cmd <- paste("saga_cmd ta_preprocessor 0 -DEM /home/lgcs-mds/tmp/tmp_mde_sinkless.sgrd ",
+             "-FLATS /home/lgcs-mds/tmp/flats.sgrd", sep = "")
+system(cmd)
+# It now seems that all flats were removed.
+
+# Compute the difference between original and processed DEM
+cmd <- paste("r.mapcalc 'mdehc5x5.diff.", size[1], "=mdehc5x5.filled5.", size[1], "-mdehc5x5'", sep = "")
+system(cmd)
+
+# Round values to 2 digits
+cmd <- paste(
+  "r.mapcalc 'elevation=(double(round(mdehc5x5.filled5.", size[1], "*100))/100)'", sep = "")
+parallel::mclapply(cmd, system, mc.cores = 2)
+cmd <- paste("r.out.gdal input=elevation output=/home/lgcs-mds/projects/urucu/data/grid/elevation.tif")
+system(cmd)
+
+
+
+
+
+
+
+
+
+
+
 # LOAD RASTER SURFACES INTO DATABASE ##########################################################################
 dir <- "/home/lgcs-mds/projects/urucu/data/grid/"
 
@@ -116,3 +212,4 @@ system("v.info map=access_limit")
 # system("r.mask input=boundary")
 
 rm(dir)
+

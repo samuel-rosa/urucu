@@ -24,7 +24,6 @@ spgrass6::initGRASS(
 system("g.region -d")
 
 # PROCESS ELEVATION DATA ######################################################################################
-<<<<<<< HEAD
 # Processing elevation data is necessary because the existing DEM has noise resulting from the use of 
 # contour lines, as well as many sinks on hilltops and flat areas. All processing steps are performed using
 # QGIS, GRASS and SAGA.
@@ -40,30 +39,13 @@ cmd <- paste("r.neighbors --o in=mdehc5x5 out=mdehc5x5.smooth.", size, " method=
 lapply(cmd, system)
 
 # Derive a profile curvature raster surface from the original DEM and each of the processed DEMs
-=======
-dir <- "/home/lgcs-mds/projects/urucu/data/grid/"
-
-# Load raw elevation data
-system(paste("r.in.gdal input=", dir, "mdehc5x5.tif output=mdehc5x5", sep = ""))
-
-# Remove stair-like artifacts sing four window sizes
-size <- c(3, 7, 15, 31)
-cmd <- paste("r.neighbors --o in=mdehc5x5 out=mdehc5x5.smooth.", size, " method=average size=", size, sep = "")
-lapply(cmd, system)
-
-# Derive a profile curvature raster surface from each dem and from the original dem
->>>>>>> f19209719a88e3379d5a409f5129d412e9127cab
 # Open data in QGIS to check which was the most efficient filter
 cmd <- paste("r.slope.aspect elevation=mdehc5x5.smooth.", size, " pcurv=pcurv.", size, sep = "")
 parallel::mclapply(cmd, system, mc.cores = 2)
 cmd <- paste("r.slope.aspect elevation=mdehc5x5 pcurv=pcurv", sep = "")
 system(cmd)
 
-<<<<<<< HEAD
 # Use the DEM filtered using a window size of 3 cells
-=======
-# Use the dem filtered using a window size of 3 cells
->>>>>>> f19209719a88e3379d5a409f5129d412e9127cab
 
 # Fill sinks repeatedly to guarantee the quality of results
 cmd <- paste(
@@ -130,6 +112,12 @@ cmd <- paste(
 parallel::mclapply(cmd, system, mc.cores = 2)
 cmd <- paste("r.out.gdal input=elevation output=/home/lgcs-mds/projects/urucu/data/grid/elevation.tif")
 system(cmd)
+
+
+
+
+
+
 
 
 

@@ -2,7 +2,7 @@
 title: "Exploratory Spatial Data Analysis"
 author: "Alessandro Samuel-Rosa"
 date: "4 July 2016"
-output: pdf_document
+output: html_document
 bibliography: /home/lgcs-mds/Dropbox/jabref/biblio.bib
 ---
 
@@ -47,7 +47,7 @@ The database contains three datasets with field soil calibration data. The first
 from n = 119 complete soil profile description. The second contains soil data from n = 199 boreholes,
 one of which lies outside the accessible area. Both of these datasets were used as calibration soil
 data to build the conventional soil map. The third dataset is composed of soil data from n = 66 
-boreholes. This last dataset was originally used for validating the conventional soil map.
+boreholes. This dataset was originally used for validating the conventional soil map.
 
 ```{r}
 # Load accessible area
@@ -68,8 +68,8 @@ sp::spplot(
 boreholes <- raster::shapefile("/home/lgcs-mds/projects/urucu/data/vector/Tradagens.shp")
 in_or_out <- which(is.na(sp::over(boreholes, area)$OBJECTID))
 sp::spplot(
-  area, 1, aspect = "iso", scales = list(draw = TRUE), colorkey = FALSE, col.regions = "gray",
-  main = "Borehole soil descriptions (n = 199)",
+  area, 1, aspect = "iso", scales = list(draw = TRUE), colorkey = FALSE, 
+  col.regions = "gray", main = "Borehole soil descriptions (n = 199)",
   panel = function(x, y, ...) {
     sp::panel.polygonsplot(x, y, ...)
     lattice::panel.points(sp::coordinates(boreholes), pch = 21, cex = 0.5)
@@ -79,8 +79,8 @@ sp::spplot(
 # Boreholes used for validation (n = 66)
 validation <- raster::shapefile("/home/lgcs-mds/projects/urucu/data/vector/Tradagens_Validacao.shp")
 sp::spplot(
-  area, 1, aspect = "iso", scales = list(draw = TRUE), colorkey = FALSE, col.regions = "gray",
-  main = "Boreholes used for validation (n = 66)",
+  area, 1, aspect = "iso", scales = list(draw = TRUE), colorkey = FALSE, 
+  col.regions = "gray", main = "Boreholes used for validation (n = 66)",
   panel = function(x, y, ...) {
     sp::panel.polygonsplot(x, y, ...)
     lattice::panel.points(sp::coordinates(validation), pch = 21, cex = 0.5)
@@ -99,7 +99,7 @@ field <-
 sp::coordinates(field) <- ~ coords.x1 + coords.x2
 sp::proj4string(field) <- sp::proj4string(profiles)
 sp::spplot(
-  area, 1, aspect = "iso", scales = list(draw = TRUE), colorkey = FALSE, col.regions = "gray",
+  area, 1, aspect = "iso", scales = list(draw = TRUE), colorkey = FALSE, col.regions = "gray", 
   main = "Field calibration dataset (n = 383)",
   panel = function(x, y, ...) {
     sp::panel.polygonsplot(x, y, ...)
@@ -107,13 +107,21 @@ sp::spplot(
     })
 ```
 
-The number of field calibration sample points in each soil mapping unit us shown below.
+The number of field calibration sample points per soil mapping unit is shown below.
 
 ```{r}
 field_cal <- sp::over(field, soil_map)
 plot(field_cal$UM, ylim = c(0, 180), main = "Points per mapping unit", cex.axis = 0.8)
 text(1:4, summary(field_cal$UM) + 10, summary(field_cal$UM))
 ```
+
+We can see that theere are
+`r round(161/46, 1)` times more calibration points in class `r levels(field_cal$UM)[1]` than in class 
+`r levels(field_cal$UM)[3]`. From a statistical perspective, this unbalance is undesirable because prediction
+models for categorical responses tend to favour -- to be biased towards -- those classes for which there are
+more calibration observations [@Agresti2002; @HairEtAl2010]. This unbalance should also make it more difficult 
+for the different classes being modelled to present common variance matrices, a requirement for employing 
+linear discriminant analysis [@HastieEtAl2009].
 
 # Random Calibration Points
 
@@ -134,8 +142,7 @@ sp::spplot(
     })
 ```
 
-The resulting number of sample points allocated in each soil mapping unit is shown below. The larger the area
-covered by a mapping unit, the larger the number of sample points.
+The resulting number of sample points allocated to each soil mapping unit is shown below.
 
 ```{r}
 random_cal <- sp::over(random, soil_map)
@@ -143,10 +150,19 @@ plot(random_cal$UM, ylim = c(0, 1000), main = "Points per mapping unit")
 text(1:4, summary(random_cal$UM) + 50, summary(random_cal$UM))
 ```
 
+The larger the area covered by a mapping unit, the larger the number of sample points. Compared to the field
+calibration data, this unbalance may result in the same statistical difficulties. However, there are two 
+important differences. First, the number of points allocated to the class with the largest area coverage is 
+`r round(913/217, 1)` -- instead of only `r round(161/46, 1)` -- times larger than the number of points
+allocated to the class with the smallest area coverage. Last, the number of points allocated to classes 
+`r levels(field_cal$UM)[4]` and `r levels(field_cal$UM)[2]` reflects more accurately the area covered by these
+two classes. This is an indication that field observations were biased towards classes 
+`r levels(field_cal$UM)[3]` and `r levels(field_cal$UM)[4]`.
+
 # Expert Calibration Points
 
-The last calibration dataset is composed of soil data from n = 847 points manually located by an expert on the
-computer screen. The spatial distribution of these sample points is shown below.
+The last calibration dataset is composed of soil data from n = 847 points manually allocated by an expert on
+the computer screen. The spatial distribution of these sample points is shown below.
 
 ```{r}
 # Expert calibration points (n = 847)
@@ -171,7 +187,7 @@ This dataset has some features that require our attention. First, `r round(in_or
 points lie outside the accessible area (red points above). Second, the expert assigned the sample points to
 five classes, while our target variable (the conventional soil map) has only four classes (mapping units). A
 visual inspection of the soil map and classes attributed to the sample points suggest that classes 2 and 3 are 
-equivalent to GXvd.
+equivalent to class `r levels(field_cal$UM)[2]`.
 
 ```{r}
 sp::spplot(
@@ -187,83 +203,134 @@ sp::spplot(
 ```
 
 If the match between attributes classes and my guesses are correct, then we can compute the number of points
-per mapping unit. Again, the number of points is correlated with the area of the mapping unit.
+per mapping unit.
 
 ```{r}
 expert$UM <- as.factor(expert$MDS)
-levels(random_cal$UM)
 levels(expert$UM) <- levels(random_cal$UM)[c(1, 2, 2, 3, 4)]
 plot(expert$UM, ylim = c(0, 320), main = "Points per mapping unit")
 text(1:4, summary(expert$UM) + 25, summary(expert$UM))
 ```
 
-\newpage
+Again, the number of points is correlated with the area of the mapping unit. However, the observed proportions
+are considerably different from those of the field and random calibration samples, as well as of the area 
+covered by each mapping unit. The ratio between the number of calibration points in mapping units 
+`r levels(expert$UM)[1]` and `r levels(expert$UM)[3]` is only `r round(280/107, 1)`. For mapping units
+`r levels(expert$UM)[4]` and `r levels(expert$UM)[2]`, the ratio is now only `r round(234/226, 2)`. Also, the
+number of points allocated by the expert to mapping unit `r levels(expert$UM)[1]` is only `r round(280/234, 2)`
+times larger than the number of points allocated to mapping unit `r levels(expert$UM)[4]`. This suggests that
+the allocation of calibration points in the expert dataset was biased towards mapping units 
+`r levels(expert$UM)[2]`, `r levels(expert$UM)[3]` and `r levels(expert$UM)[4]`. The positive side of this 
+bias is that mapping unit `r levels(expert$UM)[1]` will likely be less favoured during the estimation of model
+parameters.
 
 # Covariates
 
-There are p = 11 covariates in the database: elevation,  slope,  curvature, plan curvature, profile curvature,
-downslope flow length, upslope flow length, flow accumulation, flow direction, aspect and topographic wetness
-index. All covariate data in my possession matches the description presented by @Villela2013. However, there 
-are some details worth mentioning regarding the data structure and the selection of the covariates.
+A set of *p* = 11 covariates was included in the database: elevation, slope, curvature, plan curvature, 
+profile curvature, downslope flow length, upslope flow length, flow accumulation, flow direction, aspect and
+topographic wetness index. All covariate data in the database matches the description presented by
+@Villela2013. However, there are some details worth mentioning regarding the data quality and structure, and 
+the nature of the covariates and their possible relation with the soil spatial distribution in the study area.
 
 ## Aspect and flow direction data
 
-It appears that the **aspect** data was used as is, i.e. without linearising its values. Linearisation is 
-necessary because aspect is a circular variable: its minimum (0º) and maximum (360º) values have the 
-same physical meaning. Linearisation can be done using the following equation:
+It appears that the **aspect** data was used by @Villela2013 as is, i.e. without linearising its values.
+Linearisation is necessary because aspect is a circular variable, by which I mean that its minimum (0º) and
+maximum (360º) values have exactly the same physical meaning. Linearisation can be done using the following
+equation:
 
-$$northerness = |180 - aspect|$$
+$$northerness = |180 - aspect| / 180$$
 
-were **northerness** is a variable that indicates the degree of exposition of a surface to the north. Another 
-solution is to transform the aspect data to categories, i.e. classes of orientation. It is not clear in the
-thesis if the aspect data was used as a continuous or as a categorical covariate.
+where **northerness** is a variable that indicates the degree of exposition of a surface to the north, with 
+values 0 and 1 indicating no and maximum exposition, respectively. Another solution is to transform the aspect
+data to categories, i.e. classes of orientation. However, this would make the use of linear discriminant 
+analysis inapropriate because the assumption of multivariate normality would not hold anymore [@PressEtAl1978].
+In general, linear logistic regression is used in such circumnstances because it makes no assumption about
+the probability distribution function of the predictor variables [@PressEtAl1978; @HarrellEtAl1985;
+@MichieEtAl1994; @JohnsonEtAl2008].
 
-The reason for using aspect as a covariate is the hypothesis that it could determine the availability of water
-in the environment. I am not sure if this holds for the Amazon region, specially in a study area with a range
-in elevation values of 46-84 m. In general, aspect data has a marked influence on soil and other environmental
-features in higher latitudes, beyond the tropics. As such, I believe there is no pedological basis for using 
-it as a covariate in our study: I suggest dropping it from our dataset.
+The way I see it, reason for using aspect as a covariate in soil prediction models is the hypothesis that it
+could determine the availability of water in the environment. I am not sure if this effect is significant in 
+the Amazon region, specially in a study area with a range in elevation values of 46--84 m, where the the 
+drainage network runs, predominantly, from south to north. In general, aspect data has a marked influence on
+soil and other environmental features in higher latitudes, beyond the tropics, and in mountainous terrain
+[@OliphantEtAl2003]. As such, I believe there is no strong pedological reason for using it as a covariate in
+our study: I suggest dropping it from the set of covariates used to calibrate the soil prediction models.
 
-It is not clear how **flow direction** data was used in the analysis. It appears that this covariate was used
-as is, i.e. taking its finite set of eight integer values (1, 2, 4, 8, 16, 32, 64, and 128) as a continuous
-covariate, when the correct approach would be to use this covariate as a categorical covariate. However, like
-aspect, I believe there is no pedological basis for using flow direction as a covariate in our study. Actually,
-I think flow direction is used more to derive other, more pedologically sound, covariates, than as a covariate 
-itself. As such, I suggest dropping flow direction from our dataset.
+It is not clear to me how the **flow direction** data was used in the analysis. It appears that this covariate
+was used as is, i.e. taking its finite set of eight integer values (1, 2, 4, 8, 16, 32, 64, and 128) as a
+continuous covariate. As far as I understand, the correct approach would be to use this covariate as a
+categorical covariate, where by each of the eight possible integer values would be defined as a category. 
+However, like aspect, this would rule out multivariate normality, making the use of linear discriminant
+analysis inapropriate. Adding to that, I believe there is no strong pedological reason for using flow 
+direction as a covariate in our study because it provides virtually the same information provided by aspect.
+As such, I suggest dropping flow direction from the set of existing covariates.
 
-Finally, the northerness data gives evidence of the presence of (possibly spurious) depressions in the digital
-elevation model at places of high elevation (see figure bellow). I believe that these depressions were created
-due to the presence of contour lines with erroneous elevation values at some of the higher parts of the
-landscape. As such, higher elevations may present high values of the topographic wetness index. These 
-depressions in the digital elevation model could represent true, existing depressions. However, I am not aware
-of the existence of such depressions at higher elevations in the study area.
+**NOTE**: A previous version of the northerness data gave evidence of the presence of spurious depressions in
+the digital elevation model at places of high elevation (see figure bellow). I believe that these depressions
+were created due to the presence of contour lines with erroneous elevation values at some of the higher parts
+of the landscape. As such, elevated places, possibly hilltops, presentd high values of the topographic wetness
+index. These depressions in the digital elevation model could represent true, existing depressions. However, 
+because there is no evidence of the existence of such depressions at higher elevations in the study area, the
+original digital elevation model had to be processed to eliminate all spurious artefacts before deriving all 
+covariates once again.
 
-![Artefacts in elevation data as suggested by northerness data. The transect (red line) shows the change in 
-elevation values in a depression. ](~/projects/urucu/res/fig/north_sinks.png)
+![Artefacts in elevation data as suggested by northerness data. The transect (red line) shows the change in
+elevation values in a depression. ](/home/lgcs-mds/projects/urucu/res/fig/north_sinks.png)
 
 ## Curvature data
 
-Three covariates describing the landscape curvature were used in the study: horizontal, vertical and compound.
-Because these covariates describe very similar features of the landscape, their correlation is generally very 
-high. As a consequence, it is common to use only one of them as a covariate in soil prediction models. 
-Eliminating redundant covariates is an important step in model calibration to avoid the undesirable 
-consequences of multicollinearity. Stepwise procedures are inefficient in dealing with multi-collinear 
-covariates. Due to the multiple comparisons, stepwise procedures do not prevent a poor covariate from entering
-the model -- the chance of including a covariate with low discriminatory power is much larger than 
-significance level (5%). As such, I suggest using only **compound curvature** as a covariate in our study.
+The covariate dataset contains three covariates describing the landscape curvature: horizontal curvature,
+vertical curvature and compound curvature. Because these covariates describe very similar features of the 
+landscape, their correlation is generally moderate to high, giving rise to a strong multicollinearity. 
+Multicollinearity has a negative effect on linear models because it causes the explosion of the variance of
+estimated parameters [@FarrarEtAl1967]. Despite it does not genneraly affect fitted and predicted values 
+[@KutnerEtAl2004], strong multicollinearity causes large instability of the estimated parameters, which 
+affects stepwise variable selection methods [@Harrell2001a]. This negative effect adds to the fact that the
+multiple comparisons employed by stepwise methods increase the chance of including irrelevant predictios in 
+the model, yielding almost meaningless *P*-values [@Harrell2001a] -- the chance of including a covariate with 
+low discriminatory power is much larger than the significance level.
 
-Curvature data gives further evidence for the presence of possibly spurious artefacts in the digital elevation
-model (see figure below). There is a considerable amount of noise in the form of stairs along the slopes 
-resulting from the use of contour lines to generate the digital elevation model. This noise is a typical 
-feature of digital elevation models produced using contour lines. In general, the solution is to use a 
-smoothing filter to remove the noise from the digital elevation model before deriving terrain attributes. I am
-not aware if or how these artefacts could damage the performance of our soil prediction models. However, it 
-could be the reason for the noise (salt-and-pepper) observed in the spatial predictions made by @Villela2013,
-which were later removed using a majority filter.
+In order to avoid the negative effects of multicollinearity, I believe that only one of the covariates
+describing the landscape curvature should be used to calibrate our soil prediciton models. Optimally, this 
+covariate should be selected based on pedological knowledge and empirical evidence. The latter suggests that
+**compound curvature** is the most corralated with the observed soil spatial variation in our study area. It
+remains to be discussed if the use of this covariate is supported by the existing pedological knowledge too.
+However, considering that (given the resolution of the digital elevation model):
+
+1. most landforms have relatively small dimensions, both verticaly and horizontaly, reflecting the small range 
+   of elevation values -- for example, most of the slopes are relatively short, with a distance of about 50 m 
+   from toeslope to shoulder,
+2. the area occupied with nearly level to gently sloping terrain is considerably large, an information
+   depicted in virtualy the same manner by all three curvature related covariates, and
+3. the target soil map is relatively coarse, with only four soil mapping units, some of which are delineated
+   mostly based on the identification of areas of larger potential of water accumulation and flow,
+   irrespective of its direction and velocity,
+
+it seems reasonable to suggest that using only informaton on the compound curvature is more pedologically 
+sound than exploring all three curvature related covariates. These features of the study area and target 
+soil variable raise the question whether compound curvature would not be a more efficient predictor if 
+included in the linear soil prediction models as a categorical covariate. In fact, this was the approach 
+employed by @Villela when depicting the curvature information. There, the compound curvature was classified
+into three classes (convergent/concave, parallel/straight and divergent/convex), which were then related with 
+the soil taxa observed on the landscape. The downside of using the compound curvature as a categorical 
+covariate to increase its predictive power is that some the requirement of multivariate normality of the
+linear discriminant analysis would not be met. The solution would be to use logistic regression instead, 
+a technique that does not make assumptions about the predictor variables [@Harrell2001a].
+
+**NOTE**: A previous version of the curvature data gave further evidence for the presence of spurious 
+artefacts in the digital elevation model (see figure below). There was a considerable amount of noise in the
+form of stairs along the slopes resulting from the use of contour lines to generate the digital elevation
+model. This noise is a typical feature of digital elevation models produced using contour lines. This noise 
+could be one of the reason for the noise (salt-and-pepper) observed in the spatial predictions made by 
+@Villela2013, which were later removed using a majority filter. As far as I understand, this is an 
+suboptimal solution: "imperfections" in the resulting soil map is a result of the poor quality of the input 
+data. A more appropriate solution was employed here, which consists of applying a smoothing filter on the
+digital elevation model before deriving all terrain attributes.
 
 ![Noise in curvature data caused by the use of contour lines to compute the digital elevation model. The 
 solution is to use a smoothing filter to remove the noise from the digital elevation model before deriving 
-terrain attributes.](~/projects/urucu/res/fig/curvature_contours.png)
+terrain attributes.](/home/lgcs-mds/projects/urucu/res/fig/curvature_contours.png)
 
 ## Flow length and accumulation
 
@@ -287,3 +354,4 @@ using empirical evidence and pedological knowledge. Accordingly, the following s
 * topographic wetness index
 
 
+# References

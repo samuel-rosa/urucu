@@ -342,16 +342,18 @@ terrain attributes.](fig/curvature_contours.png)
 ## Flow length and accumulation
 
 Another two covariates used by @Villela2013 are also strongly correlated: **flow accumulation** and 
-**upslope flow path length**. For a given cell, the first is defined as the area that contribute to the flow 
-that reaches it, while the second is defined as the distance covered by that flow. Both are determined by the
-cell size and the number of cells that contribute to the flow. The main mathematical difference between these
-two covariates is their measurement units: metres, for upslope flow path length, and square metres, for 
-flow accumulation. This leads to the conclusion that they are proxies of the same environmental condition: the
-potential that the different parts of the landscape have of accumulating water. Being strongly correlated, it
-would be wise to include only one of these covariates in our soil prediction models.
+**upslope flow path length**. For a given cell, the first is defined as the area that contributes to the flow 
+that reaches it, while the second is defined as the maximum distance covered by the flow within that area. 
+Both seem to be determined by the cell size and the number of cells that contribute to the flow. The main
+mathematical difference between these two covariates, which results in a different empirical distribution, is
+the measurement unit: metres, for upslope flow path length, and square metres, for flow accumulation. This
+leads to the conclusion that they are proxies of the same environmental condition: the potential that the 
+different parts of the landscape have of accumulating water. The strong correlations is evident in Figures 33 
+and 35 of @Villela2013. Being strongly correlated, it could be wise to include only one of these covariates in
+our soil prediction models.
 
-Finally, it is not clear to me how flow accumulation and upslope flow path length data were used by
-@Villela2013. Despite it is not mentioned in the text, the figures 33 and 35 suggest that both were 
-transformed using a logarithmic function.
+Finally, it is not clear how flow accumulation and upslope flow path length data were used by @Villela2013. 
+Despite it is not mentioned in the text, Figures 33 and 35 suggest that both were transformed using a
+logarithmic function.
 
 # References

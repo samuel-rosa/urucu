@@ -3,7 +3,7 @@ title: "Exploratory Spatial Data Analysis"
 author: "Alessandro Samuel-Rosa"
 date: "4 July 2016"
 output: html_document
-bibliography: /home/lgcs-mds/Dropbox/jabref/biblio.bib
+bibliography: biblio.bib
 ---
 
 ```{r setup, include=FALSE}
@@ -255,7 +255,7 @@ in the Amazon region, specially in a study area with a range in elevation values
 drainage network runs, predominantly, from south to north. In general, aspect data has a marked influence on
 soil and other environmental features in higher latitudes, beyond the tropics, and in mountainous terrain
 [@OliphantEtAl2003]. As such, I believe there is no strong pedological reason for using it as a covariate in
-our study: I suggest dropping it from the set of covariates used to calibrate the soil prediction models.
+our study.
 
 It is also not clear to me how the **flow direction** data was used in the analysis. It appears that this
 covariate was used as is, i.e. taking its finite set of eight integer values (1, 2, 4, 8, 16, 32, 64, and 128) 
@@ -264,7 +264,7 @@ categorical covariate, whereby each of the eight possible integer values would b
 category. However, like aspect, this would rule out multivariate normality, making the use of linear
 discriminant analysis inappropriate. Adding to that, I believe there is no strong pedological reason for using
 flow direction as a covariate in our study because it carries virtually the same information already provided
-by aspect. As such, I suggest dropping flow direction from the set of existing covariates.
+by aspect.
 
 **NOTE**: A previous version of the northerness data gave evidence of the presence of spurious depressions in
 the digital elevation model at places of high elevation (see figure bellow). I believe that these depressions
@@ -284,19 +284,19 @@ The covariate dataset contains three covariates describing the landscape curvatu
 vertical curvature and compound curvature. Because these covariates describe very similar features of the 
 landscape, their correlation is generally moderate to high, giving rise to a strong multicollinearity. 
 Multicollinearity has a negative effect on linear models because it causes the explosion of the variance of
-estimated parameters [@FarrarEtAl1967]. Despite it does not genneraly affect fitted and predicted values 
-[@KutnerEtAl2004], strong multicollinearity causes large instability of the estimated parameters, which 
-affects stepwise variable selection methods [@Harrell2001a]. This negative effect adds to the fact that the
-multiple comparisons employed by stepwise methods increase the chance of including irrelevant predictios in 
-the model, yielding almost meaningless *P*-values [@Harrell2001a] -- the chance of including a covariate with 
-low discriminatory power is much larger than the significance level.
+estimated parameters [@FarrarEtAl1967]. Despite this does not genneraly affect fitted and predicted values 
+[@KutnerEtAl2004], it causes large instability of the estimated parameters, which affects stepwise variable 
+selection methods [@Harrell2001a]. This negative effect adds to the fact that the multiple comparisons 
+employed by stepwise methods increase the chance of including irrelevant predictors in the model, yielding 
+almost meaningless *P*-values [@Harrell2001a] -- the chance of including a covariate with low discriminatory 
+power is much larger than the significance level [@SASInstituteInc2013].
 
 In order to avoid the negative effects of multicollinearity, I believe that only one of the covariates
 describing the landscape curvature should be used to calibrate our soil prediciton models. Optimally, this 
 covariate should be selected based on pedological knowledge and empirical evidence. The latter suggests that
 **compound curvature** is the most corralated with the observed soil spatial variation in our study area. It
 remains to be discussed if the use of this covariate is supported by the existing pedological knowledge too.
-However, considering that (given the resolution of the digital elevation model):
+Considering that (given the resolution of the digital elevation model):
 
 1. most landforms have relatively small dimensions, both verticaly and horizontaly, reflecting the small range 
    of elevation values -- for example, most of the slopes are relatively short, with a distance of about 50 m 
@@ -314,25 +314,27 @@ included in the linear soil prediction models as a categorical covariate. In fac
 employed by @Villela when depicting the curvature information. There, the compound curvature was classified
 into three classes (convergent/concave, parallel/straight and divergent/convex), which were then related with 
 the soil taxa observed on the landscape. The downside of using the compound curvature as a categorical 
-covariate to increase its predictive power is that some the requirement of multivariate normality of the
+covariate to increase its predictive power is that the assumption of multivariate normality made when using 
 linear discriminant analysis would not be met. The solution would be to use logistic regression instead, 
 a technique that does not make assumptions about the predictor variables [@Harrell2001a].
 
 **NOTE**: A previous version of the curvature data gave further evidence for the presence of spurious 
 artefacts in the digital elevation model (see figure below). There was a considerable amount of noise in the
 form of stairs along the slopes resulting from the use of contour lines to generate the digital elevation
-model. This noise is a typical feature of digital elevation models produced using contour lines. This noise 
-could be one of the reason for the noise (salt-and-pepper) observed in the spatial predictions made by 
-@Villela2013, which were later removed using a majority filter. As far as I understand, this is an 
+model. This noise is a typical feature of digital elevation models produced using contour lines. These 
+artefacts could be one of the reason for the noise (salt-and-pepper) observed in the spatial predictions made 
+by @Villela2013, which were later removed using a majority filter. As far as I understand, this is an 
 suboptimal solution: "imperfections" in the resulting soil map is a result of the poor quality of the input 
-data. A more appropriate solution was employed here, which consists of applying a smoothing filter on the
-digital elevation model before deriving all terrain attributes.
+data. A more appropriate solution was employed here, which consists of applying a smoothing filter with a 
+three by three window on the digital elevation model before deriving all terrain attributes once again.
 
 ![Noise in curvature data caused by the use of contour lines to compute the digital elevation model. The 
 solution is to use a smoothing filter to remove the noise from the digital elevation model before deriving 
 terrain attributes.](/home/lgcs-mds/projects/urucu/res/fig/curvature_contours.png)
 
 ## Flow length and accumulation
+
+
 
 Covariates **flow accumulation** and **upslope flow path length** are strongly correlated, the difference
 being that the latter is more efficient in highlighting larger water channels at the lowermost positions of 

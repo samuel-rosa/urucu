@@ -236,40 +236,40 @@ the nature of the covariates and their possible relation with the soil spatial d
 
 It appears that the **aspect** data was used by @Villela2013 as is, i.e. without linearising its values.
 Linearisation is necessary because aspect is a circular variable, by which I mean that its minimum (0º) and
-maximum (360º) values have exactly the same physical meaning. Linearisation can be done using the following
-equation:
+maximum (360º) values have exactly the same physical meaning. Linearisation can be accomplished using the
+following equation:
 
 $$northerness = |180 - aspect| / 180$$
 
 where **northerness** is a variable that indicates the degree of exposition of a surface to the north, with 
-values 0 and 1 indicating no and maximum exposition, respectively. Another solution is to transform the aspect
-data to categories, i.e. classes of orientation. However, this would make the use of linear discriminant 
-analysis inapropriate because the assumption of multivariate normality would not hold anymore [@PressEtAl1978].
-In general, linear logistic regression is used in such circumnstances because it makes no assumption about
-the probability distribution function of the predictor variables [@PressEtAl1978; @HarrellEtAl1985;
-@MichieEtAl1994; @JohnsonEtAl2008].
+values 0 and 1 indicating minimum and maximum exposition, respectively. Another solution is to transform the
+aspect data to categories, i.e. classes of orientation. However, this would make the use of linear 
+discriminant analysis inappropriate because the assumption of multivariate normality would not hold any more 
+[@PressEtAl1978]. In general, linear logistic regression is used in such circumstances because it makes no 
+assumption about the probability distribution function of the predictor variables [@PressEtAl1978; 
+@HarrellEtAl1985; @MichieEtAl1994; @JohnsonEtAl2008].
 
-The way I see it, reason for using aspect as a covariate in soil prediction models is the hypothesis that it
-could determine the availability of water in the environment. I am not sure if this effect is significant in 
-the Amazon region, specially in a study area with a range in elevation values of 46--84 m, where the the 
+The way I see it, the reason for using aspect as a covariate in soil prediction models is the hypothesis that 
+it could determine the availability of water in the environment. I am not sure if this effect is significant 
+in the Amazon region, specially in a study area with a range in elevation values of 46--84 m, where the the 
 drainage network runs, predominantly, from south to north. In general, aspect data has a marked influence on
 soil and other environmental features in higher latitudes, beyond the tropics, and in mountainous terrain
 [@OliphantEtAl2003]. As such, I believe there is no strong pedological reason for using it as a covariate in
 our study: I suggest dropping it from the set of covariates used to calibrate the soil prediction models.
 
-It is not clear to me how the **flow direction** data was used in the analysis. It appears that this covariate
-was used as is, i.e. taking its finite set of eight integer values (1, 2, 4, 8, 16, 32, 64, and 128) as a
-continuous covariate. As far as I understand, the correct approach would be to use this covariate as a
-categorical covariate, where by each of the eight possible integer values would be defined as a category. 
-However, like aspect, this would rule out multivariate normality, making the use of linear discriminant
-analysis inapropriate. Adding to that, I believe there is no strong pedological reason for using flow 
-direction as a covariate in our study because it provides virtually the same information provided by aspect.
-As such, I suggest dropping flow direction from the set of existing covariates.
+It is also not clear to me how the **flow direction** data was used in the analysis. It appears that this
+covariate was used as is, i.e. taking its finite set of eight integer values (1, 2, 4, 8, 16, 32, 64, and 128) 
+as a continuous covariate. As far as I understand, the correct approach would be to use this covariate as a
+categorical covariate, whereby each of the eight possible integer values would be defined as a unique 
+category. However, like aspect, this would rule out multivariate normality, making the use of linear
+discriminant analysis inappropriate. Adding to that, I believe there is no strong pedological reason for using
+flow direction as a covariate in our study because it carries virtually the same information already provided
+by aspect. As such, I suggest dropping flow direction from the set of existing covariates.
 
 **NOTE**: A previous version of the northerness data gave evidence of the presence of spurious depressions in
 the digital elevation model at places of high elevation (see figure bellow). I believe that these depressions
 were created due to the presence of contour lines with erroneous elevation values at some of the higher parts
-of the landscape. As such, elevated places, possibly hilltops, presentd high values of the topographic wetness
+of the landscape. As such, elevated places, possibly hilltops, presented high values of the topographic wetness
 index. These depressions in the digital elevation model could represent true, existing depressions. However, 
 because there is no evidence of the existence of such depressions at higher elevations in the study area, the
 original digital elevation model had to be processed to eliminate all spurious artefacts before deriving all 

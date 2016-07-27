@@ -2,7 +2,7 @@
 # author: "Alessandro Samuel Rosa"
 # 
 # Spatial exploratory data analysis were performed using QGIS and SAGA GIS. The results are described in 
-# \code\exploratory.Rmd. The Grass GIS database was created using \code\dbGRASS.R. All covariates were loaded
+# \code\exploratory.Rmd. The GRASS GIS database was created using \code\dbGRASS.R. All covariates were loaded
 # to the database, as well as all existing vector (polygon) data.
 
 spgrass6::initGRASS(

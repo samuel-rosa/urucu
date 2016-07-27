@@ -24,12 +24,13 @@ spgrass6::initGRASS(
 system("g.region -d")
 
 # PROCESS ELEVATION DATA ######################################################################################
-# Processing elevation data is necessary because the existing DEM has noise resulting from the use of 
-# contour lines, as well as many sinks on hilltops and flat areas. All processing steps are performed using
-# QGIS, GRASS and SAGA.
+# Processing elevation data is necessary because the DEM used by Villela (2013) has noise resulting from the
+# use of contour lines, as well as many sinks on hilltops and flat areas. All processing steps are performed
+# using QGIS, GRASS and SAGA.
+# Afterwards, all covariates used by Villela (2013) are recomputed using ArcGIS.
 
 # Load raw elevation data
-dir <- path.expand("~/projects/urucu/data/grid/")
+dir <- path.expand("~/projects/urucu/data/grid/old_dem/")
 cmd <- paste("r.in.gdal input=", dir, "mdehc5x5.tif output=mdehc5x5", sep = "")
 system(cmd)
 
@@ -113,71 +114,111 @@ parallel::mclapply(cmd, system, mc.cores = 2)
 cmd <- paste("r.out.gdal input=elevation output=/home/lgcs-mds/projects/urucu/data/grid/elevation.tif")
 system(cmd)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # LOAD RASTER SURFACES INTO DATABASE ##########################################################################
+# All primary covariates were derived using ArcGIS after sinks and noise had been removed.
+# Set parameters of the GRASS GIS region based on the elevation raster surface.
 dir <- "/home/lgcs-mds/projects/urucu/data/grid/"
+system("d.mon x0")
 
 # Elevation
-system(paste("r.in.gdal input=", dir, "mdehc5x5.tif output=elevation", sep = ""))
+system(paste("r.in.gdal input=", dir, "elevation.tif output=elevation", sep = ""))
 system("r.info map=elevation")
 system("g.region rast=elevation")
 spgrass6::gmeta()
+system("d.rast.leg elevation")
+system("d.histogram elevation")
+system("r.mask elevation")
 
 # Aspect
+# ArcGIS help: Cells in the input raster that are flat—with zero slope—are assigned an aspect of -1.
+# Given the conditions of the study area, it seems reasonable to set -1 as 0º. But let us first decide if 
+# aspect will be used as a covariate or will be dropped from the dataset.
 system(paste("r.in.gdal input=", dir, "aspect.tif output=aspect", sep = ""))
 system("r.info map=aspect")
+system("d.rast.leg aspect")
+system("d.histogram aspect")
 
 # Upslope flow path length
-system(paste("r.in.gdal input=", dir, "comdrenmon.tif output=upslope", sep = ""))
-system("r.info map=upslope")
-cmd <- paste("r.in.gdal --overwrite input=", dir, "ln_comdrenmon.tif output=ln_upslope", sep = "")
+system(paste("r.in.gdal input=", dir, "flow_up.tif output=flow_up", sep = ""))
+system("r.info flow_up")
+system("d.rast.leg flow_up")
+system("d.histogram flow_up")
+# This covariate has a very assymetric distribution. It would be wise to reduce the assymetry to yielding
+# stronger correlations with the target soil variable. One solution is to use a logarithmic transform (but we
+# could also create categories).
+cmd <- c("r.mapcalc 'ln_flow_up=log(flow_up + 1)'")
 system(cmd)
-system("r.info map=ln_upslope")
+system("r.info ln_flow_up")
+system("d.rast.leg ln_flow_up")
+system("d.histogram ln_flow_up")
 
 # Curvature
-system(paste("r.in.gdal input=", dir, "curvatura.tif output=curvature", sep = ""))
-system("r.info map=curvature")
+# This covariate has a very peaky distribution, with most values around zero. Besides, it may be necessary to
+# round values to the second decimal place. A solution might be to create categories.
+system(paste("r.in.gdal input=", dir, "curvature.tif output=curvature", sep = ""))
+system("r.info curvature")
+system("d.rast.leg curvature")
+system("d.histogram curvature")
 
 # Profile curvature
-system(paste("r.in.gdal input=", dir, "curvperf.tif output=profile_curvature", sep = ""))
-system("r.info map=profile_curvature")
+# This covariate has a very peaky distribution, with most values around zero. Besides, it may be necessary to
+# round values to the second decimal place. A solution might be to create categories.
+system(paste("r.in.gdal input=", dir, "prof_curv.tif output=prof_curv", sep = ""))
+system("r.info prof_curv")
+system("d.rast.leg prof_curv")
+system("d.histogram prof_curv")
 
 # Plan curvature
-system(paste("r.in.gdal input=", dir, "curvplan.tif output=plan_curvature", sep = ""))
-system("r.info map=plan_curvature")
+# This covariate has a very peaky distribution, with most values around zero. Besides, it may be necessary to
+# round values to the second decimal place. A solution might be to create categories.
+system(paste("r.in.gdal input=", dir, "plan_curv.tif output=plan_curv", sep = ""))
+system("r.info plan_curv")
+system("d.rast.leg plan_curv")
+system("d.histogram plan_curv")
 
 # Slope
-system(paste("r.in.gdal input=", dir, "declgrauhc.tif output=slope", sep = ""))
-system("r.info map=slope")
+# It may be necessary to round values to the second decimal place.
+# The empirical distribution is very assymetric, with most values close to zero. Larger values are found close
+# to the drainage network.
+system(paste("r.in.gdal input=", dir, "slope.tif output=slope", sep = ""))
+system("r.info slope")
+system("d.rast.leg slope")
+system("d.histogram slope")
 
 # Flow direction
-system(paste("r.in.gdal input=", dir, "dirfluxcort2.tif output=flow_direction", sep = ""))
-system("r.info map=flow_direction")
+# This covariate has erroneous values outside the study area. This will likely not be a problem because we use 
+# a masking variable.
+system(paste("r.in.gdal input=", dir, "flow_dir.tif output=flow_dir", sep = ""))
+system("r.info flow_dir")
+system("d.rast.leg flow_dir")
+system("d.histogram flow_dir")
 
 # Downslope flow path length
-system(paste("r.in.gdal input=", dir, "flowlend_n.tif output=downslope", sep = ""))
-system("r.info map=downslope")
+system(paste("r.in.gdal input=", dir, "flow_down.tif output=flow_down", sep = ""))
+system("r.info flow_down")
+system("d.rast.leg flow_down")
+system("d.histogram flow_down")
 
 # Flow accumulation
-system(paste("r.in.gdal input=", dir, "fluxacc5x5.tif output=accumulation", sep = ""))
-system("r.info map=accumulation")
-system(paste("r.in.gdal input=", dir, "ln_flow_accumulation.tif output=ln_accumulation", sep = ""))
-system("r.info map=ln_accumulation")
+# Like flow direction, this covariate has erroneous values outside the study area. This will likely not be a
+# problem because we use a masking variable.
+system(paste("r.in.gdal input=", dir, "flow_accum.tif output=flow_accum", sep = ""))
+system("r.info flow_accum")
+system("d.rast.leg flow_accum")
+system("d.histogram flow_accum")
+# This covariate has an assymetric distribution. It would could be helpful to transform it using a logarithmic
+# function.
+cmd <- paste("r.mapcalc 'ln_flow_accum = log(flow_accum + 1)'")
+system(cmd)
+system("r.info ln_flow_accum")
+system("d.rast.leg ln_flow_accum")
+system("d.histogram ln_flow_accum")
+
+
+
+
+
+
 
 # Topographic wetness index
 system(paste("r.in.gdal input=", dir, "itu5x5.tif output=twi", sep = ""))
@@ -190,8 +231,9 @@ system("r.info map=northerness")
 # Check raster surfaces
 system("d.mon start=x0")
 system("d.rast twi")
-system("d.mon stop=x0")
 
+
+system("d.mon stop=x0")
 rm(dir)
 
 # LOAD VECTOR DATA INTO DATABASE ##############################################################################

@@ -59,10 +59,9 @@ spgrass6::writeVECT(SDF = cal_random, vname = "cal_random")
 spgrass6::writeVECT(SDF = cal_expert, vname = "cal_expert")
 
 # Setup database of calibration points
-maps <- c("aspect", "elevation", "upslope", "ln_upslope", "curvature", "profile_curvature", "plan_curvature",
-          "slope", "downslope", "accumulation", "ln_accumulation", "twi", "northerness",
-          "flow_direction")
-cols <- paste(maps, c(rep("DOUBLE PRECISION", length(maps) - 1), "INT"))
+maps <- c("elevation", "flow_up", "ln_flow_up", "curvature", "prof_curv", "plan_curv", "slope", "flow_down",
+          "flow_accum", "ln_flow_accum", "twi")
+cols <- paste(maps, "DOUBLE PRECISION")
 cols <- paste(cols, collapse = ",")
 cols_samp <- substring(maps, first = 1, last = 10)
 
@@ -103,14 +102,11 @@ rm(cols, maps)
 
 # Calibrate soil prediction models ############################################################################
 
-form <- formula(paste("UM ~ ", paste(cols_samp[c(2, 5, 8, 9, 11, 12)], collapse = " + ")))
+form <- formula(paste("UM ~ ", paste(cols_samp[c(1, 2, 4, 5, 6, 7, 8, 9, 11)], collapse = " + ")))
+form <- formula(paste("UM ~ ", paste(cols_samp[c(1, 4, 6, 7, 8, 10)], collapse = " + "))) # log and cor
 
 # Field calibration points
-# Villela2013: 
-# - Calibration: 85.07 %
-# - Validation: 
 cal_field <- spgrass6::readVECT("cal_field")
-cal_field$flow_direc <- as.factor(cal_field$flow_direc)
 cal_field$UM <- as.factor(cal_field$UM)
 
 str(cal_field)
@@ -118,17 +114,13 @@ head(cal_field@data)
 nrow(na.omit(cal_field@data)) - nrow(cal_field@data)
 which(sapply(lapply(cal_field@data, is.na), any))
 
-fit_field <- MASS::lda(
-  form, data = cal_field@data, prior = rep(1, nlevels(cal_field$UM))/nlevels(cal_field$UM), na.action = na.omit)
+fit_field <- MASS::lda(form, data = cal_field@data, na.action = na.omit)
 fit_field_fitted <- predict(fit_field, newdata = na.omit(cal_field@data), prior = fit_field$prior)
 sum(diag(table(data.frame(obs = na.omit(cal_field@data)$UM, fit = fit_field_fitted$class)))) / 
   nrow(na.omit(cal_field@data))
 
 # Random calibration points
-# - Calibration: 76.11 %
-# - Validation: 
 cal_random <- spgrass6::readVECT("cal_random")
-cal_random$flow_direc <- as.factor(cal_random$flow_direc)
 cal_random$UM <- as.factor(cal_random$UM)
 
 str(cal_random)
@@ -136,19 +128,30 @@ head(cal_random@data)
 nrow(na.omit(cal_random@data)) - nrow(cal_random@data)
 which(sapply(lapply(cal_random@data, is.na), any))
 
-fit_random <- 
-  MASS::lda(form, data = cal_random@data, prior = rep(1, nlevels(cal_random$UM))/nlevels(cal_random$UM))
-fit_random_fitted <- predict(fit_random, newdata = cal_random@data, prior = fit_random$prior)
-sum(diag(table(data.frame(obs = cal_random$UM, fit = fit_random_fitted$class)))) / length(cal_random$UM)
+fit_random <- MASS::lda(form, data = cal_random@data, na.action = na.omit)
+fit_random_fitted <- predict(fit_random, newdata = na.omit(cal_random@data), prior = fit_random$prior)
+sum(diag(table(data.frame(obs = na.omit(cal_random@data)$UM, fit = fit_random_fitted$class)))) / 
+  length(cal_random$UM)
+
+
+tmp <- subselect::ldaHmat(form, na.omit(cal_field@data))
+subselect::improve(tmp$mat, 1, 5)
+round(cor(na.omit(cal_field@data[, -c(1:2)])), 2)
+
+
+
+
 
 # Expert calibration points
-# - Calibration: 93.89 %
-# - Validation: 
 cal_expert <- spgrass6::readVECT("cal_expert")
-str(cal_expert)
-cal_expert$flow_direc <- as.factor(cal_expert$flow_direc)
 cal_expert$UM <- as.factor(cal_expert$UM)
-fit_expert <- 
-  MASS::lda(form, data = cal_expert@data, prior = rep(1, nlevels(cal_expert$UM))/nlevels(cal_expert$UM))
-fit_expert_fitted <- predict(fit_expert, newdata = cal_expert@data, prior = fit_expert$prior)
-sum(diag(table(data.frame(obs = cal_expert$UM, fit = fit_expert_fitted$class)))) / length(cal_expert$UM)
+
+str(cal_expert)
+head(cal_expert@data)
+nrow(na.omit(cal_expert@data)) - nrow(cal_expert@data)
+which(sapply(lapply(cal_expert@data, is.na), any))
+
+fit_expert <- MASS::lda(form, data = cal_expert@data, na.action = na.omit)
+fit_expert_fitted <- predict(fit_expert, newdata = na.omit(cal_expert@data), prior = fit_expert$prior)
+sum(diag(table(data.frame(obs = na.omit(cal_expert@data)$UM, fit = fit_expert_fitted$class)))) / 
+  nrow(na.omit(cal_expert@data))

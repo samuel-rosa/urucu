@@ -255,6 +255,7 @@ system("v.info map=outer_limit")
 # Accesible area
 system(paste("v.in.ogr dsn=", dir, "access_area.shp output=access_limit", sep = ""))
 system("v.info map=access_limit")
+system("v.to.rast input=access_limit output=access_limit use=val")
 
 # Non-accessible area
 system(paste("v.in.ogr dsn=", dir, "non_access_area.shp output=non_access_limit", sep = ""))

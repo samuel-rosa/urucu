@@ -235,9 +235,18 @@ rm(dir)
 dir <- "/home/lgcs-mds/projects/urucu/data/vector/"
 
 # Target soil map
-
-system(paste("v.in.ogr dsn=", dir, "target_soil_map.shp output=target_soil_map", sep = ""))
-system("v.info map=target_soil_map")
+# Clean data.frame and convert target soil map to raster
+# 
+tmp <- raster::shapefile(paste(dir, "target_soil_map.shp", sep = ""))
+tmp@data <- data.frame(UM = tmp$UM)
+levels(tmp$UM)
+tmp$UM <- as.integer(tmp$UM)
+spgrass6::writeVECT(tmp, "target_soil_map", v.in.ogr_flags = "overwrite")
+system("v.info -c target_soil_map")
+cmd <- paste("v.to.rast --o input=target_soil_map output=target_soil_map column=UM")
+system(cmd)
+system("d.mon x0")
+system("d.rast.leg target_soil_map")
 
 # Outer limit
 system(paste("v.in.ogr dsn=", dir, "outer_area.shp output=outer_limit", sep = ""))

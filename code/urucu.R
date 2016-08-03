@@ -11,6 +11,22 @@ spgrass6::initGRASS(
   override = TRUE, pid = Sys.getpid())
 system("r.mask -o target_soil_map")
 
+# User defined functions ######################################################################################
+
+# Purity
+purity <- 
+  function (obs, fit) {
+    tab <- table(data.frame(fit, obs))
+    diagonal <- diag(tab)
+    overall_purity <- sum(diag(tab)) / length(obs)
+    map_unit_purity <- diagonal / rowSums(tab)
+    class_representation <- diagonal / colSums(tab)
+    res <- 
+      list(overall_purity = overall_purity, 
+           by_class = data.frame(mu_purity = map_unit_purity, class_rep = class_representation))
+    return(res)
+  }
+
 # Prepare calibration data ####################################################################################
 
 # Load necessary data
@@ -143,12 +159,10 @@ nrow(na.omit(cal_field@data)) - nrow(cal_field@data)
 which(sapply(lapply(cal_field@data, is.na), any))
 # Calibrate LDA model
 fit_field_lda <- MASS::lda(form, data = cal_field@data, na.action = na.omit)
-tmp <- predict(fit_field_lda, newdata = na.omit(cal_field@data), prior = fit_field_lda$prior)
-sum(diag(table(data.frame(obs = na.omit(cal_field@data)$UM, fit = tmp$class)))) / nrow(na.omit(cal_field@data))
+fit_field_lda$fitted <- predict(fit_field_lda, newdata = na.omit(cal_field@data), prior = fit_field_lda$prior)
 # Calibrate RF model
 set.seed(2001)
 fit_field_rf <- randomForest::randomForest(form, data = cal_field@data, na.action = na.omit)
-sum(diag(table(data.frame(obs = cal_field$UM, fit = fit_field_rf$predicted)))) / nrow(na.omit(cal_field@data))
 
 # Expert calibration points
 cal_expert <- spgrass6::readVECT("cal_expert")
@@ -160,12 +174,11 @@ nrow(na.omit(cal_expert@data)) - nrow(cal_expert@data)
 which(sapply(lapply(cal_expert@data, is.na), any))
 # Calibrate LDA model
 fit_expert_lda <- MASS::lda(form, data = cal_expert@data, na.action = na.omit)
-tmp <- predict(fit_expert_lda, newdata = na.omit(cal_expert@data), prior = fit_expert_lda$prior)
-sum(diag(table(data.frame(obs = cal_expert$UM, fit = tmp$class)))) / nrow(na.omit(cal_expert@data))
+fit_expert_lda$fitted <- 
+  predict(fit_expert_lda, newdata = na.omit(cal_expert@data), prior = fit_expert_lda$prior)
 # Calibrate RF model
 set.seed(2001)
 fit_expert_rf <- randomForest::randomForest(form, data = cal_expert@data, na.action = na.omit)
-sum(diag(table(data.frame(obs = cal_expert$UM, fit = fit_expert_rf$predicted)))) / nrow(cal_expert@data)
 
 # Random field calibration points
 # Look for NAs
@@ -175,13 +188,11 @@ nrow(na.omit(cal_random_field@data)) - nrow(cal_random_field@data)
 which(sapply(lapply(cal_random_field@data, is.na), any))
 # Calibrate LDA model
 fit_random_field_lda <- MASS::lda(form, data = cal_random_field@data)
-tmp <- predict(fit_random_field_lda, newdata = cal_random_field@data, prior = fit_random_field_lda$prior)
-sum(diag(table(data.frame(obs = cal_random_field$UM, fit = tmp$class)))) / length(cal_random_field$UM)
+fit_random_field_lda$fitted <- 
+  predict(fit_random_field_lda, newdata = cal_random_field@data, prior = fit_random_field_lda$prior)
 # Calibrate RF model
 set.seed(2001)
 fit_random_field_rf <- randomForest::randomForest(form, data = cal_random_field@data)
-sum(diag(table(data.frame(obs = cal_random_field$UM, fit = fit_random_field_rf$predicted)))) / 
-  nrow(cal_random_field@data)
 
 # Random expert calibration points
 # Look for NAs
@@ -191,13 +202,11 @@ nrow(na.omit(cal_random_expert@data)) - nrow(cal_random_expert@data)
 which(sapply(lapply(cal_random_expert@data, is.na), any))
 # Calibrate LDA model
 fit_random_expert_lda <- MASS::lda(form, data = cal_random_expert@data)
-tmp <- predict(fit_random_expert_lda, newdata = cal_random_expert@data, prior = fit_random_expert_lda$prior)
-sum(diag(table(data.frame(obs = cal_random_expert$UM, fit = tmp$class)))) / length(cal_random_expert$UM)
+fit_random_expert_lda$fitted <- 
+  predict(fit_random_expert_lda, newdata = cal_random_expert@data, prior = fit_random_expert_lda$prior)
 # Calibrate RF model
 set.seed(2001)
 fit_random_expert_rf <- randomForest::randomForest(form, data = cal_random_expert@data)
-sum(diag(table(data.frame(obs = cal_random_expert$UM, fit = fit_random_expert_rf$predicted)))) / 
-  nrow(cal_random_expert@data)
 
 # Random large calibration points
 # Look for NAs
@@ -207,13 +216,11 @@ nrow(na.omit(cal_random_large@data)) - nrow(cal_random_large@data)
 which(sapply(lapply(cal_random_large@data, is.na), any))
 # Calibrate LDA model
 fit_random_large_lda <- MASS::lda(form, data = cal_random_large@data)
-tmp <- predict(fit_random_large_lda, newdata = cal_random_large@data, prior = fit_random_large_lda$prior)
-sum(diag(table(data.frame(obs = cal_random_large$UM, fit = tmp$class)))) / length(cal_random_large$UM)
+fit_random_large_lda$fitted <-
+  predict(fit_random_large_lda, newdata = cal_random_large@data, prior = fit_random_large_lda$prior)
 # Calibrate RF model
 set.seed(2001)
 fit_random_large_rf <- randomForest::randomForest(form, data = cal_random_large@data)
-sum(diag(table(data.frame(obs = cal_random_large$UM, fit = fit_random_large_rf$predicted)))) / 
-  nrow(cal_random_large@data)
 
 # Prepare validation data #####################################################################################
 
@@ -227,11 +234,12 @@ soil_map <- soil_map[order(soil_map$V3), ]
 
 # Get stratified simple random sample (proportional to area)
 size <- round(2000 * (summary(as.factor(soil_map$V3)) / length(soil_map$V3)))
+area <- list(total = (length(soil_map$V3) * 25), strata = (size * 25))
 set.seed(1984)
 val_sample <- sampling::strata(
   data = soil_map[order(soil_map$V3), ], stratanames = "V3", size = size, method = "srswor")
 str(val_sample)
-summary(as.factor(val_sample$V3)) - size
+summary(as.factor(val_sample$V3))
 
 # Prepare validation data
 soil_map <- soil_map[val_sample$ID_unit, ]
@@ -242,7 +250,25 @@ levels(val_sample$data$V3) <-
 colnames(val_sample$data) <- c("UM", colnames(val_sample$data)[-1])
 str(val_sample$data)
 
+# Field data
+val_field_lda <- purity(obs = val_sample$data$UM, fit = predict(fit_field_lda, val_sample$data)$class)
+val_field_rf <- purity(obs = val_sample$data$UM, fit = predict(fit_field_rf, val_sample$data))
 
+# Expert data
+val_expert_lda <- purity(obs = val_sample$data$UM, fit = predict(fit_expert_lda, val_sample$data)$class)
+val_expert_rf <- purity(obs = val_sample$data$UM, fit = predict(fit_expert_rf, val_sample$data))
 
-tmp <- predict(fit_expert_rf, val_sample$data)
-sum(diag(table(data.frame(obs = val_sample$data$UM, fit = tmp)))) / 1999
+# Random data (field)
+val_random_field_lda <- 
+  purity(obs = val_sample$data$UM, fit = predict(fit_random_field_lda, val_sample$data)$class)
+val_random_field_rf <- purity(obs = val_sample$data$UM, fit = predict(fit_random_field_rf, val_sample$data))
+
+# Random data (expert)
+val_random_expert_lda <- 
+  purity(obs = val_sample$data$UM, fit = predict(fit_random_expert_lda, val_sample$data)$class)
+val_random_expert_rf <- purity(obs = val_sample$data$UM, fit = predict(fit_random_expert_rf, val_sample$data))
+
+# Random data (large)
+val_random_large_lda <- 
+  purity(obs = val_sample$data$UM, fit = predict(fit_random_large_lda, val_sample$data)$class)
+val_random_large_rf <- purity(obs = val_sample$data$UM, fit = predict(fit_random_large_rf, val_sample$data))

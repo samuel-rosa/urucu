@@ -1,10 +1,9 @@
-# title: "Create GRASS GIS database"
+# title: "Create GRASS GIS database on Linux machine"
 # author: "Alessandro Samuel Rosa"
 
 rm(list = ls())
 
 # CREATE GRASS GIS DATABASE ###################################################################################
-
 # Set GRASS GIS DATABASE
 dbGRASS <- "data/GRASS"
 spgrass6::initGRASS(

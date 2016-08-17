@@ -6,8 +6,27 @@
 # to the database, as well as all existing vector (polygon) data.
 
 rm(list = ls())
+
+# Start OS dependent GRASS GIS ################################################################################
+
+if (.Platform$OS.type == "unix") {
+  gisBase <- "/usr/lib/grass64/"
+} else {
+  gisBase <- "C:/Program Files (x86)/GRASS GIS 6.4.4"
+}
+
+grassGis <- function (cmd) {
+  if (.Platform$OS.type == "unix") {
+    system(cmd)
+  } else {
+    shell(cmd)
+  }
+}
+
 spgrass6::initGRASS(
-  gisBase = "/usr/lib/grass64/", gisDbase = "data/GRASS", location = "urucu", mapset = "database",
+  gisBase = gisBase,
+  # gisBase = "/usr/lib/grass64/", 
+  gisDbase = "data/GRASS", location = "urucu", mapset = "database",
   override = TRUE, pid = Sys.getpid())
 system("r.mask -o target_soil_map")
 

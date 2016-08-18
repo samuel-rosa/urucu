@@ -95,11 +95,12 @@ plot(cal_expert@coords)
 # Here we create the probabilistic calibration datasets. First we need to load the covariate data to create
 # our balanced sample. Due to the large size of the study region, it is wiser to export a csv file omiting
 # cells with NA values to a temporary file.
-id <- c("elevation", "curvature", "plan_curv", "slope", "flow_down", "twi")
-cmd <- paste("r.out.xyz input=",  paste(id, collapse = ","), " output=data/tmp/access_covars.csv", sep = "")
+id_covars <- c("elevation", "curvature", "plan_curv", "slope", "flow_down", "twi")
+cmd <- paste(
+  "r.out.xyz input=", paste(id_covars, collapse = ","), " output=data/tmp/access_covars.csv", sep = "")
 grassGis(cmd)
 covars <- read.table("data/tmp/access_covars.csv", sep = "|")
-colnames(covars) <- c("x", "y", id)
+colnames(covars) <- c("x", "y", id_covars)
 head(covars)
 
 # Start with the field-based random balanced samples, i.e. the probability sample with as many observations
@@ -203,20 +204,41 @@ xy <- do.call(rbind, xy)
 xy[, 1:2] <- xy[, 1:2] / 1000
 map <- lattice::xyplot(
   y ~ x | cal, xy, xlab = "Easting (km)", ylab = "Northing (km)", aspect = "iso", layout = c(3, 2),
+  par.settings = list(fontsize = list(text = 8, points = 6)),
   panel = function (x, y, ...) {
     lattice::panel.polygon(
-      x = access_limit@polygons[[1]]@Polygons[[1]]@coords[, 1], 
-      y = access_limit@polygons[[1]]@Polygons[[1]]@coords[, 2], col = "lightgray", border = "lightgray")
-    lattice::panel.xyplot(
-      x, y, col = "black", pch = 20, cex = 0.2)
+      x = access_limit@polygons[[1]]@Polygons[[1]]@coords[, 1] / 1000, 
+      y = access_limit@polygons[[1]]@Polygons[[1]]@coords[, 2] / 1000, col = "lightgray", border = "lightgray")
+    lattice::panel.xyplot(x, y, col = "black", pch = 20, cex = 0.1)
   })
 map$index.cond[[1]] <- c(4, 5, 3, 2, 1)
 dev.off()
-png("res/fig/calibration_points.png", width = 20, height = 12, units = "cm", res = 600)
+png("res/fig/calibration_points.png", width = 16, height = 10, units = "cm", res = 600)
 map
 dev.off()
-rm(map, xy, n, id)
+
+rm(map, xy)
 gc()
+
+# Prepare figure with the distribution of points per category
+xy <- list(cal_field, cal_expert, cal_random_field, cal_random_expert, cal_random_large)
+xy <- lapply(xy, function (x) x$UM)
+names(xy) <- id
+xy <- lapply(xy, function (x) summary(x) / sum(summary(x))) 
+xy <- cbind(stack(xy), um = names(xy[[1]]))
+col <- c("azure2", "lightsalmon", "darkseagreen1", "lightgoldenrod1")
+p <- lattice::barchart(
+  values ~ um | ind, data = xy, col = col, 
+  scales = list(x = list(draw = FALSE)), ylab = "Proportion",
+  key = list(text = list(as.character(unique(xy$um))), rectangles = list(col = col)),
+  par.settings = list(fontsize = list(text = 8, points = 6)))
+p$index.cond[[1]] <- c(4, 5, 3, 2, 1)
+names(p$legend) <- "bottom"
+dev.off()
+png("res/fig/cal_points_prop.png", width = 16, height = 10, units = "cm", res = 600)
+p
+dev.off()
+rm(p, col, xy)
 
 # Calibrate soil prediction models ############################################################################
 
@@ -292,7 +314,12 @@ fit_random_large_lda$predicted <-
 set.seed(2001)
 fit_random_large_rf <- randomForest::randomForest(form, data = cal_random_large@data)
 
-# Prepare figure with gooddness of fit measure ()
+# Save calibrated models
+save(fit_field_rf, fit_field_lda, fit_expert_rf, fit_expert_lda, fit_random_field_rf, fit_random_field_lda,
+     fit_random_expert_rf, fit_random_expert_lda, fit_random_large_rf, fit_random_large_lda,
+     file = "data/R/calibrated_models.rda")
+
+# Prepare figure with gooddness of fit measure
 good_fit <- 
   list(
     field = sapply(list(fit_field_lda, fit_field_rf), 
@@ -306,39 +333,42 @@ good_fit <-
     random_large = sapply(list(fit_random_large_lda, fit_random_large_rf), 
                           function (x) overallPurity(obs = cal_random_large$UM, fit = x$predicted)))
 good_fit <- stack(good_fit)
-good_fit$model <- c("LDA", "RF")
+good_fit$model <- c("FLD", "RF")
 n <- sapply(list(cal_field, cal_expert, cal_random_field, cal_random_expert, cal_random_large), nrow)
 id <- c("Field", "Expert", rep("Random", 3))
-id <- paste(id, " (n = ", n, ")", sep = "")
+id <- paste(id, "\n(n = ", n, ")", sep = "")
 good_fit$ind <- factor(rep(id, each = 2), levels = id)
+col <- c("darkseagreen1", "lightgoldenrod1")
 p <- lattice::barchart(
-  values ~ ind, group = model, good_fit, col = c("lightgray", "darkgray"), ylab = "Calibration agreement",
+  values ~ ind, group = model, good_fit, col = col, ylab = "Calibration agreement", 
   xlab = "Calibration dataset", 
-  key = list(text = list(unique(good_fit$model)), rectangles = list(col = c("lightgray", "darkgray"))),
-  scales = list(x = list(rot = 10)))
+  key = list(text = list(unique(good_fit$model)), rectangles = list(col = col)),
+  par.settings = list(fontsize = list(text = 8, points = 6))
+  )
 names(p$legend) <- "inside"
-p$legend$inside$x <- 0.755
+p$legend$inside$x <- 0.6
 p$legend$inside$y <- 0.875
 dev.off()
-png("res/fig/fit_accuracy.png")
+png("res/fig/fit_accuracy.png", width = 8, height = 8, units = "cm", res = 600)
 p
 dev.off()
+
 rm(p, good_fit, n, id)
 gc()
 
 # Prepare validation data #####################################################################################
 
 # Load required data
-system("r.mask -o access_limit")
+grassGis("r.mask -o access_limit")
 cmd <- paste("r.out.xyz input=target_soil_map output=data/tmp/target_soil_map.csv", sep = "")
-system(cmd)
+grassGis(cmd)
 soil_map <- read.table("data/tmp/target_soil_map.csv", sep = "|")
 soil_map$id <- 1:nrow(soil_map)
 soil_map <- soil_map[order(soil_map$V3), ]
 
-# Get stratified simple random sample (proportional to area)
+# Get stratified simple random sample (proportional to area) using the reference soil map
 size <- round(2000 * (summary(as.factor(soil_map$V3)) / length(soil_map$V3)))
-area <- list(total = (length(soil_map$V3) * 25), strata = (size * 25))
+area <- list(total = length(soil_map$V3), strata = summary(as.factor(soil_map$V3)))
 set.seed(1984)
 val_sample <- sampling::strata(
   data = soil_map[order(soil_map$V3), ], stratanames = "V3", size = size, method = "srswor")
@@ -355,7 +385,15 @@ colnames(val_sample$data) <- c("UM", colnames(val_sample$data)[-1])
 str(val_sample$data)
 
 # Field data
-val_field_lda <- purity(obs = val_sample$data$UM, fit = predict(fit_field_lda, val_sample$data)$class)
+val_field_lda <- cbind(
+  obs = val_sample$data$UM,
+  fit = predict(fit_field_lda, val_sample$data)$class,
+  stra = val_sample$sample$Stratum
+)
+val_field_lda <- c(by(val_field_lda, val_field_lda[, "stra"], function (x) overallPurity(x$obs, x$fit)))
+val_field_lda <- sum(val_field_lda * (summary(val_sample$data$UM) / 1999))
+  
+
 val_field_rf <- purity(obs = val_sample$data$UM, fit = predict(fit_field_rf, val_sample$data))
 
 # Expert data

@@ -89,6 +89,7 @@ cal_expert$UM <- as.factor(cal_expert$MDS)
 levels(cal_expert$UM) <- levels(cal_field$UM)[c(1, 2, 2, 3, 4)]
 cal_expert@data <- data.frame(UM = cal_expert$UM)
 str(cal_expert)
+plot(cal_expert@coords)
 
 # Select three probability samples of sizes equal to n = 'cal_field', n = 'cal_expert' and n = 2000.
 # Here we create the probabilistic calibration datasets. First we need to load the covariate data to create
@@ -163,6 +164,8 @@ cmd <- paste("v.what.rast vect=", pts, " raster=", id, " column=", cols_samp, se
 lapply(cmd, grassGis)
 grassGis(paste("v.info -c ", pts))
 rm(cmd, pts)
+cal_field <- spgrass6::readVECT("cal_field")
+cal_field$UM <- as.factor(cal_field$UM)
 
 # Expert calibration
 pts <- "cal_expert"
@@ -174,10 +177,17 @@ cmd <- paste("v.what.rast vect=", pts, " raster=", id, " column=", cols_samp, se
 lapply(cmd, grassGis)
 grassGis(paste("v.info -c ", pts))
 rm(cmd, pts)
+cal_expert <- spgrass6::readVECT("cal_expert")
+cal_expert$UM <- as.factor(cal_expert$UM)
 
 rm(cols)
 
+# Save calibration points
+save(cal_field, cal_expert, cal_random_field, cal_random_expert, cal_random_large, 
+     file = "data/R/calibration_points.rda")
+
 # Prepare figure with calibration observations
+# Transform coordinates to kilometres to improve plotting
 n <- sapply(list(cal_field, cal_expert, cal_random_field, cal_random_expert, cal_random_large), nrow)
 id <- c("Field", "Expert", rep("Random", 3))
 id <- paste(id, " (n = ", n, ")", sep = "")
@@ -190,8 +200,9 @@ xy <- lapply(seq_along(xy), function (i) {
 })
 str(xy)
 xy <- do.call(rbind, xy)
+xy[, 1:2] <- xy[, 1:2] / 1000
 map <- lattice::xyplot(
-  y ~ x | cal, xy, xlab = "Easting (m)", ylab = "Northing (m)", aspect = "iso", layout = c(3, 2),
+  y ~ x | cal, xy, xlab = "Easting (km)", ylab = "Northing (km)", aspect = "iso", layout = c(3, 2),
   panel = function (x, y, ...) {
     lattice::panel.polygon(
       x = access_limit@polygons[[1]]@Polygons[[1]]@coords[, 1], 
@@ -213,9 +224,6 @@ gc()
 form <- formula(paste("UM ~ ", paste(cols_samp, collapse = " + ")))
 
 # Field calibration points
-cal_field <- spgrass6::readVECT("cal_field")
-cal_field$UM <- as.factor(cal_field$UM)
-# Look for NAs
 str(cal_field)
 head(cal_field@data)
 nrow(na.omit(cal_field@data)) - nrow(cal_field@data)
@@ -229,8 +237,6 @@ set.seed(2001)
 fit_field_rf <- randomForest::randomForest(form, data = cal_field@data, na.action = na.omit)
 
 # Expert calibration points
-cal_expert <- spgrass6::readVECT("cal_expert")
-cal_expert$UM <- as.factor(cal_expert$UM)
 # Look for NAs
 str(cal_expert)
 head(cal_expert@data)

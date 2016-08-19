@@ -370,12 +370,12 @@ soil_map <- soil_map[order(soil_map$V3), ]
 size <- round(2000 * (summary(as.factor(soil_map$V3)) / length(soil_map$V3)))
 area <- list(total = length(soil_map$V3), strata = summary(as.factor(soil_map$V3)))
 set.seed(1984)
-val_sample <- sampling::strata(
-  data = soil_map[order(soil_map$V3), ], stratanames = "V3", size = size, method = "srswor")
+val_sample <- sampling::strata(data = soil_map, stratanames = "V3", size = size, method = "srswor")
 str(val_sample)
 summary(as.factor(val_sample$V3))
 
 # Prepare validation data
+# Get IDs of selected units
 soil_map <- soil_map[val_sample$ID_unit, ]
 val_sample <- list(sample = val_sample, data = cbind(soil_map[, -c(1:2)], covars[soil_map$id, ]))
 val_sample$data$V3 <- as.factor(val_sample$data$V3)
@@ -384,33 +384,45 @@ levels(val_sample$data$V3) <-
 colnames(val_sample$data) <- c("UM", colnames(val_sample$data)[-1])
 str(val_sample$data)
 
-# Field data
-val_field_lda <- cbind(
-  obs = val_sample$data$UM,
-  fit = predict(fit_field_lda, val_sample$data)$class,
-  stra = val_sample$sample$Stratum
+# Validation
+# We compute the overall actual purity for each sampling strata, which are used to compute a weigthed average
+# that represents the overall actual purity of the soil map. The weights are the relative size of each stratum.
+# Because the strata coincide with the categories of the target variable, the strata-based overall actual 
+# purity is equivalent to the class representation (producer's accuracy), i.e. the proportion of the area
+# occupied with a given class that is mapped as that class.
+# Load randomForest package for prediction
+require(randomForest)
+validation <- data.frame(
+  observed = val_sample$data$UM,
+  strata = as.factor(val_sample$sample$Stratum),
+  field_lda = predict(fit_field_lda, val_sample$data)$class,
+  field_rf = predict(fit_field_rf, val_sample$data),
+  expert_lda = predict(fit_expert_lda, val_sample$data)$class,
+  expert_rf = predict(fit_expert_rf, val_sample$data),
+  random_field_lda = predict(fit_random_field_lda, val_sample$data)$class,
+  random_field_rf = predict(fit_random_field_rf, val_sample$data),
+  random_expert_lda = predict(fit_random_expert_lda, val_sample$data)$class,
+  random_expert_rf = predict(fit_random_expert_rf, val_sample$data),
+  random_large_lda = predict(fit_random_large_lda, val_sample$data)$class,
+  random_large_rf = predict(fit_random_large_rf, val_sample$data)
 )
-val_field_lda <- c(by(val_field_lda, val_field_lda[, "stra"], function (x) overallPurity(x$obs, x$fit)))
-val_field_lda <- sum(val_field_lda * (summary(val_sample$data$UM) / 1999))
-  
+strata_validation <- sapply(3:ncol(validation), function (i) {
+  c(by(validation, validation$strata, function (x) overallPurity(obs = x[, 1], fit = x[, i])))
+})
+colnames(strata_validation) <- names(validation)[-c(1:2)]
+rownames(strata_validation) <- levels(val_sample$data$UM)
+strata_validation <- 
+  rbind(strata_validation,
+        MEAN = apply(strata_validation, 2, function (x) sum(x * (area$strata / area$total))))
+w2 <- (area$strata / area$total) ^ 2
+strata_validation <-
+  rbind(strata_validation,
+        SE = sqrt(apply(strata_validation[1:4, ], 2, function (x) sum(w2 * ((x * (1 - x)) / (size - 1))))))
+strata_validation <- round(strata_validation, 4)
+strata_validation <- t(strata_validation) * 100
 
-val_field_rf <- purity(obs = val_sample$data$UM, fit = predict(fit_field_rf, val_sample$data))
 
-# Expert data
-val_expert_lda <- purity(obs = val_sample$data$UM, fit = predict(fit_expert_lda, val_sample$data)$class)
-val_expert_rf <- purity(obs = val_sample$data$UM, fit = predict(fit_expert_rf, val_sample$data))
 
-# Random data (field)
-val_random_field_lda <- 
-  purity(obs = val_sample$data$UM, fit = predict(fit_random_field_lda, val_sample$data)$class)
-val_random_field_rf <- purity(obs = val_sample$data$UM, fit = predict(fit_random_field_rf, val_sample$data))
+diag(table(validation[, c(3, 1)])) / rowSums(table(validation[, c(3, 1)]))
 
-# Random data (expert)
-val_random_expert_lda <- 
-  purity(obs = val_sample$data$UM, fit = predict(fit_random_expert_lda, val_sample$data)$class)
-val_random_expert_rf <- purity(obs = val_sample$data$UM, fit = predict(fit_random_expert_rf, val_sample$data))
 
-# Random data (large)
-val_random_large_lda <- 
-  purity(obs = val_sample$data$UM, fit = predict(fit_random_large_lda, val_sample$data)$class)
-val_random_large_rf <- purity(obs = val_sample$data$UM, fit = predict(fit_random_large_rf, val_sample$data))

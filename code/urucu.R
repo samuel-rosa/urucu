@@ -339,6 +339,7 @@ cal_purity$model <- c("FLD", "BRF")
 tmp <- data.frame(x = round(cal_purity$values * 100, 2))
 rownames(tmp) <- paste(cal_purity$ind, "_", cal_purity$model, sep = "")
 write.csv(tmp, file = "res/tab/calibration_purity.csv")
+rm(tmp)
 
 # n <- sapply(list(cal_field, cal_expert, cal_random_field, cal_random_expert, cal_random_large), nrow)
 # id <- c("Field", "Expert", rep("Random", 3))
@@ -434,5 +435,45 @@ val_purity <- data.frame(val_purity)
 tmp <- apply(val_purity, 1, function (x) 
   paste(round(x[1] * 100, 2), " (", round(x[2] * 100, 2), ")", sep = ""))
 write.csv(tmp, file = "res/tab/validation_purity.csv")
+rm(tmp)
 
+# Compute validation theoretical purity and entropy
+val_entropy <- list(
+  field_lda = predict(fit_field_lda, val_sample$data)$posterior,
+  field_rf = predict(fit_field_rf, val_sample$data, type = "prob"),
+  expert_lda = predict(fit_expert_lda, val_sample$data)$posterior,
+  expert_rf = predict(fit_expert_rf, val_sample$data, type = "prob"),
+  random_field_lda = predict(fit_random_field_lda, val_sample$data)$posterior,
+  random_field_rf = predict(fit_random_field_rf, val_sample$data, type = "prob"),
+  random_expert_lda = predict(fit_random_expert_lda, val_sample$data)$posterior,
+  random_expert_rf = predict(fit_random_expert_rf, val_sample$data, type = "prob"),
+  random_large_lda = predict(fit_random_large_lda, val_sample$data)$posterior,
+  random_large_rf = predict(fit_random_large_rf, val_sample$data, type = "prob")
+)
+theo_purity <- list(mean = sapply(val_entropy, function (x) apply(x, 1, max)))
+theo_purity$var <- sapply(1:ncol(theo_purity$mean), function (i) {
+  c(by(theo_purity$mean, as.factor(val_sample$sample$Stratum), function (x) var(x[, i])))
+})
+theo_purity$mean <- sapply(1:ncol(theo_purity$mean), function (i) {
+  c(by(theo_purity$mean, as.factor(val_sample$sample$Stratum), function (x) mean(x[, i])))
+})
+# colnames(theo_purity$mean) <- names(val_entropy)
+# rownames(theo_purity$mean) <- levels(val_sample$data$UM)
+theo_purity$overall <- 
+  data.frame(mean = apply(theo_purity$mean, 2, function (x) sum(x * (area$strata / area$total))),
+             se = sqrt(apply(theo_purity$var, 2, function (x) sum(w2 * x))))
 
+tmp <- sapply(val_entropy, function (x) apply(x, 1, function (x) -sum(x*log(x), na.rm = TRUE)))
+tmp <- list(
+  mean = sapply(1:ncol(tmp), function (i) {
+    c(by(tmp, as.factor(val_sample$sample$Stratum), function (x) mean(x[, i])))
+  }),
+  var = sapply(1:ncol(tmp), function (i) {
+    c(by(tmp, as.factor(val_sample$sample$Stratum), function (x) var(x[, i])))
+  })
+  )
+tmp$overal <-
+  data.frame(mean = apply(tmp$mean, 2, function (x) sum(x * (area$strata / area$total))),
+             se = sqrt(apply(tmp$var, 2, function (x) sum(w2 * x))))
+
+  

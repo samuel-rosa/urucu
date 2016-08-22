@@ -319,8 +319,8 @@ save(fit_field_rf, fit_field_lda, fit_expert_rf, fit_expert_lda, fit_random_fiel
      fit_random_expert_rf, fit_random_expert_lda, fit_random_large_rf, fit_random_large_lda,
      file = "data/R/calibrated_models.rda")
 
-# Prepare figure with gooddness of fit measure
-good_fit <- 
+# Compute calibration purity and save as a csv file
+cal_purity <- 
   list(
     field = sapply(list(fit_field_lda, fit_field_rf), 
                    function (x) overallPurity(obs = cal_field$UM, fit = x$predicted)),
@@ -332,29 +332,35 @@ good_fit <-
                            function (x) overallPurity(obs = cal_random_expert$UM, fit = x$predicted)),
     random_large = sapply(list(fit_random_large_lda, fit_random_large_rf), 
                           function (x) overallPurity(obs = cal_random_large$UM, fit = x$predicted)))
-good_fit <- stack(good_fit)
-good_fit$model <- c("FLD", "RF")
-n <- sapply(list(cal_field, cal_expert, cal_random_field, cal_random_expert, cal_random_large), nrow)
-id <- c("Field", "Expert", rep("Random", 3))
-id <- paste(id, "\n(n = ", n, ")", sep = "")
-good_fit$ind <- factor(rep(id, each = 2), levels = id)
-col <- c("darkseagreen1", "lightgoldenrod1")
-p <- lattice::barchart(
-  values ~ ind, group = model, good_fit, col = col, ylab = "Calibration agreement", 
-  xlab = "Calibration dataset", 
-  key = list(text = list(unique(good_fit$model)), rectangles = list(col = col)),
-  par.settings = list(fontsize = list(text = 8, points = 6))
-  )
-names(p$legend) <- "inside"
-p$legend$inside$x <- 0.6
-p$legend$inside$y <- 0.875
-dev.off()
-png("res/fig/fit_accuracy.png", width = 8, height = 8, units = "cm", res = 600)
-p
-dev.off()
+cal_purity <- stack(cal_purity)
+cal_purity$model <- c("FLD", "BRF")
 
-rm(p, good_fit, n, id)
-gc()
+# Save csv file with calibration purity
+tmp <- data.frame(x = round(cal_purity$values * 100, 2))
+rownames(tmp) <- paste(cal_purity$ind, "_", cal_purity$model, sep = "")
+write.csv(tmp, file = "res/tab/calibration_purity.csv")
+
+# n <- sapply(list(cal_field, cal_expert, cal_random_field, cal_random_expert, cal_random_large), nrow)
+# id <- c("Field", "Expert", rep("Random", 3))
+# id <- paste(id, "\n(n = ", n, ")", sep = "")
+# good_fit$ind <- factor(rep(id, each = 2), levels = id)
+# col <- c("darkseagreen1", "lightgoldenrod1")
+# p <- lattice::barchart(
+#   values ~ ind, group = model, good_fit, col = col, ylab = "Calibration agreement", 
+#   xlab = "Calibration dataset", 
+#   key = list(text = list(unique(good_fit$model)), rectangles = list(col = col)),
+#   par.settings = list(fontsize = list(text = 8, points = 6))
+#   )
+# names(p$legend) <- "inside"
+# p$legend$inside$x <- 0.6
+# p$legend$inside$y <- 0.875
+# dev.off()
+# png("res/fig/fit_accuracy.png", width = 8, height = 8, units = "cm", res = 600)
+# p
+# dev.off()
+# 
+# rm(p, good_fit, n, id)
+# gc()
 
 # Prepare validation data #####################################################################################
 
@@ -406,23 +412,27 @@ validation <- data.frame(
   random_large_lda = predict(fit_random_large_lda, val_sample$data)$class,
   random_large_rf = predict(fit_random_large_rf, val_sample$data)
 )
-strata_validation <- sapply(3:ncol(validation), function (i) {
-  c(by(validation, validation$strata, function (x) overallPurity(obs = x[, 1], fit = x[, i])))
-})
-colnames(strata_validation) <- names(validation)[-c(1:2)]
-rownames(strata_validation) <- levels(val_sample$data$UM)
-strata_validation <- 
-  rbind(strata_validation,
-        MEAN = apply(strata_validation, 2, function (x) sum(x * (area$strata / area$total))))
+
+# Actual class representation
+class_representation <- list(
+  mean = sapply(3:ncol(validation), function (i) {
+    c(by(validation, validation$strata, function (x) overallPurity(obs = x[, 1], fit = x[, i])))
+  }))
+colnames(class_representation$mean) <- names(validation)[-c(1:2)]
+rownames(class_representation$mean) <- levels(val_sample$data$UM)
+class_representation$se <- sqrt((class_representation$mean * (1 - class_representation$mean)) / (size - 1))
+
+# Overall actual purity
+val_purity <- 
+  list(mean = apply(class_representation$mean, 2, function (x) sum(x * (area$strata / area$total))))
 w2 <- (area$strata / area$total) ^ 2
-strata_validation <-
-  rbind(strata_validation,
-        SE = sqrt(apply(strata_validation[1:4, ], 2, function (x) sum(w2 * ((x * (1 - x)) / (size - 1))))))
-strata_validation <- round(strata_validation, 4)
-strata_validation <- t(strata_validation) * 100
+val_purity$se <- 
+  sqrt(apply(class_representation$mean, 2, function (x) sum(w2 * ((x * (1 - x)) / (size - 1)))))
+val_purity <- data.frame(val_purity)
 
-
-
-diag(table(validation[, c(3, 1)])) / rowSums(table(validation[, c(3, 1)]))
+# Save csv file with overall purity
+tmp <- apply(val_purity, 1, function (x) 
+  paste(round(x[1] * 100, 2), " (", round(x[2] * 100, 2), ")", sep = ""))
+write.csv(tmp, file = "res/tab/validation_purity.csv")
 
 

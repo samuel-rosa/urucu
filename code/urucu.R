@@ -414,7 +414,7 @@ validation <- data.frame(
   random_large_rf = predict(fit_random_large_rf, val_sample$data)
 )
 
-# Actual class representation
+# Compute actual class representation
 class_representation <- list(
   mean = sapply(3:ncol(validation), function (i) {
     c(by(validation, validation$strata, function (x) overallPurity(obs = x[, 1], fit = x[, i])))
@@ -423,21 +423,19 @@ colnames(class_representation$mean) <- names(validation)[-c(1:2)]
 rownames(class_representation$mean) <- levels(val_sample$data$UM)
 class_representation$se <- sqrt((class_representation$mean * (1 - class_representation$mean)) / (size - 1))
 
-# Overall actual purity
+# Compute overall actual purity and save csv file 
 val_purity <- 
   list(mean = apply(class_representation$mean, 2, function (x) sum(x * (area$strata / area$total))))
 w2 <- (area$strata / area$total) ^ 2
 val_purity$se <- 
   sqrt(apply(class_representation$mean, 2, function (x) sum(w2 * ((x * (1 - x)) / (size - 1)))))
 val_purity <- data.frame(val_purity)
-
-# Save csv file with overall purity
 tmp <- apply(val_purity, 1, function (x) 
   paste(round(x[1] * 100, 2), " (", round(x[2] * 100, 2), ")", sep = ""))
 write.csv(tmp, file = "res/tab/validation_purity.csv")
 rm(tmp)
 
-# Compute validation theoretical purity and entropy
+# Compute theoretical purity and entropy
 val_entropy <- list(
   field_lda = predict(fit_field_lda, val_sample$data)$posterior,
   field_rf = predict(fit_field_rf, val_sample$data, type = "prob"),

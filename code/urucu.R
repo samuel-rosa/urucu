@@ -314,10 +314,37 @@ fit_random_large_lda$predicted <-
 set.seed(2001)
 fit_random_large_rf <- randomForest::randomForest(form, data = cal_random_large@data)
 
+# Deterministic landform classification algorithm
+fit_land_classification <-
+  function (x) {
+    res <- vector()
+    for (i in 1:nrow(x)) {
+      if (x$slope[i] > 3.50) {
+      # if (x$slope[i] > 3.60) {
+        res[i] <- "CXal+PVA+PVal"
+      } else {
+        if (x$curvature[i] < -0.05 || x$slope[i] < 1.70 && x$elevation[i] < 60.00) {
+        # if (x$curvature[i] < -0.04 || x$slope[i] < 3.6 && x$elevation[i] < 62) {
+          res[i] <- "GXvd+RYq+CXbd+ESkg"
+        } else {
+          if (x$flow_down[i] > 15000.00 && x$twi[i] > 8.00) {
+          # if (x$flow_down[i] > 15000.00 && x$twi[i] > 5.2) {
+            res[i] <- "PACd"
+          } else {
+            res[i] <- "PAd+PAal+PAa"
+          }
+        }
+      }
+    }
+    return (as.factor(res))
+  }
+fit_lca <- fit_land_classification(cal_field@data)
+overallPurity(obs = cal_field$UM, fit = fit_lca)
+
 # Save calibrated models
-save(fit_field_rf, fit_field_lda, fit_expert_rf, fit_expert_lda, fit_random_field_rf, fit_random_field_lda,
-     fit_random_expert_rf, fit_random_expert_lda, fit_random_large_rf, fit_random_large_lda,
-     file = "data/R/calibrated_models.rda")
+save(fit_land_classification, fit_field_rf, fit_field_lda, fit_expert_rf, fit_expert_lda, fit_random_field_rf,
+     fit_random_field_lda, fit_random_expert_rf, fit_random_expert_lda, fit_random_large_rf, 
+     fit_random_large_lda, file = "data/R/calibrated_models.rda")
 
 # Compute calibration purity and save as a csv file
 cal_purity <- 
@@ -332,8 +359,9 @@ cal_purity <-
                            function (x) overallPurity(obs = cal_random_expert$UM, fit = x$predicted)),
     random_large = sapply(list(fit_random_large_lda, fit_random_large_rf), 
                           function (x) overallPurity(obs = cal_random_large$UM, fit = x$predicted)))
+cal_purity$field <- c(cal_purity$field, overallPurity(obs = cal_field$UM, fit = fit_lca))
 cal_purity <- stack(cal_purity)
-cal_purity$model <- c("FLD", "BRF")
+cal_purity$model <- c("FLD", "BRF", "LCA", rep(c("FLD", "BRF"), 4))
 
 # Save csv file with calibration purity
 tmp <- data.frame(x = round(cal_purity$values * 100, 2))
@@ -391,7 +419,7 @@ levels(val_sample$data$V3) <-
 colnames(val_sample$data) <- c("UM", colnames(val_sample$data)[-1])
 str(val_sample$data)
 
-# Validation
+# Validation ##################################################################################################
 # We compute the overall actual purity for each sampling strata, which are used to compute a weigthed average
 # that represents the overall actual purity of the soil map. The weights are the relative size of each stratum.
 # Because the strata coincide with the categories of the target variable, the strata-based overall actual 
@@ -404,6 +432,7 @@ validation <- data.frame(
   strata = as.factor(val_sample$sample$Stratum),
   field_lda = predict(fit_field_lda, val_sample$data)$class,
   field_rf = predict(fit_field_rf, val_sample$data),
+  field_lca = fit_land_classification(val_sample$data),
   expert_lda = predict(fit_expert_lda, val_sample$data)$class,
   expert_rf = predict(fit_expert_rf, val_sample$data),
   random_field_lda = predict(fit_random_field_lda, val_sample$data)$class,
@@ -413,6 +442,38 @@ validation <- data.frame(
   random_large_lda = predict(fit_random_large_lda, val_sample$data)$class,
   random_large_rf = predict(fit_random_large_rf, val_sample$data)
 )
+
+# # Landform classification algorithm
+# cal_profiles <- raster::shapefile("data/vector/Perfis.shp")
+# cal_boreholes <- raster::shapefile("data/vector/Tradagens.shp")
+# val_boreholes <- raster::shapefile("data/vector/Tradagens_Validacao.shp")
+# tmp1 <- cal_profiles@data[, c(30, 31, 32, 40, 41, 39, 36, 37)]
+# tmp2 <- cal_boreholes@data[, c(18, 19, 20, 27, 28, 25, 35, 24)]
+# tmp3 <- val_boreholes@data[, c(26, 27, 28, 36, 37, 34, 32, 33)]
+# colnames(tmp1) <- c("x", "y", id_covars)
+# colnames(tmp2) <- c("x", "y", id_covars)
+# colnames(tmp3) <- c("x", "y", id_covars)
+# tmp <- rbind(tmp1, tmp2, tmp3)
+# sp::coordinates(tmp) <- ~ x + y
+# sp::proj4string(tmp) <- sp::proj4string(target_soil_map)
+# tmp@data$UM <- sp::over(tmp, target_soil_map)$UM
+# tmp <- tmp[-which(is.na(tmp@data$UM)), ]
+# tmp2 <- tmp[sample(1:nrow(tmp), 96), ]
+# 
+# # Compare DEM data
+# fit1 <- fit_land_classification(cal_field@data) # processed dem data
+# fit2 <- fit_land_classification(tmp2@data) # original dem data
+# overallPurity(obs = cal_field$UM, fit = fit1)
+# overallPurity(obs = tmp2$UM, fit = as.factor(fit2))
+# 
+# # Simulate validation datasets
+# a <- vector()
+# i <- 1
+# for (i in 1:1000) {
+#   tmp2 <- tmp[sample(1:nrow(tmp), 96), ]
+#   fit2 <- fit_land_classification(tmp2@data)
+#   a[i] <- overallPurity(obs = tmp2$UM, fit = as.factor(fit2))
+# }
 
 # Compute actual class representation
 class_representation <- list(
@@ -435,6 +496,7 @@ tmp <- apply(val_purity, 1, function (x)
 write.csv(tmp, file = "res/tab/validation_purity.csv")
 rm(tmp)
 
+# Compute the probability of occurence of each category
 occurence_prob <- list(
   field_lda = predict(fit_field_lda, val_sample$data)$posterior,
   field_rf = predict(fit_field_rf, val_sample$data, type = "prob"),

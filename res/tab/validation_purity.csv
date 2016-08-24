@@ -8,4 +8,4 @@
 "random_expert_lda","74.44 (0.97)"
 "random_expert_rf","75.64 (0.96)"
 "random_large_lda","74.34 (0.97)"
-"random_large_rf","77.29 (0.93)"
+"random_large_rf","77.39 (0.93)"

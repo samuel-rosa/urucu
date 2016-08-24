@@ -435,8 +435,7 @@ tmp <- apply(val_purity, 1, function (x)
 write.csv(tmp, file = "res/tab/validation_purity.csv")
 rm(tmp)
 
-# Compute theoretical purity and entropy
-val_entropy <- list(
+occurence_prob <- list(
   field_lda = predict(fit_field_lda, val_sample$data)$posterior,
   field_rf = predict(fit_field_rf, val_sample$data, type = "prob"),
   expert_lda = predict(fit_expert_lda, val_sample$data)$posterior,
@@ -448,30 +447,73 @@ val_entropy <- list(
   random_large_lda = predict(fit_random_large_lda, val_sample$data)$posterior,
   random_large_rf = predict(fit_random_large_rf, val_sample$data, type = "prob")
 )
-theo_purity <- list(mean = sapply(val_entropy, function (x) apply(x, 1, max)))
-theo_purity$var <- sapply(1:ncol(theo_purity$mean), function (i) {
-  c(by(theo_purity$mean, as.factor(val_sample$sample$Stratum), function (x) var(x[, i])))
-})
-theo_purity$mean <- sapply(1:ncol(theo_purity$mean), function (i) {
-  c(by(theo_purity$mean, as.factor(val_sample$sample$Stratum), function (x) mean(x[, i])))
-})
-# colnames(theo_purity$mean) <- names(val_entropy)
-# rownames(theo_purity$mean) <- levels(val_sample$data$UM)
-theo_purity$overall <- 
-  data.frame(mean = apply(theo_purity$mean, 2, function (x) sum(x * (area$strata / area$total))),
-             se = sqrt(apply(theo_purity$var, 2, function (x) sum(w2 * x))))
 
-tmp <- sapply(val_entropy, function (x) apply(x, 1, function (x) -sum(x*log(x), na.rm = TRUE)))
-tmp <- list(
+# Compute theoretical purity and save data in a csv file
+# We compute the overall mean, median and standard error. The median is compared to the mean to see 
+# if the theoretical purity is a skewed variable. The overall theoretical purity is a left skewed 
+# variable (the median is always larger than the mean). Besides, the difference between the median and the
+# mean increases with the mean.
+tmp <- sapply(occurence_prob, function (x) apply(x, 1, max))
+theo_purity <- list(
   mean = sapply(1:ncol(tmp), function (i) {
     c(by(tmp, as.factor(val_sample$sample$Stratum), function (x) mean(x[, i])))
+  }),
+  median = sapply(1:ncol(tmp), function (i) {
+    c(by(tmp, as.factor(val_sample$sample$Stratum), function (x) median(x[, i])))
   }),
   var = sapply(1:ncol(tmp), function (i) {
     c(by(tmp, as.factor(val_sample$sample$Stratum), function (x) var(x[, i])))
   })
-  )
-tmp$overal <-
-  data.frame(mean = apply(tmp$mean, 2, function (x) sum(x * (area$strata / area$total))),
-             se = sqrt(apply(tmp$var, 2, function (x) sum(w2 * x))))
+)
+tmp <- 
+  data.frame(mean = apply(theo_purity$mean, 2, function (x) sum(x * (area$strata / area$total))),
+             median = apply(theo_purity$median, 2, function (x) sum(x * (area$strata / area$total))),
+             se = sqrt(apply(theo_purity$var, 2, function (x) sum(w2 * x))))
+rownames(tmp) <- rownames(val_purity)
+tmp
+tmp <- apply(tmp, 1, function (x) 
+  paste(round(x[1] * 100, 2), " (", round(x[2] * 100, 2), ")", sep = ""))
+write.csv(tmp[, -2], file = "res/tab/theoretical_purity.csv")
+rm(tmp)
 
-  
+# Compute validation entropy and save data in a csv file
+# The validation entropy seems to be less skewd than the theoretical purity. However, it still is left skewed,
+# which means that the median says we are more uncertain than the mean says. This relation changes as the 
+# entropy decreases, i.e. the median says we are more certain than the mean says. In other words, the entropy
+# becomes right skewed with decreasing values. I guess these are common characteristics of variables bounded 
+# to an interval.
+val_entropy <- 
+  sapply(occurence_prob, function (x) apply(x, 1, function (x) -sum(x*log(x), na.rm = TRUE)))
+val_entropy <- list(
+  mean = sapply(1:ncol(val_entropy), function (i) {
+    c(by(val_entropy, as.factor(val_sample$sample$Stratum), function (x) mean(x[, i])))
+  }),
+  median = sapply(1:ncol(val_entropy), function (i) {
+    c(by(val_entropy, as.factor(val_sample$sample$Stratum), function (x) median(x[, i])))
+  }),
+  var = sapply(1:ncol(val_entropy), function (i) {
+    c(by(val_entropy, as.factor(val_sample$sample$Stratum), function (x) var(x[, i])))
+  })
+  )
+val_entropy$overal <-
+  data.frame(mean = apply(val_entropy$mean, 2, function (x) sum(x * (area$strata / area$total))),
+             median = apply(val_entropy$median, 2, function (x) sum(x * (area$strata / area$total))),
+             se = sqrt(apply(val_entropy$var, 2, function (x) sum(w2 * x))))
+rownames(val_entropy$overal) <- rownames(val_purity)
+val_entropy$overal
+
+tmp <- apply(val_entropy$overal[, -2], 1, function (x) 
+  paste(round(x[1] * 100, 2), " (", round(x[2] * 100, 2), ")", sep = ""))
+write.csv(tmp, file = "res/tab/validation_entropy.csv")
+rm(tmp)
+
+# Prepare table with model performance and save as a csv file
+id <- c("calibration_purity", "theoretical_purity", "validation_entropy", "validation_purity")
+tmp <- lapply(id, function (x) {
+  res <- read.csv(paste("res/tab/", x, ".csv", sep = ""))
+  colnames(res) <- c("model", x)
+  res
+})
+tmp <- do.call(cbind, tmp)[, c("model", id)]
+write.csv(tmp, "res/tab/overall_model_performance.csv")
+rm(tmp)

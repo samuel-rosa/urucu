@@ -475,7 +475,7 @@ validation <- data.frame(
 #   a[i] <- overallPurity(obs = tmp2$UM, fit = as.factor(fit2))
 # }
 
-# Compute actual class representation
+# Compute actual class representation and save data in a csv file
 class_representation <- list(
   mean = sapply(3:ncol(validation), function (i) {
     c(by(validation, validation$strata, function (x) overallPurity(obs = x[, 1], fit = x[, i])))
@@ -483,6 +483,14 @@ class_representation <- list(
 colnames(class_representation$mean) <- names(validation)[-c(1:2)]
 rownames(class_representation$mean) <- levels(val_sample$data$UM)
 class_representation$se <- sqrt((class_representation$mean * (1 - class_representation$mean)) / (size - 1))
+
+tmp <- lapply(class_representation, function (x) round(x * 100, 2))
+tmp <- matrix(paste(tmp$mean, " (", tmp$se, ")", sep = ""), nrow = nrow(tmp$mean))
+colnames(tmp) <- colnames(class_representation$mean)
+rownames(tmp) <- rownames(class_representation$mean)
+tmp <- t(tmp)
+write.csv(tmp, file = "res/tab/class_representation.csv")
+rm(tmp)
 
 # Compute overall actual purity and save csv file 
 val_purity <- 

@@ -10,7 +10,8 @@ rm(list = ls())
 # Start OS dependent GRASS GIS ################################################################################
 
 if (.Platform$OS.type == "unix") {
-  gisBase <- "/usr/lib/grass64/"
+  # gisBase <- "/usr/lib/grass64/"
+  gisBase <- "/usr/lib/grass70/"
 } else {
   gisBase <- "C:/Program Files (x86)/GRASS GIS 6.4.4"
 }
@@ -23,12 +24,19 @@ grassGis <- function (cmd) {
   }
 }
 
-spgrass6::initGRASS(
+spgrass7::initGRASS(
   gisBase = gisBase,
   # gisBase = "/usr/lib/grass64/", 
   gisDbase = "data/GRASS", location = "urucu", mapset = "database",
   override = TRUE, pid = Sys.getpid())
-grassGis("r.mask -o target_soil_map")
+grassGis("r.mask --o target_soil_map")
+
+# Convert all GRASS 6 vector maps to GRASS 7
+# Source: https://grasswiki.osgeo.org/wiki/Convert_all_GRASS_6_vector_maps_to_GRASS_7
+# grassGis("v.build.all")
+# grassGis("db.connect -d")
+# grassGis("db.connect -p")
+# grassGis("v.db.reconnect.all -cd")
 
 # User defined functions ######################################################################################
 

@@ -628,44 +628,39 @@ rm(tmp)
 
 # Spatial predictions #########################################################################################
 
-# Prepare mask to define prediction tiles
-grassGis("r.mask -o non_access_limit")
+# Load spatial prediction models
+load("data/R/calibrated_models.rda")
 
+# Prepare covariates
+# We export a text file containing only the data from inside the prediction region (NAs are not exported).
+# Attention: processing the full grid at once requires a lot of RAM (16 Gb).
+grassGis("r.mask --o non_access_limit")
+id_covars <- c("elevation", "curvature", "plan_curv", "slope", "flow_down", "twi")
+cmd <- paste(
+  "r.out.xyz input=", paste(id_covars, collapse = ","), " output=data/tmp/non_access_covars.csv", sep = "")
+grassGis(cmd)
+covars <- read.table("data/tmp/non_access_covars.csv", sep = "|")
+colnames(covars) <- c("x", "y", id_covars)
+head(covars)
+str(covars)
 
+# Field calibration data
+pred_field_lda <- predict(fit_field_lda, newdata = covars)$posterior
+save(pred_field_lda, file = "data/R/pred_field_lda.rda")
+rm(pred_field_lda)
+gc()
 
+pred_field_rf <- predict(fit_field_rf, newdata = covars, type = "prob")
+save(pred_field_rf, file = "data/R/pred_field_rf.rda")
+rm(pred_field_rf)
+gc()
 
+coords <- covars[, 1:2]
+rm(covars)
+gc()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+load("data/R/pred_field_rf.rda")
+coords <- cbind(coords, pred_field_rf)
+write.csv(coords, file = "data/tmp/pred_rf.csv")
+rm(coords)
+gc()

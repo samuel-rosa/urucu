@@ -298,6 +298,19 @@ p
 dev.off()
 rm(p, col, xy)
 
+# Check how well the random samples representat the covariate data
+tmp <- rbind(
+  cbind(stack(covars[, 3:ncol(covars)]), id = "true"), 
+  cbind(stack(cal_random_field@data[, -ncol(cal_random_field@data)]), id = "n = 383"), 
+  cbind(stack(cal_random_expert@data[, -ncol(cal_random_expert@data)]), id = "n = 838"),
+  cbind(stack(cal_random_large@data[, -ncol(cal_random_large@data)]), id = "n = 2003"))
+p <- lattice::bwplot(values ~ id | ind, data = tmp, scales = list(y = list(relation = "free")))
+p$par.settings <- list(plot.symbol = list(cex = 0.2))
+dev.off()
+png("res/fig/balanced_sampling.png", width = 1200, height = 600, res = 120)
+p
+dev.off()
+
 # Calibrate soil prediction models ############################################################################
 
 # Set formula

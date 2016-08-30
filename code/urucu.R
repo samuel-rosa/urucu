@@ -50,6 +50,56 @@ overallPurity <-
     return (res)
   }
 
+# Return the columns with the maximum value
+maxCol <- 
+  function (x, colnames = TRUE, as.factor = TRUE, ...) {
+    if (colnames) {
+      res <- colnames(x)[max.col(x, ...)]
+    } else {
+      res <- max.col(x, ...)
+    }
+    
+    if (as.factor) {
+      res <- as.factor(res)
+    }
+    return (res)
+  }
+
+# Shannon entropy
+entropy <-
+  function (x) {
+    - sum(x * log(x, base = length(x)), na.rm = TRUE)
+  }
+
+# Deterministic landform classification algorithm
+fit_land_classification <-
+  function (x) {
+    res <- vector()
+    for (i in 1:nrow(x)) {
+      if (x$slope[i] > 3.50) {
+        # if (x$slope[i] > 3.60) {
+        res[i] <- "CXal+PVA+PVal"
+      } else {
+        if (x$curvature[i] < -0.05 || x$slope[i] < 1.70 && x$elevation[i] < 60.00) {
+          # if (x$curvature[i] < -0.04 || x$slope[i] < 3.6 && x$elevation[i] < 62) {
+          res[i] <- "GXvd+RYq+CXbd+ESkg"
+        } else {
+          if (x$flow_down[i] > 15000.00 && x$twi[i] > 8.00) {
+            # if (x$flow_down[i] > 15000.00 && x$twi[i] > 5.2) {
+            res[i] <- "PACd"
+          } else {
+            res[i] <- "PAd+PAal+PAa"
+          }
+        }
+      }
+    }
+    return (as.factor(res))
+  }
+
+# Load core packages ##########################################################################################
+require(MASS)
+require(randomForest)
+
 # Prepare calibration data ####################################################################################
 
 # Load necessary data
@@ -315,29 +365,6 @@ set.seed(2001)
 fit_random_large_rf <- randomForest::randomForest(form, data = cal_random_large@data)
 
 # Deterministic landform classification algorithm
-fit_land_classification <-
-  function (x) {
-    res <- vector()
-    for (i in 1:nrow(x)) {
-      if (x$slope[i] > 3.50) {
-      # if (x$slope[i] > 3.60) {
-        res[i] <- "CXal+PVA+PVal"
-      } else {
-        if (x$curvature[i] < -0.05 || x$slope[i] < 1.70 && x$elevation[i] < 60.00) {
-        # if (x$curvature[i] < -0.04 || x$slope[i] < 3.6 && x$elevation[i] < 62) {
-          res[i] <- "GXvd+RYq+CXbd+ESkg"
-        } else {
-          if (x$flow_down[i] > 15000.00 && x$twi[i] > 8.00) {
-          # if (x$flow_down[i] > 15000.00 && x$twi[i] > 5.2) {
-            res[i] <- "PACd"
-          } else {
-            res[i] <- "PAd+PAal+PAa"
-          }
-        }
-      }
-    }
-    return (as.factor(res))
-  }
 fit_lca <- fit_land_classification(cal_field@data)
 overallPurity(obs = cal_field$UM, fit = fit_lca)
 
@@ -419,14 +446,16 @@ levels(val_sample$data$V3) <-
 colnames(val_sample$data) <- c("UM", colnames(val_sample$data)[-1])
 str(val_sample$data)
 
+# save data
+save(val_sample, file = "data/R/validation_points.rda")
+
 # Validation ##################################################################################################
 # We compute the overall actual purity for each sampling strata, which are used to compute a weigthed average
 # that represents the overall actual purity of the soil map. The weights are the relative size of each stratum.
 # Because the strata coincide with the categories of the target variable, the strata-based overall actual 
 # purity is equivalent to the class representation (producer's accuracy), i.e. the proportion of the area
 # occupied with a given class that is mapped as that class.
-# Load randomForest package for prediction
-require(randomForest)
+
 validation <- data.frame(
   observed = val_sample$data$UM,
   strata = as.factor(val_sample$sample$Stratum),
@@ -539,11 +568,11 @@ tmp <-
   data.frame(mean = apply(theo_purity$mean, 2, function (x) sum(x * (area$strata / area$total))),
              median = apply(theo_purity$median, 2, function (x) sum(x * (area$strata / area$total))),
              se = sqrt(apply(theo_purity$var, 2, function (x) sum(w2 * x))))
-rownames(tmp) <- rownames(val_purity)
+rownames(tmp) <- rownames(val_purity)[-3]
 tmp
 tmp <- apply(tmp, 1, function (x) 
-  paste(round(x[1] * 100, 2), " (", round(x[2] * 100, 2), ")", sep = ""))
-write.csv(tmp[, -2], file = "res/tab/theoretical_purity.csv")
+  paste(round(x[1] * 100, 2), " (", round(x[3] * 100, 2), ")", sep = ""))
+write.csv(tmp, file = "res/tab/theoretical_purity.csv")
 rm(tmp)
 
 # Compute validation entropy and save data in a csv file
@@ -552,8 +581,7 @@ rm(tmp)
 # entropy decreases, i.e. the median says we are more certain than the mean says. In other words, the entropy
 # becomes right skewed with decreasing values. I guess these are common characteristics of variables bounded 
 # to an interval.
-val_entropy <- 
-  sapply(occurence_prob, function (x) apply(x, 1, function (x) -sum(x*log(x), na.rm = TRUE)))
+val_entropy <- sapply(occurence_prob, function (x) apply(x, 1, entropy))
 val_entropy <- list(
   mean = sapply(1:ncol(val_entropy), function (i) {
     c(by(val_entropy, as.factor(val_sample$sample$Stratum), function (x) mean(x[, i])))
@@ -569,7 +597,7 @@ val_entropy$overal <-
   data.frame(mean = apply(val_entropy$mean, 2, function (x) sum(x * (area$strata / area$total))),
              median = apply(val_entropy$median, 2, function (x) sum(x * (area$strata / area$total))),
              se = sqrt(apply(val_entropy$var, 2, function (x) sum(w2 * x))))
-rownames(val_entropy$overal) <- rownames(val_purity)
+rownames(val_entropy$overal) <- rownames(val_purity)[-3]
 val_entropy$overal
 
 tmp <- apply(val_entropy$overal[, -2], 1, function (x) 
@@ -584,6 +612,52 @@ tmp <- lapply(id, function (x) {
   colnames(res) <- c("model", x)
   res
 })
+tmp[[2]] <- rbind(tmp[[2]][1:2, ], NA, tmp[[2]][3:nrow(tmp[[2]]), ])
+tmp[[3]] <- rbind(tmp[[3]][1:2, ], NA, tmp[[3]][3:nrow(tmp[[3]]), ])
 tmp <- do.call(cbind, tmp)[, c("model", id)]
 write.csv(tmp, "res/tab/overall_model_performance.csv")
 rm(tmp)
+
+# Spatial predictions #########################################################################################
+
+# Prepare mask to define prediction tiles
+grassGis("r.mask -o non_access_limit")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

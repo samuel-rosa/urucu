@@ -563,12 +563,61 @@ rm(tmp)
 load("data/R/calibrated_models.rda")
 
 # Prepare covariates
+# We first work in a small area to check the perfomance of all prediction models.
+# We export a text file containing only the data from inside the prediction region (NAs are not exported).
+grassGis("r.mask --o map_inset")
+id_covars <- c("elevation", "curvature", "plan_curv", "slope", "flow_down", "twi")
+cmd <- paste(
+  "r.out.xyz input=", paste(id_covars, collapse = ","), " output=data/tmp/inset_covars.csv", sep = "")
+grassGis(cmd)
+inset_covars <- read.table("data/tmp/inset_covars.csv", sep = "|")
+colnames(inset_covars) <- c("x", "y", id_covars)
+str(inset_covars)
+
+# Field calibration data (n = 383)
+pred_field_lda <- spPredict(fit_field_lda, inset_covars)
+pred_field_rf <- spPredict(fit_field_rf, inset_covars)
+fit_land_classification(tool = "grass", vname = "inset_land_class")
+cmd <- paste("r.out.xyz --overwrite input=inset_land_class output=data/tmp/inset_land_class.csv", sep = "")
+grassGis(cmd)
+pred_field_lca <- read.table("data/tmp/inset_land_class.csv", sep = "|")
+colnames(pred_field_lca) <- c("x", "y", "UM")
+pred_field_lca$UM <- as.factor(pred_field_lca$UM)
+levels(pred_field_lca$UM) <- levels(pred_expert_lda$UM)
+sp::gridded(pred_field_lca) <- ~ x + y
+
+# Expert calibration data (n = 837)
+pred_expert_lda <- spPredict(fit_expert_lda, inset_covars)
+pred_expert_rf <- spPredict(fit_expert_rf, inset_covars)
+
+# Random calibration data (n = 383)
+pred_random_field_lda <- spPredict(fit_random_field_lda, inset_covars)
+pred_random_field_rf <- spPredict(fit_random_field_rf, inset_covars)
+
+# Random calibration data (n = 837)
+pred_random_expert_lda <- spPredict(fit_random_expert_lda, inset_covars)
+pred_random_expert_rf <- spPredict(fit_random_expert_rf, inset_covars)
+
+# Random calibration data (n = 2000)
+pred_random_large_lda <- spPredict(fit_random_large_lda, inset_covars)
+pred_random_large_rf <- spPredict(fit_random_large_rf, inset_covars)
+
+
+
+sp::spplot(pred_field_lca, "UM", col.regions = soil.colors)
+
+
+
+
+
+
+
+
 # We export a text file containing only the data from inside the prediction region (NAs are not exported).
 # Attention: processing the full grid at once requires a lot of RAM (16 Gb).
 grassGis("r.mask --o non_access_limit")
-id_covars <- c("elevation", "curvature", "plan_curv", "slope", "flow_down", "twi")
-cmd <- paste(
-  "r.out.xyz input=", paste(id_covars, collapse = ","), " output=data/tmp/non_access_covars.csv", sep = "")
+
+
 grassGis(cmd)
 covars <- read.table("data/tmp/non_access_covars.csv", sep = "|")
 colnames(covars) <- c("x", "y", id_covars)

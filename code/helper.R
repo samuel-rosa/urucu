@@ -54,29 +54,43 @@ entropy <-
     - sum(x * log(x, base = length(x)), na.rm = TRUE)
   }
 
-# Deterministic landform classification algorithm ----
+# Deterministic landform classification algorithm for R ----
 fit_land_classification <-
-  function (x) {
-    res <- vector()
-    for (i in 1:nrow(x)) {
-      if (x$slope[i] > 3.50) {
-        # if (x$slope[i] > 3.60) {
-        res[i] <- "CXal+PVA+PVal"
-      } else {
-        if (x$curvature[i] < -0.05 || x$slope[i] < 1.70 && x$elevation[i] < 60.00) {
-          # if (x$curvature[i] < -0.04 || x$slope[i] < 3.6 && x$elevation[i] < 62) {
-          res[i] <- "GXvd+RYq+CXbd+ESkg"
+  function (x, tool = "r", vname) {
+    
+    param <- c(3.50, -0.05, 1.70, 60.00, 15000.00, 8.00)
+    # param <- c(3.60, -0.04, 3.60, 62.00, 15000.00, 5.20)
+    
+    if (tool == "r") {
+      pb <- txtProgressBar(min = 0, max = nrow(x), style = 3)
+      res <- vector()
+      for (i in 1:nrow(x)) {
+        if (x$slope[i] > param[1]) {
+          res[i] <- "CXal+PVA+PVal"
         } else {
-          if (x$flow_down[i] > 15000.00 && x$twi[i] > 8.00) {
-            # if (x$flow_down[i] > 15000.00 && x$twi[i] > 5.2) {
-            res[i] <- "PACd"
+          if (x$curvature[i] < param[2] || x$slope[i] < param[3] && x$elevation[i] < param[4]) {
+            res[i] <- "GXvd+RYq+CXbd+ESkg"
           } else {
-            res[i] <- "PAd+PAal+PAa"
+            if (x$flow_down[i] > param[5] && x$twi[i] > param[6]) {
+              res[i] <- "PACd"
+            } else {
+              res[i] <- "PAd+PAal+PAa"
+            }
           }
         }
+        setTxtProgressBar(pb, value = i)
+      }
+      return (as.factor(res))
+    } else {
+      if (tool == "grass") {
+        cmd <- 
+          paste("r.mapcalc '", vname, " = ",
+                "if(slope > ", param[1], ", 1, ", 
+                "if(curvature < ", param[2], " || slope < ", param[3], " && elevation < ", param[4], ", 2, ",
+                "if(flow_down > ", param[5], " && twi > ", param[6], ", 3, 4)))'", sep = "")
+        grassGis(cmd)
       }
     }
-    return (as.factor(res))
   }
 
 # Colour ramps ----
@@ -84,3 +98,19 @@ uncertainty.colors <-
   colorRampPalette(c("olivedrab", "khaki", "maroon1"))
 soil.colors <- 
   c("lightsalmon", "cadetblue1", "azure2", "lightgoldenrod1")
+
+# Spatial prediction -----
+spPredict <-
+  function (model, covariates) {
+    if (inherits(model, "lda")) {
+      res <- data.frame(predict(model, newdata = covariates)$posterior)
+    } else {
+      res <- data.frame(predict(model, covariates, type = "prob"))
+    }
+    res$UM <- maxCol(res)
+    res$entropy <- apply(res[, 1:4], 1, entropy)
+    res <- cbind(covariates[, 1:2], res)
+    sp::gridded(res) <- ~ x + y
+    
+    return (res)
+  }

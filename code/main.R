@@ -5,9 +5,9 @@
 # \code\exploratory.Rmd. The GRASS GIS database was created using \code\dbGRASS.R. All covariates were loaded
 # to the database, as well as all existing vector (polygon) data.
 
-# Clean up and load user defined helper functions #############################################################
+# Clean up and source user defined helper functions ###########################################################
 rm(list = ls())
-load("code/helper.R")
+source("code/helper.R")
 
 # Start GRASS GIS #############################################################################################
 spgrass7::initGRASS(

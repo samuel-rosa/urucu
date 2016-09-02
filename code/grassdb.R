@@ -6,18 +6,18 @@ rm(list = ls())
 # CREATE GRASS GIS DATABASE ###################################################################################
 # Set GRASS GIS DATABASE
 dbGRASS <- "data/GRASS"
-spgrass6::initGRASS(
-  gisBase = "/usr/lib/grass64/", gisDbase = dbGRASS, location = "urucu", mapset = "database",
+spgrass7::initGRASS(
+  gisBase = "/usr/lib/grass70/", gisDbase = dbGRASS, location = "urucu", mapset = "database",
   override = TRUE, pid = Sys.getpid())
 
 # Set PERMANENT coordinate reference system
-spgrass6::initGRASS(
+spgrass7::initGRASS(
   gisBase = "/usr/lib/grass64/", gisDbase = dbGRASS, location = "urucu", mapset = "PERMANENT",
   override = TRUE, pid = Sys.getpid())
 system("g.proj -c epsg=29190")
 
 # Update projection information in 'database'
-spgrass6::initGRASS(
+spgrass7::initGRASS(
   gisBase = "/usr/lib/grass64/", gisDbase = dbGRASS, location = "urucu", mapset = "database",
   override = TRUE, pid = Sys.getpid())
 system("g.region -d")
@@ -123,7 +123,7 @@ system("d.mon x0")
 system(paste("r.in.gdal input=", dir, "elevation.tif output=elevation", sep = ""))
 system("r.info elevation")
 system("g.region rast=elevation")
-spgrass6::gmeta()
+spgrass7::gmeta()
 system("d.rast.leg elevation")
 system("d.histogram elevation")
 
@@ -231,7 +231,7 @@ rm(dir)
 
 # LOAD VECTOR DATA INTO DATABASE ##############################################################################
 
-dir <- "/home/lgcs-mds/projects/urucu/data/vector/"
+dir <- paste(getwd(), "/data/vector/", sep = "")
 
 # Target soil map
 # Clean data.frame and convert target soil map to raster
@@ -240,7 +240,7 @@ tmp <- raster::shapefile(paste(dir, "target_soil_map.shp", sep = ""))
 tmp@data <- data.frame(UM = tmp$UM)
 levels(tmp$UM)
 tmp$UM <- as.integer(tmp$UM)
-spgrass6::writeVECT(tmp, "target_soil_map", v.in.ogr_flags = "overwrite")
+spgrass7::writeVECT(tmp, "target_soil_map", v.in.ogr_flags = "overwrite")
 system("v.info -c target_soil_map")
 cmd <- paste("v.to.rast --o input=target_soil_map output=target_soil_map column=UM")
 system(cmd)

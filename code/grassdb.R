@@ -1,7 +1,9 @@
 # title: "Create GRASS GIS database on Linux machine"
 # author: "Alessandro Samuel Rosa"
 
+# Clean up and source user defined helper functions ###########################################################
 rm(list = ls())
+source("code/helper.R")
 
 # CREATE GRASS GIS DATABASE ###################################################################################
 # Set GRASS GIS DATABASE
@@ -235,7 +237,6 @@ dir <- paste(getwd(), "/data/vector/", sep = "")
 
 # Target soil map
 # Clean data.frame and convert target soil map to raster
-# 
 tmp <- raster::shapefile(paste(dir, "target_soil_map.shp", sep = ""))
 tmp@data <- data.frame(UM = tmp$UM)
 levels(tmp$UM)
@@ -263,5 +264,15 @@ system("v.info map=non_access_limit")
 # Transform vector to raster to create a MASK.
 system("v.to.rast input=non_access_limit output=non_access_limit use=val")
 system("r.mask --o input=non_access_limit")
+
+# Map inset
+# Polygon defining the small area where spatial predictions are made using all spatial predictions models to
+# compare their performance visually. The area presents a high topographic variation, with all four map units
+# of the target variable present.
+# We use the vector data to crate raster data which will be used as a raster mask.
+cmd <- paste("v.in.ogr dsn=", dir, "map_inset.shp output=map_inset", sep = "")
+grassGis(cmd)
+grassGis("v.to.rast input=map_inset output=map_inset use=val")
+
 
 rm(dir)

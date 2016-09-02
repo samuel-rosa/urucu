@@ -78,3 +78,9 @@ fit_land_classification <-
     }
     return (as.factor(res))
   }
+
+# Colour ramps ----
+uncertainty.colors <- 
+  colorRampPalette(c("olivedrab", "khaki", "maroon1"))
+soil.colors <- 
+  c("lightsalmon", "cadetblue1", "azure2", "lightgoldenrod1")

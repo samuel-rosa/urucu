@@ -38,10 +38,17 @@
       <layer-tree-layer expanded="1" checked="Qt::Checked" id="outer_area20160727154434717" name="outer_area">
         <customproperties/>
       </layer-tree-layer>
+<<<<<<< HEAD
       <layer-tree-layer expanded="1" checked="Qt::Checked" id="non_access_area20160720113528485" name="non_access_area">
         <customproperties/>
       </layer-tree-layer>
       <layer-tree-layer expanded="1" checked="Qt::Checked" id="inset20160902134929549" name="inset">
+=======
+      <layer-tree-layer expanded="1" checked="Qt::Checked" id="map_inset20160902163240167" name="map_inset">
+        <customproperties/>
+      </layer-tree-layer>
+      <layer-tree-layer expanded="1" checked="Qt::Unchecked" id="non_access_area20160720113528485" name="non_access_area">
+>>>>>>> 841d68429c85f613be42481631081085b529bd7d
         <customproperties/>
       </layer-tree-layer>
       <layer-tree-layer expanded="1" checked="Qt::Unchecked" id="access_area20160727154131822" name="access_area">
@@ -51,6 +58,7 @@
         <customproperties/>
       </layer-tree-layer>
     </layer-tree-group>
+<<<<<<< HEAD
     <layer-tree-group expanded="0" checked="Qt::Checked" name="soil_maps">
       <customproperties/>
       <layer-tree-layer expanded="1" checked="Qt::Checked" id="target_soil_map20160727153902068" name="target_soil_map">
@@ -60,6 +68,11 @@
     <layer-tree-group expanded="1" checked="Qt::Checked" name="covariates">
       <customproperties/>
       <layer-tree-layer expanded="1" checked="Qt::Checked" id="elevation20160902134038578" name="elevation">
+=======
+    <layer-tree-group expanded="1" checked="Qt::Checked" name="soil_maps">
+      <customproperties/>
+      <layer-tree-layer expanded="0" checked="Qt::Checked" id="target_soil_map20160727153902068" name="target_soil_map">
+>>>>>>> 841d68429c85f613be42481631081085b529bd7d
         <customproperties/>
       </layer-tree-layer>
     </layer-tree-group>
@@ -109,6 +122,7 @@
       <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="flow_down20160721095535505"/>
       <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="twi20160727150807972"/>
       <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="Lim10000Detal20160704102609571"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="map_inset20160902163240167"/>
       <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="flow_accum20160721095249843"/>
       <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="outer_area20160727154434717"/>
       <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="plan_curv20160721095715576"/>
@@ -118,6 +132,7 @@
       <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="inset20160902134929549"/>
       <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="target_soil_map20160727153902068"/>
       <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="slope20160721095843031"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="inset20160902163043514"/>
       <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="flow_accum20160721095343753"/>
       <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="Lim50000Semidet20160704102707688"/>
       <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="MCS_Simplif_Poligon_correct20160704163418626"/>
@@ -137,8 +152,12 @@
       <item>target_soil_map20160727153902068</item>
       <item>access_area20160727154131822</item>
       <item>outer_area20160727154434717</item>
+<<<<<<< HEAD
       <item>elevation20160902134038578</item>
       <item>inset20160902134929549</item>
+=======
+      <item>map_inset20160902163240167</item>
+>>>>>>> 841d68429c85f613be42481631081085b529bd7d
     </custom-order>
   </layer-tree-canvas>
   <legend updateDrawingOrder="true">
@@ -170,17 +189,30 @@
       </legendlayer>
     </legendgroup>
     <legendgroup open="true" checked="Qt::PartiallyChecked" name="limits">
+<<<<<<< HEAD
       <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="outer_area" showFeatureCount="0">
         <filegroup open="true" hidden="false">
           <legendlayerfile isInOverview="0" layerid="outer_area20160727154434717" visible="1"/>
         </filegroup>
       </legendlayer>
       <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="non_access_area" showFeatureCount="0">
+=======
+      <legendlayer drawingOrder="-1" open="true" checked="Qt::Unchecked" name="outer_area" showFeatureCount="0">
+>>>>>>> 841d68429c85f613be42481631081085b529bd7d
         <filegroup open="true" hidden="false">
           <legendlayerfile isInOverview="0" layerid="non_access_area20160720113528485" visible="1"/>
         </filegroup>
       </legendlayer>
+<<<<<<< HEAD
       <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="inset" showFeatureCount="0">
+=======
+      <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="map_inset" showFeatureCount="0">
+        <filegroup open="true" hidden="false">
+          <legendlayerfile isInOverview="0" layerid="map_inset20160902163240167" visible="1"/>
+        </filegroup>
+      </legendlayer>
+      <legendlayer drawingOrder="-1" open="true" checked="Qt::Unchecked" name="non_access_area" showFeatureCount="0">
+>>>>>>> 841d68429c85f613be42481631081085b529bd7d
         <filegroup open="true" hidden="false">
           <legendlayerfile isInOverview="0" layerid="inset20160902134929549" visible="1"/>
         </filegroup>
@@ -196,6 +228,7 @@
         </filegroup>
       </legendlayer>
     </legendgroup>
+<<<<<<< HEAD
     <legendgroup open="false" checked="Qt::Checked" name="soil_maps">
       <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="target_soil_map" showFeatureCount="0">
         <filegroup open="true" hidden="false">
@@ -207,6 +240,12 @@
       <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="elevation" showFeatureCount="0">
         <filegroup open="true" hidden="false">
           <legendlayerfile isInOverview="0" layerid="elevation20160902134038578" visible="1"/>
+=======
+    <legendgroup open="true" checked="Qt::Checked" name="soil_maps">
+      <legendlayer drawingOrder="-1" open="false" checked="Qt::Checked" name="target_soil_map" showFeatureCount="0">
+        <filegroup open="false" hidden="false">
+          <legendlayerfile isInOverview="0" layerid="target_soil_map20160727153902068" visible="1"/>
+>>>>>>> 841d68429c85f613be42481631081085b529bd7d
         </filegroup>
       </legendlayer>
     </legendgroup>
@@ -3356,6 +3395,106 @@ def my_form_open(dialog, layer, feature):
         <fieldstyles/>
       </conditionalstyles>
     </maplayer>
+    <maplayer simplifyAlgorithm="0" minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" readOnly="0" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Polygon" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
+      <id>map_inset20160902163240167</id>
+      <datasource>./data/vector/map_inset.shp</datasource>
+      <keywordList>
+        <value></value>
+      </keywordList>
+      <layername>map_inset</layername>
+      <srs>
+        <spatialrefsys>
+          <proj4>+proj=utm +zone=20 +south +ellps=aust_SA +towgs84=-57,1,-41,0,0,0,0 +units=m +no_defs</proj4>
+          <srsid>2542</srsid>
+          <srid>29190</srid>
+          <authid>EPSG:29190</authid>
+          <description>SAD69 / UTM zone 20S</description>
+          <projectionacronym>utm</projectionacronym>
+          <ellipsoidacronym>aust_SA</ellipsoidacronym>
+          <geographicflag>false</geographicflag>
+        </spatialrefsys>
+      </srs>
+      <provider encoding="System">ogr</provider>
+      <previewExpression></previewExpression>
+      <vectorjoins/>
+      <layerDependencies/>
+      <expressionfields/>
+      <map-layer-style-manager current="">
+        <map-layer-style name=""/>
+      </map-layer-style-manager>
+      <edittypes>
+        <edittype widgetv2type="TextEdit" name="id">
+          <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
+        </edittype>
+      </edittypes>
+      <renderer-v2 forceraster="0" symbollevels="0" type="singleSymbol" enableorderby="0">
+        <symbols>
+          <symbol alpha="1" clip_to_extent="1" type="fill" name="0">
+            <layer pass="0" class="SimpleFill" locked="0">
+              <prop k="border_width_map_unit_scale" v="0,0,0,0,0,0"/>
+              <prop k="color" v="246,45,252,255"/>
+              <prop k="joinstyle" v="bevel"/>
+              <prop k="offset" v="0,0"/>
+              <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
+              <prop k="offset_unit" v="MM"/>
+              <prop k="outline_color" v="0,0,0,255"/>
+              <prop k="outline_style" v="solid"/>
+              <prop k="outline_width" v="0.26"/>
+              <prop k="outline_width_unit" v="MM"/>
+              <prop k="style" v="solid"/>
+            </layer>
+          </symbol>
+        </symbols>
+        <rotation/>
+        <sizescale scalemethod="diameter"/>
+      </renderer-v2>
+      <labeling type="simple"/>
+      <customproperties/>
+      <blendMode>0</blendMode>
+      <featureBlendMode>0</featureBlendMode>
+      <layerTransparency>0</layerTransparency>
+      <displayfield>id</displayfield>
+      <label>0</label>
+      <labelattributes>
+        <label fieldname="" text="Label"/>
+        <family fieldname="" name="Waree"/>
+        <size fieldname="" units="pt" value="12"/>
+        <bold fieldname="" on="0"/>
+        <italic fieldname="" on="0"/>
+        <underline fieldname="" on="0"/>
+        <strikeout fieldname="" on="0"/>
+        <color fieldname="" red="0" blue="0" green="0"/>
+        <x fieldname=""/>
+        <y fieldname=""/>
+        <offset x="0" y="0" units="pt" yfieldname="" xfieldname=""/>
+        <angle fieldname="" value="0" auto="0"/>
+        <alignment fieldname="" value="center"/>
+        <buffercolor fieldname="" red="255" blue="255" green="255"/>
+        <buffersize fieldname="" units="pt" value="1"/>
+        <bufferenabled fieldname="" on=""/>
+        <multilineenabled fieldname="" on=""/>
+        <selectedonly on=""/>
+      </labelattributes>
+      <annotationform></annotationform>
+      <excludeAttributesWMS/>
+      <excludeAttributesWFS/>
+      <attributeactions default="-1"/>
+      <attributetableconfig actionWidgetStyle="dropDown" sortExpression="" sortOrder="754435376">
+        <columns/>
+      </attributetableconfig>
+      <editform></editform>
+      <editforminit/>
+      <editforminitcodesource>0</editforminitcodesource>
+      <editforminitfilepath></editforminitfilepath>
+      <editforminitcode><![CDATA[]]></editforminitcode>
+      <featformsuppress>0</featformsuppress>
+      <editorlayout>generatedlayout</editorlayout>
+      <widgets/>
+      <conditionalstyles>
+        <rowstyles/>
+        <fieldstyles/>
+      </conditionalstyles>
+    </maplayer>
     <maplayer simplifyAlgorithm="0" minimumScale="-4.65661e-10" maximumScale="1e+08" simplifyDrawingHints="1" readOnly="0" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Polygon" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
       <extent>
         <xmin>230395.50207519729156047</xmin>
@@ -3616,7 +3755,7 @@ def my_form_open(dialog, layer, feature):
       <annotationform>.</annotationform>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
-      <attributeactions default="0"/>
+      <attributeactions default="-1"/>
       <attributetableconfig actionWidgetStyle="dropDown" sortExpression="" sortOrder="0">
         <columns/>
       </attributetableconfig>
@@ -4363,7 +4502,6 @@ def my_form_open(dialog, layer, feature):
     <WMSKeywordList type="QStringList">
       <value></value>
     </WMSKeywordList>
-    <WFSUrl type="QString"></WFSUrl>
     <Topol>
       <tolerance_0 type="QString">0</tolerance_0>
       <tolerance_1 type="QString">0</tolerance_1>
@@ -4387,6 +4525,7 @@ def my_form_open(dialog, layer, feature):
       <layer1_4 type="QString">tmp_lim720160720104634823</layer1_4>
       <testname_4 type="QString">must not overlap</testname_4>
     </Topol>
+    <WFSUrl type="QString"></WFSUrl>
     <Paths>
       <Absolute type="bool">false</Absolute>
     </Paths>
@@ -4399,8 +4538,8 @@ def my_form_open(dialog, layer, feature):
       <DegreeFormat type="QString">MU</DegreeFormat>
     </PositionPrecision>
     <WCSUrl type="QString"></WCSUrl>
-    <WMSContactPhone type="QString"></WMSContactPhone>
     <WMSServiceCapabilities type="bool">false</WMSServiceCapabilities>
+    <WMSContactPhone type="QString"></WMSContactPhone>
     <WMSServiceAbstract type="QString"></WMSServiceAbstract>
     <WMSContactPosition type="QString"></WMSContactPosition>
     <WMSAddWktGeometry type="bool">false</WMSAddWktGeometry>
@@ -4435,7 +4574,11 @@ def my_form_open(dialog, layer, feature):
         <value>non_access_area20160720113528485</value>
         <value>outer_area20160727154434717</value>
         <value>target_soil_map20160727153902068</value>
+<<<<<<< HEAD
         <value>inset20160902134929549</value>
+=======
+        <value>map_inset20160902163240167</value>
+>>>>>>> 841d68429c85f613be42481631081085b529bd7d
       </LayerSnappingList>
       <LayerSnappingEnabledList type="QStringList">
         <value>disabled</value>
@@ -4464,7 +4607,11 @@ def my_form_open(dialog, layer, feature):
         <value>1</value>
         <value>1</value>
         <value>1</value>
+<<<<<<< HEAD
         <value>1</value>
+=======
+        <value>2</value>
+>>>>>>> 841d68429c85f613be42481631081085b529bd7d
       </LayerSnappingToleranceUnitList>
       <LayerSnapToList type="QStringList">
         <value>to_vertex_and_segment</value>

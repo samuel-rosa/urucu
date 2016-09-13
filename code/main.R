@@ -5,29 +5,13 @@
 # \code\exploratory.Rmd. The GRASS GIS database was created using \code\dbGRASS.R. All covariates were loaded
 # to the database, as well as all existing vector (polygon) data.
 
+# Clean up and source user defined helper functions ###########################################################
 rm(list = ls())
+source("code/helper.R")
 
-# Start OS dependent GRASS GIS ################################################################################
-
-if (.Platform$OS.type == "unix") {
-  # gisBase <- "/usr/lib/grass64/"
-  gisBase <- "/usr/lib/grass70/"
-} else {
-  gisBase <- "C:/Program Files (x86)/GRASS GIS 6.4.4"
-}
-
-grassGis <- function (cmd) {
-  if (.Platform$OS.type == "unix") {
-    system(cmd)
-  } else {
-    shell(cmd)
-  }
-}
-
+# Start GRASS GIS #############################################################################################
 spgrass7::initGRASS(
-  gisBase = gisBase,
-  # gisBase = "/usr/lib/grass64/", 
-  gisDbase = "data/GRASS", location = "urucu", mapset = "database",
+  gisBase = gisBase, gisDbase = "data/GRASS", location = "urucu", mapset = "database",
   override = TRUE, pid = Sys.getpid())
 grassGis("r.mask --o target_soil_map")
 
@@ -37,72 +21,6 @@ grassGis("r.mask --o target_soil_map")
 # grassGis("db.connect -d")
 # grassGis("db.connect -p")
 # grassGis("v.db.reconnect.all -cd")
-
-# User defined functions ######################################################################################
-
-# Overall purity
-overallPurity <- 
-  function (obs, fit, weights) {
-    tab <- table(data.frame(fit, obs))
-    diagonal <- diag(tab)
-    if (missing(weights)) {
-      res <- sum(diag(tab)) / length(obs)
-    } else {
-      res <- sum(diagonal * weights)
-    }
-    # map_unit_purity <- diagonal / rowSums(tab)
-    # class_representation <- diagonal / colSums(tab)
-    # res <- 
-      # list(overall_purity = overall_purity, 
-           # by_class = data.frame(mu_purity = map_unit_purity, class_rep = class_representation))
-    return (res)
-  }
-
-# Return the columns with the maximum value
-maxCol <- 
-  function (x, colnames = TRUE, as.factor = TRUE, ...) {
-    if (colnames) {
-      res <- colnames(x)[max.col(x, ...)]
-    } else {
-      res <- max.col(x, ...)
-    }
-    
-    if (as.factor) {
-      res <- as.factor(res)
-    }
-    return (res)
-  }
-
-# Shannon entropy
-entropy <-
-  function (x) {
-    - sum(x * log(x, base = length(x)), na.rm = TRUE)
-  }
-
-# Deterministic landform classification algorithm
-fit_land_classification <-
-  function (x) {
-    res <- vector()
-    for (i in 1:nrow(x)) {
-      if (x$slope[i] > 3.50) {
-        # if (x$slope[i] > 3.60) {
-        res[i] <- "CXal+PVA+PVal"
-      } else {
-        if (x$curvature[i] < -0.05 || x$slope[i] < 1.70 && x$elevation[i] < 60.00) {
-          # if (x$curvature[i] < -0.04 || x$slope[i] < 3.6 && x$elevation[i] < 62) {
-          res[i] <- "GXvd+RYq+CXbd+ESkg"
-        } else {
-          if (x$flow_down[i] > 15000.00 && x$twi[i] > 8.00) {
-            # if (x$flow_down[i] > 15000.00 && x$twi[i] > 5.2) {
-            res[i] <- "PACd"
-          } else {
-            res[i] <- "PAd+PAal+PAa"
-          }
-        }
-      }
-    }
-    return (as.factor(res))
-  }
 
 # Load core packages ##########################################################################################
 require(MASS)
@@ -645,12 +563,61 @@ rm(tmp)
 load("data/R/calibrated_models.rda")
 
 # Prepare covariates
+# We first work in a small area to check the perfomance of all prediction models.
+# We export a text file containing only the data from inside the prediction region (NAs are not exported).
+grassGis("r.mask --o map_inset")
+id_covars <- c("elevation", "curvature", "plan_curv", "slope", "flow_down", "twi")
+cmd <- paste(
+  "r.out.xyz input=", paste(id_covars, collapse = ","), " output=data/tmp/inset_covars.csv", sep = "")
+grassGis(cmd)
+inset_covars <- read.table("data/tmp/inset_covars.csv", sep = "|")
+colnames(inset_covars) <- c("x", "y", id_covars)
+str(inset_covars)
+
+# Field calibration data (n = 383)
+pred_field_lda <- spPredict(fit_field_lda, inset_covars)
+pred_field_rf <- spPredict(fit_field_rf, inset_covars)
+fit_land_classification(tool = "grass", vname = "inset_land_class")
+cmd <- paste("r.out.xyz --overwrite input=inset_land_class output=data/tmp/inset_land_class.csv", sep = "")
+grassGis(cmd)
+pred_field_lca <- read.table("data/tmp/inset_land_class.csv", sep = "|")
+colnames(pred_field_lca) <- c("x", "y", "UM")
+pred_field_lca$UM <- as.factor(pred_field_lca$UM)
+levels(pred_field_lca$UM) <- levels(pred_expert_lda$UM)
+sp::gridded(pred_field_lca) <- ~ x + y
+
+# Expert calibration data (n = 837)
+pred_expert_lda <- spPredict(fit_expert_lda, inset_covars)
+pred_expert_rf <- spPredict(fit_expert_rf, inset_covars)
+
+# Random calibration data (n = 383)
+pred_random_field_lda <- spPredict(fit_random_field_lda, inset_covars)
+pred_random_field_rf <- spPredict(fit_random_field_rf, inset_covars)
+
+# Random calibration data (n = 837)
+pred_random_expert_lda <- spPredict(fit_random_expert_lda, inset_covars)
+pred_random_expert_rf <- spPredict(fit_random_expert_rf, inset_covars)
+
+# Random calibration data (n = 2000)
+pred_random_large_lda <- spPredict(fit_random_large_lda, inset_covars)
+pred_random_large_rf <- spPredict(fit_random_large_rf, inset_covars)
+
+
+
+sp::spplot(pred_field_lca, "UM", col.regions = soil.colors)
+
+
+
+
+
+
+
+
 # We export a text file containing only the data from inside the prediction region (NAs are not exported).
 # Attention: processing the full grid at once requires a lot of RAM (16 Gb).
 grassGis("r.mask --o non_access_limit")
-id_covars <- c("elevation", "curvature", "plan_curv", "slope", "flow_down", "twi")
-cmd <- paste(
-  "r.out.xyz input=", paste(id_covars, collapse = ","), " output=data/tmp/non_access_covars.csv", sep = "")
+
+
 grassGis(cmd)
 covars <- read.table("data/tmp/non_access_covars.csv", sep = "|")
 colnames(covars) <- c("x", "y", id_covars)

@@ -29,9 +29,9 @@ require(randomForest)
 # Prepare calibration data ####################################################################################
 
 # Load necessary data
-target_soil_map <- spgrass6::readVECT("target_soil_map")
-access_limit <- spgrass6::readVECT("access_limit")
-non_access_limit <- spgrass6::readVECT("non_access_limit")
+target_soil_map <- spgrass7::readVECT("target_soil_map")
+access_limit <- spgrass7::readVECT("access_limit")
+non_access_limit <- spgrass7::readVECT("non_access_limit")
 cal_profiles <- raster::shapefile("data/vector/Perfis.shp")
 cal_boreholes <- raster::shapefile("data/vector/Tradagens.shp")
 val_boreholes <- raster::shapefile("data/vector/Tradagens_Validacao.shp")
@@ -122,8 +122,8 @@ str(cal_random_large)
 plot(cal_random_large@coords)
 
 # Load field and expert calibration points to GRASS GIS
-spgrass6::writeVECT(SDF = cal_field, vname = "cal_field", v.in.ogr_flags = c("overwrite"))
-spgrass6::writeVECT(SDF = cal_expert, vname = "cal_expert", v.in.ogr_flags = c("overwrite"))
+spgrass7::writeVECT(SDF = cal_field, vname = "cal_field", v.in.ogr_flags = c("overwrite"))
+spgrass7::writeVECT(SDF = cal_expert, vname = "cal_expert", v.in.ogr_flags = c("overwrite"))
 
 # Setup database of calibration points (sample data from covariates)
 grassGis("r.mask -o non_access_limit")
@@ -141,7 +141,7 @@ cmd <- paste("v.what.rast vect=", pts, " raster=", id, " column=", cols_samp, se
 lapply(cmd, grassGis)
 grassGis(paste("v.info -c ", pts))
 rm(cmd, pts)
-cal_field <- spgrass6::readVECT("cal_field")
+cal_field <- spgrass7::readVECT("cal_field")
 cal_field$UM <- as.factor(cal_field$UM)
 
 # Expert calibration
@@ -154,7 +154,7 @@ cmd <- paste("v.what.rast vect=", pts, " raster=", id, " column=", cols_samp, se
 lapply(cmd, grassGis)
 grassGis(paste("v.info -c ", pts))
 rm(cmd, pts)
-cal_expert <- spgrass6::readVECT("cal_expert")
+cal_expert <- spgrass7::readVECT("cal_expert")
 cal_expert$UM <- as.factor(cal_expert$UM)
 
 rm(cols)
@@ -165,6 +165,7 @@ save(cal_field, cal_expert, cal_random_field, cal_random_expert, cal_random_larg
 
 # Prepare figure with calibration observations
 # Transform coordinates to kilometres to improve plotting
+# This is to see the spatial distribution of the sample point in the accessible area.
 n <- sapply(list(cal_field, cal_expert, cal_random_field, cal_random_expert, cal_random_large), nrow)
 id <- c("Field", "Expert", rep("Random", 3))
 id <- paste(id, " (n = ", n, ")", sep = "")
@@ -175,21 +176,22 @@ xy <- lapply(seq_along(xy), function (i) {
   res$cal <- id[i]
   return (res)
 })
-str(xy)
 xy <- do.call(rbind, xy)
 xy[, 1:2] <- xy[, 1:2] / 1000
 map <- lattice::xyplot(
   y ~ x | cal, xy, xlab = "Easting (km)", ylab = "Northing (km)", aspect = "iso", layout = c(3, 2),
   par.settings = list(fontsize = list(text = 8, points = 6)),
   panel = function (x, y, ...) {
+    lattice::panel.grid(v = -1, h = -1)
     lattice::panel.polygon(
       x = access_limit@polygons[[1]]@Polygons[[1]]@coords[, 1] / 1000, 
-      y = access_limit@polygons[[1]]@Polygons[[1]]@coords[, 2] / 1000, col = "lightgray", border = "lightgray")
+      y = access_limit@polygons[[1]]@Polygons[[1]]@coords[, 2] / 1000, 
+      col = "lightcoral", border = "lightcoral")
     lattice::panel.xyplot(x, y, col = "black", pch = 20, cex = 0.1)
   })
 map$index.cond[[1]] <- c(4, 5, 3, 2, 1)
 dev.off()
-png("res/fig/calibration_points.png", width = 16, height = 10, units = "cm", res = 600)
+png("res/fig/calibration_points.png", width = 480*3, height = 480*2, res = 300)
 map
 dev.off()
 
@@ -202,30 +204,40 @@ xy <- lapply(xy, function (x) x$UM)
 names(xy) <- id
 xy <- lapply(xy, function (x) summary(x) / sum(summary(x))) 
 xy <- cbind(stack(xy), um = names(xy[[1]]))
-col <- c("azure2", "lightsalmon", "darkseagreen1", "lightgoldenrod1")
+col <- c("lightsalmon", "cornflowerblue", "azure2", "lightgoldenrod1")
 p <- lattice::barchart(
   values ~ um | ind, data = xy, col = col, 
   scales = list(x = list(draw = FALSE)), ylab = "Proportion",
   key = list(text = list(as.character(unique(xy$um))), rectangles = list(col = col)),
-  par.settings = list(fontsize = list(text = 8, points = 6)))
+  par.settings = list(fontsize = list(text = 8, points = 6)),
+  panel = function (...) {
+    lattice::panel.grid(v = -1, h = -1)
+    lattice::panel.barchart(...)
+  })
 p$index.cond[[1]] <- c(4, 5, 3, 2, 1)
 names(p$legend) <- "bottom"
 dev.off()
-png("res/fig/cal_points_prop.png", width = 16, height = 10, units = "cm", res = 600)
+png("res/fig/cal_points_prop.png", width = 480*3, height = 480*2, res = 300)
 p
 dev.off()
+
 rm(p, col, xy)
 
 # Check how well the random samples representat the covariate data
 tmp <- rbind(
-  cbind(stack(covars[, 3:ncol(covars)]), id = "true"), 
+  cbind(stack(covars[, 3:ncol(covars)]), id = "pop"), 
   cbind(stack(cal_random_field@data[, -ncol(cal_random_field@data)]), id = "n = 383"), 
   cbind(stack(cal_random_expert@data[, -ncol(cal_random_expert@data)]), id = "n = 838"),
   cbind(stack(cal_random_large@data[, -ncol(cal_random_large@data)]), id = "n = 2003"))
-p <- lattice::bwplot(values ~ id | ind, data = tmp, scales = list(y = list(relation = "free")))
-p$par.settings <- list(plot.symbol = list(cex = 0.2))
+p <- lattice::bwplot(
+  values ~ id | ind, data = tmp, scales = list(y = list(relation = "free")),
+  panel = function (...) {
+    lattice::panel.grid(v = -1, h = -1)
+    lattice::panel.bwplot(...)
+  })
+p$par.settings <- list(plot.symbol = list(cex = 0.2), box.dot = list(cex = 0.5))
 dev.off()
-png("res/fig/balanced_sampling.png", width = 1200, height = 600, res = 120)
+png("res/fig/balanced_sampling.png", width = 480*4, height = 480*2, res = 250)
 p
 dev.off()
 

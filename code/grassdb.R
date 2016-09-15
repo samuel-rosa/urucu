@@ -269,10 +269,13 @@ grassGis("r.mask --o input=non_access_limit")
 # Polygon defining the small area where spatial predictions are made using all spatial predictions models to
 # compare their performance visually. The area presents a high topographic variation, with all four map units
 # of the target variable present.
-# We use the vector data to crate raster data which will be used as a raster mask.
-cmd <- paste("v.in.ogr dsn=", dir, "map_inset.shp output=map_inset", sep = "")
-grassGis(cmd)
-grassGis("v.to.rast input=map_inset output=map_inset use=val")
-
+# Produce a perfect rectangle using pedometrics::bbox2sp.
+# We use the vector data to create raster data which will be used as a raster mask.
+tmp <- raster::shapefile(paste(dir, "map_inset.shp", sep = ""))
+tmp <- pedometrics::bbox2sp(tmp, sp = "SpatialPolygonsDataFrame")
+spgrass7::writeVECT(tmp, "map_inset", v.in.ogr_flags = "overwrite")
+# cmd <- paste("v.in.ogr input=", dir, "map_inset.shp output=map_inset", sep = "")
+# grassGis(cmd)
+grassGis("v.to.rast --overwrite input=map_inset output=map_inset use=val")
 
 rm(dir)

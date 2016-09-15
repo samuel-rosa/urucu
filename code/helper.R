@@ -97,20 +97,29 @@ fit_land_classification <-
 uncertainty.colors <- 
   colorRampPalette(c("olivedrab", "khaki", "maroon1"))
 soil.colors <- 
-  c("lightsalmon", "cadetblue1", "azure2", "lightgoldenrod1")
+  # c("lightsalmon", "cadetblue1", "azure2", "lightgoldenrod1")
+  c("lightsalmon", "cornflowerblue", "azure2", "lightgoldenrod1")
 
 # Spatial prediction -----
 spPredict <-
-  function (model, covariates) {
+  function (model, covariates, sp = TRUE, probs = FALSE) {
     if (inherits(model, "lda")) {
       res <- data.frame(predict(model, newdata = covariates)$posterior)
     } else {
       res <- data.frame(predict(model, covariates, type = "prob"))
     }
-    res$UM <- maxCol(res)
-    res$entropy <- apply(res[, 1:4], 1, entropy)
-    res <- cbind(covariates[, 1:2], res)
-    sp::gridded(res) <- ~ x + y
     
+    if (probs) {
+      res$UM <- maxCol(res)
+      res$entropy <- apply(res[, 1:4], 1, entropy)  
+    } else {
+      res <- data.frame(
+        UM = maxCol(res), entropy = apply(res[, 1:4], 1, entropy))
+    }
+    
+    if (sp) {
+      res <- cbind(covariates[, 1:2], res)
+      sp::gridded(res) <- ~ x + y
+    }
     return (res)
   }

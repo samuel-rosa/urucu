@@ -569,30 +569,81 @@ pred_um@data <- cbind(
   random_large_rf = spPredict(fit_random_large_rf, inset_covars, sp = FALSE)
   )
 save(pred_um, file = "data/R/map_inset_pred.rda")
+# load("data/R/map_inset_pred.rda")
 
-# Prepare figure with predictions
-levels <- c("Field", "Expert")
-levels <- c(rep(levels, each = 2), rep(paste(rep("Random", 3), c(levels, "Large")), each = 2))
+# Prepare data for figures with predictions
+levels <- c("Field sample", "Expert sample")
+levels <- c(rep(levels, each = 2), rep(paste(rep("Random sample", 3)), each = 2))
 levels <- paste(levels, c("FLD", "BRF"))
+n <- 
+  paste("(n = ", 
+        sapply(list(cal_field, cal_expert, cal_random_field, cal_random_expert, cal_random_large), length),
+        ")", sep = "")
+levels <- paste(levels, rep(n, each = 2))
 idx <- grep(".UM", colnames(pred_um@data))
-p <- sp::spplot(
-  pred_um, idx, col.regions = soil.colors, colorkey = FALSE,
-  strip = lattice::strip.custom(factor.levels = levels), layout = c(2, 5)) + 
+
+# Predictions with field and expert samples
+p1 <- sp::spplot(
+  pred_um, idx[1:4], col.regions = soil.colors, 
+  colorkey = list(space = "bottom"),
+  strip = lattice::strip.custom(factor.levels = levels[1:4]), layout = c(2, 2)) + 
   latticeExtra::as.layer(
-    sp::spplot(target_soil_map, "UM", col.regions = soil.colors, alpha.regions = 0.5, lwd = 0.75))
+    sp::spplot(target_soil_map, "UM", col.regions = "transparent", lwd = 0.75))
+p1$par.settings <- list(fontsize = list(text = 12 * 3, points = 8))
+p1$legend$bottom$args$key$labels$labels <- as.character(um_levels)
+p1$legend$bottom$args$key$width <- 1
+p1$legend$bottom$args$key$height <- 1
 dev.off()
-png("res/fig/map_inset_predictions.png", width = 480*3, height = 480*6, res = 150)
+# png("res/fig/map_inset_predictions.png", width = 480*3, height = 480*6)
+jpeg("res/fig/map_inset_predictions_field_expert.jpg", width = 480 * 4, height = 480 * 3.5)
+p1
+dev.off()
+rm(p1)
+
+# Figure with predictions based on random samples
+p1 <- sp::spplot(
+  pred_um, idx[-c(1:4)], col.regions = soil.colors, 
+  colorkey = list(space = "bottom"),
+  strip = lattice::strip.custom(factor.levels = levels[-c(1:4)]), layout = c(2, 3)) + 
+  latticeExtra::as.layer(
+    sp::spplot(target_soil_map, "UM", col.regions = "transparent", lwd = 0.75))
+p1$par.settings <- list(fontsize = list(text = 12 * 3, points = 8))
+p1$legend$bottom$args$key$labels$labels <- as.character(um_levels)
+p1$legend$bottom$args$key$width <- 1
+p1$legend$bottom$args$key$height <- 1
+dev.off()
+# png("res/fig/map_inset_predictions.png", width = 480*3, height = 480*6)
+jpeg("res/fig/map_inset_predictions_random.jpg", width = 480 * 4, height = 480 * 5)
+p1
+dev.off()
+rm(p1)
+
+# Prepare figure with uncertainty of field and expert samples
+p <- sp::spplot(
+  pred_um, (idx + 1)[1:4], col.regions = uncertainty.colors, 
+  # colorkey = FALSE,
+  colorkey = list(space = "bottom", at = seq(0, 1, 0.1)),
+  strip = lattice::strip.custom(factor.levels = levels[1:4]), layout = c(2, 2)) + 
+  latticeExtra::as.layer(sp::spplot(target_soil_map, "UM", col.regions = "transparent", lwd = 0.75))
+p$par.settings <- list(fontsize = list(text = 12 * 3, points = 8))
+dev.off()
+# png("res/fig/map_inset_entropy.png", width = 480*3, height = 480*6, res = 150)
+jpeg("res/fig/map_inset_entropy_field_expert.jpg", width = 480 * 4, height = 480 * 3.5)
 p
 dev.off()
 rm(p)
 
-# Prepare figure with uncertainty
+# Prepare figure with uncertainty of random samples
 p <- sp::spplot(
-  pred_um, idx+1, col.regions = uncertainty.colors, colorkey = FALSE,
-  strip = lattice::strip.custom(factor.levels = levels), layout = c(2, 5)) + 
+  pred_um, (idx + 1)[-c(1:4)], col.regions = uncertainty.colors, 
+  # colorkey = FALSE,
+  colorkey = list(space = "bottom", at = seq(0, 1, 0.1)),
+  strip = lattice::strip.custom(factor.levels = levels[-c(1:4)]), layout = c(2, 3)) + 
   latticeExtra::as.layer(sp::spplot(target_soil_map, "UM", col.regions = "transparent", lwd = 0.75))
+p$par.settings <- list(fontsize = list(text = 12 * 3, points = 8))
 dev.off()
-png("res/fig/map_inset_entropy.png", width = 480*3, height = 480*6, res = 150)
+# png("res/fig/map_inset_entropy.png", width = 480*3, height = 480*6, res = 150)
+jpeg("res/fig/map_inset_entropy_random.jpg", width = 480 * 4, height = 480 * 5.2)
 p
 dev.off()
 rm(p)

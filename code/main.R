@@ -22,6 +22,37 @@ grassGis("r.mask --o target_soil_map")
 # grassGis("db.connect -p")
 # grassGis("v.db.reconnect.all -cd")
 
+# Load polygon data ###########################################################################################
+target_soil_map <- spgrass7::readVECT("target_soil_map")
+access_limit <- spgrass7::readVECT("access_limit")
+non_access_limit <- spgrass7::readVECT("non_access_limit")
+
+# Prepare figure of study area
+p <- raster::shapefile("data/vector/target_soil_map.shp", stringsAsFactors = TRUE)
+p <- 
+  sp::spplot(
+    p, "UM", lwd = 0, 
+    colorkey = list(space = "right"), col.regions = soil.colors, 
+    xlim = sp::bbox(non_access_limit)[1, ], 
+    ylim = sp::bbox(non_access_limit)[2, ], 
+    scales = list(draw = TRUE, x = list(labels = pretty(sp::bbox(non_access_limit)[1, ]) / 1000),
+                  y = list(labels = pretty(sp::bbox(non_access_limit)[2, ]) / 1000)),
+    xlab = "Easting (km)", ylab = "Northing (km)",
+    panel = function (...) {
+      lattice::panel.grid(h = -1, v = -1)
+      sp::panel.polygonsplot(...)
+    }) +
+  latticeExtra::as.layer(sp::spplot(non_access_limit, 1, col.regions = "transparent"))
+p$par.settings <- list(fontsize = list(text = 12 * 2.5))
+names(p$legend) <- "inside"
+p$legend$inside$x <- 0.6
+p$legend$inside$y <- 0.2
+dev.off()
+png("res/fig/study_area.png", width = 480 * 2.5, height = 480 * 2)
+p
+dev.off()
+rm(p)
+
 # Load core packages ##########################################################################################
 require(MASS)
 require(randomForest)
@@ -42,9 +73,6 @@ colnames(covars) <- c("x", "y", id_covars)
 head(covars)
 
 # Load necessary vector data
-target_soil_map <- spgrass7::readVECT("target_soil_map")
-access_limit <- spgrass7::readVECT("access_limit")
-non_access_limit <- spgrass7::readVECT("non_access_limit")
 cal_profiles <- raster::shapefile("data/vector/Perfis.shp")
 cal_boreholes <- raster::shapefile("data/vector/Tradagens.shp")
 val_boreholes <- raster::shapefile("data/vector/Tradagens_Validacao.shp")

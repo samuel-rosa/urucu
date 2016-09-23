@@ -42,7 +42,6 @@ p <-
     }) +
   latticeExtra::as.layer(sp::spplot(non_access_limit, 1, col.regions = "transparent", col = "red")) +
   latticeExtra::as.layer(sp::spplot(spgrass7::readVECT("map_inset"), 1, col.regions = "transparent"))
-
 p$par.settings <- list(fontsize = list(text = 12 * 2.5))
 names(p$legend) <- "inside"
 p$legend$inside$x <- 0.6

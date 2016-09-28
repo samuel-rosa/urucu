@@ -572,6 +572,7 @@ colnames(inset_covars) <- c("x", "y", id_covars)
 str(inset_covars)
 
 # Predictions
+# load("data/R/calibrated_models.rda")
 pred_um <- spPredict(fit_field_lda, inset_covars)
 colnames(pred_um@data) <- paste("field_lda.", colnames(pred_um@data), sep = "")
 pred_um@data <- cbind(
@@ -597,25 +598,24 @@ pred_um@data <- cbind(
   )
 save(pred_um, file = "data/R/map_inset_pred.rda")
 # load("data/R/map_inset_pred.rda")
+# load("data/R/calibration_points.rda")
 
 # Prepare data for figures with predictions
-levels <- c("Field sample", "Expert sample")
-levels <- c(rep(levels, each = 2), rep(paste(rep("Random sample", 3)), each = 2))
-levels <- paste(levels, c("FLD", "BRF"))
+levels <- c("Field", "Expert")
+levels <- c(rep(levels, each = 2), rep(paste(rep("Map", 3)), each = 2))
 n <- 
   paste("(n = ", 
         sapply(list(cal_field, cal_expert, cal_random_field, cal_random_expert, cal_random_large), length),
         ")", sep = "")
 levels <- paste(levels, rep(n, each = 2))
+levels <- paste(c("FLD + ", "BRF + "), levels, sep = "")
 idx <- grep(".UM", colnames(pred_um@data))
 
 # Predictions with field and expert samples
 p1 <- sp::spplot(
-  pred_um, idx[1:4], col.regions = soil.colors, 
-  colorkey = list(space = "bottom"),
+  pred_um, idx[1:4], col.regions = soil.colors, colorkey = list(space = "bottom"),
   strip = lattice::strip.custom(factor.levels = levels[1:4]), layout = c(2, 2)) + 
-  latticeExtra::as.layer(
-    sp::spplot(target_soil_map, "UM", col.regions = "transparent", lwd = 0.75))
+  latticeExtra::as.layer(sp::spplot(target_soil_map, "UM", col.regions = "transparent"))
 p1$par.settings <- list(fontsize = list(text = 12 * 3, points = 8))
 p1$legend$bottom$args$key$labels$labels <- as.character(um_levels)
 p1$legend$bottom$args$key$width <- 1
@@ -629,11 +629,9 @@ rm(p1)
 
 # Figure with predictions based on random samples
 p1 <- sp::spplot(
-  pred_um, idx[-c(1:4)], col.regions = soil.colors, 
-  colorkey = list(space = "bottom"),
+  pred_um, idx[-c(1:4)], col.regions = soil.colors, colorkey = list(space = "bottom"),
   strip = lattice::strip.custom(factor.levels = levels[-c(1:4)]), layout = c(2, 3)) + 
-  latticeExtra::as.layer(
-    sp::spplot(target_soil_map, "UM", col.regions = "transparent", lwd = 0.75))
+  latticeExtra::as.layer(sp::spplot(target_soil_map, "UM", col.regions = "transparent"))
 p1$par.settings <- list(fontsize = list(text = 12 * 3, points = 8))
 p1$legend$bottom$args$key$labels$labels <- as.character(um_levels)
 p1$legend$bottom$args$key$width <- 1
@@ -646,13 +644,16 @@ dev.off()
 rm(p1)
 
 # Prepare figure with uncertainty of field and expert samples
+col <- uncertainty.colors(10)
+col <- c(col[1], col, col[10])
 p <- sp::spplot(
-  pred_um, (idx + 1)[1:4], col.regions = uncertainty.colors, 
-  # colorkey = FALSE,
-  colorkey = list(space = "bottom", at = seq(0, 1, 0.1)),
+  pred_um, (idx + 1)[1:4], col.regions = col, at = c(-0.01, seq(0, 1, 0.1), 1.01),
+  colorkey = list(space = "bottom", at = c(-0.01, seq(0, 1, 0.1), 1.01)),
   strip = lattice::strip.custom(factor.levels = levels[1:4]), layout = c(2, 2)) + 
-  latticeExtra::as.layer(sp::spplot(target_soil_map, "UM", col.regions = "transparent", lwd = 0.75))
+  latticeExtra::as.layer(sp::spplot(target_soil_map, "UM", col.regions = "transparent"))
 p$par.settings <- list(fontsize = list(text = 12 * 3, points = 8))
+p$legend$bottom$args$key$width <- 1
+p$legend$bottom$args$key$height <- 1
 dev.off()
 # png("res/fig/map_inset_entropy.png", width = 480*3, height = 480*6, res = 150)
 jpeg("res/fig/map_inset_entropy_field_expert.jpg", width = 480 * 4, height = 480 * 3.5)
@@ -662,25 +663,22 @@ rm(p)
 
 # Prepare figure with uncertainty of random samples
 p <- sp::spplot(
-  pred_um, (idx + 1)[-c(1:4)], col.regions = uncertainty.colors, 
-  # colorkey = FALSE,
-  colorkey = list(space = "bottom", at = seq(0, 1, 0.1)),
+  pred_um, (idx + 1)[-c(1:4)], col.regions = col, at = c(-0.01, seq(0, 1, 0.1), 1.01),
+  colorkey = list(space = "bottom", at = c(-0.01, seq(0, 1, 0.1), 1.01)),
   strip = lattice::strip.custom(factor.levels = levels[-c(1:4)]), layout = c(2, 3)) + 
-  latticeExtra::as.layer(sp::spplot(target_soil_map, "UM", col.regions = "transparent", lwd = 0.75))
+  latticeExtra::as.layer(sp::spplot(target_soil_map, "UM", col.regions = "transparent"))
 p$par.settings <- list(fontsize = list(text = 12 * 3, points = 8))
+p$legend$bottom$args$key$width <- 1
+p$legend$bottom$args$key$height <- 1
 dev.off()
 # png("res/fig/map_inset_entropy.png", width = 480*3, height = 480*6, res = 150)
-jpeg("res/fig/map_inset_entropy_random.jpg", width = 480 * 4, height = 480 * 5.2)
+jpeg("res/fig/map_inset_entropy_random.jpg", width = 480 * 4, height = 480 * 5)
 p
 dev.off()
 rm(p)
+rm(pred_um)
 
-
-
-
-
-
-
+# Predictions using the landform classification algorithm
 fit_land_classification(tool = "grass", vname = "inset_land_class")
 cmd <- paste("r.out.xyz --overwrite input=inset_land_class output=data/tmp/inset_land_class.csv", sep = "")
 grassGis(cmd)
@@ -688,8 +686,27 @@ pred_field_lca <- read.table("data/tmp/inset_land_class.csv", sep = "|")
 colnames(pred_field_lca) <- c("x", "y", "UM")
 pred_field_lca$UM <- as.factor(pred_field_lca$UM)
 levels(pred_field_lca$UM) <- um_levels
-pred_um$field_lca.UM <- pred_field_lca$UM
-rm(pred_field_lca)
+sp::gridded(pred_field_lca) <- ~ x + y
+
+# Prepare figure
+p <- sp::spplot(
+  pred_field_lca, col.regions = soil.colors, colorkey = list(space = "bottom"),
+  strip = lattice::strip.custom(factor.levels = levels[-c(1:4)])) + 
+  latticeExtra::as.layer(sp::spplot(target_soil_map, "UM", col.regions = "transparent"))
+p$par.settings <- list(fontsize = list(text = 12 * 2, points = 8))
+p$legend$bottom$args$key$labels$labels <- as.character(um_levels)
+p$legend$bottom$args$key$width <- 1
+p$legend$bottom$args$key$height <- 1
+dev.off()
+# png("res/fig/map_inset_predictions.png", width = 480*3, height = 480*6)
+jpeg("res/fig/map_inset_predictions_geoforms_tmp.jpg", width = 480 * 2, height = 480 * 2.5)
+p
+dev.off()
+rm(p)
+
+
+
+
 
 
 
@@ -708,9 +725,6 @@ colnames(pred_field_lca) <- c("x", "y", "UM")
 pred_field_lca$UM <- as.factor(pred_field_lca$UM)
 levels(pred_field_lca$UM) <- um_levels
 sp::gridded(pred_field_lca) <- ~ x + y
-
-
-
 
 # Expert calibration data (n = 837)
 pred_expert_lda <- spPredict(fit_expert_lda, inset_covars)

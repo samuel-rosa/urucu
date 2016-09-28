@@ -84,7 +84,7 @@ fit_land_classification <-
     } else {
       if (tool == "grass") {
         cmd <- 
-          paste("r.mapcalc '", vname, " = ",
+          paste("r.mapcalc --overwrite '", vname, " = ",
                 "if(slope > ", param[1], ", 1, ", 
                 "if(curvature < ", param[2], " || slope < ", param[3], " && elevation < ", param[4], ", 2, ",
                 "if(flow_down > ", param[5], " && twi > ", param[6], ", 3, 4)))'", sep = "")

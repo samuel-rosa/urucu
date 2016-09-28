@@ -105,6 +105,26 @@ cal_expert <- raster::shapefile("data/vector/Trein_Classes.shp")
 out <- sp::over(cal_expert, non_access_limit)
 out <- which(is.na(sp::over(cal_expert, non_access_limit)$cat))
 cal_expert <- cal_expert[-out, ]
+
+# Check the order in which map units were "sampled" by the expert
+tmp <- cal_expert$MDS
+tmp <- ifelse(tmp == 3, 2, tmp)
+tmp <- ifelse(tmp == 4, 3, tmp)
+tmp <- ifelse(tmp == 5, 4, tmp)
+x <- data.frame(y = rep(1, length(tmp)), x = 1:length(tmp))
+p <- lattice::xyplot(
+  y ~ x, data = x, col = soil.colors[tmp], pch = 15, cex = 0.25, type = "h", ylim = c(0, 1),
+  key = list(text = list(labels = um_levels), rect = list(col = soil.colors), columns = 2),
+  ylab = "", xlab = "Sampling order", scales = list(y = list(draw = FALSE)), xlim = c(1, length(tmp)))
+p$x.scales$at <- seq(1, length(tmp), length.out = 5)
+p$par.settings <- list(fontsize = list(text = 12))
+dev.off()
+png("res/fig/expert_sampling_order.png", width = 480 * 2, height = 480 * 0.5, res = 72 * 2)
+p
+dev.off()
+rm(tmp, x, p)
+
+# Continue with processing
 cal_expert$UM <- as.factor(cal_expert$MDS)
 levels(cal_expert$UM) <- levels(cal_field$UM)[c(1, 2, 2, 3, 4)]
 cal_expert@data <- data.frame(UM = cal_expert$UM)

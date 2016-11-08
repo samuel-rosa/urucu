@@ -38,19 +38,45 @@ p <-
     xlab = "Easting (km)", ylab = "Northing (km)",
     panel = function (...) {
       lattice::panel.grid(h = -1, v = -1)
+      lattice::panel.text(
+        x = c(255, 262, 271, 238, 274, 239, 242, 270, 235, 255, 251, 267) * 1000,
+        y = c(94630, 94650, 94670, 94470, 94595, 94570, 94635, 94710, 94460, 94700, 94540, 94590) * 100, 
+        labels = c("Pri", "Dc", "Dc", "Pri", "Pri", "Dc", "Apf", "Apf", "Apf", "Apf", "Pri", "Dc"), 
+        cex = 0.75, col = "gray")
       sp::panel.polygonsplot(...)
     }) +
   latticeExtra::as.layer(sp::spplot(non_access_limit, 1, col.regions = "transparent", col = "red")) +
-  latticeExtra::as.layer(sp::spplot(spgrass7::readVECT("map_inset"), 1, col.regions = "transparent"))
+  latticeExtra::as.layer(sp::spplot(spgrass7::readVECT("map_inset"), 1, col.regions = "transparent")) +
+  latticeExtra::as.layer(
+    sp::spplot(raster::shapefile("data/vector/geomorphology.shp", stringsAsFactors = TRUE), "SIMB_MOD", 
+               col.regions = "transparent", lwd = 0.1))
 p$par.settings <- list(fontsize = list(text = 12 * 2.5))
 names(p$legend) <- "inside"
-p$legend$inside$x <- 0.6
-p$legend$inside$y <- 0.2
+p$legend$inside$x <- 0.025
+p$legend$inside$y <- 0.875
 dev.off()
 png("res/fig/study_area.png", width = 480 * 2.5, height = 480 * 2)
 p
 dev.off()
 rm(p)
+
+# Figure of the Amazon region #################################################################################
+# Prepare figure of the Amazon region using Google Earth imagery
+
+map <- ggmap::get_googlemap(
+  center = c(-61, -4.8), zoom = 5, size = c(640, 640 * 0.7), scale = 2, maptype = "hybrid")
+p <-
+  ggmap::ggmap(map) + 
+  # ggplot2::xlab("Longitude") + ggplot2::ylab("Latitude") + 
+  ggplot2::geom_point(ggplot2::aes(y = -4.095218, x = -63.145973), size = 3, colour = "red") +
+  ggplot2::geom_text(
+    ggplot2::aes(label = "COARI", y = -4.095218, x = -63.145973), size = 4, colour = "white", 
+    position = ggplot2::position_nudge(x = 2)) +
+  ggplot2::theme_void()
+dev.off()
+png("res/fig/coari.png", width = 480 * 4, height = 480 * 4 * 0.7, res = 72 * 4, bg = "transparent")
+p
+dev.off()
 
 # Load core packages ##########################################################################################
 require(MASS)

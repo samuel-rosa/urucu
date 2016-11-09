@@ -278,4 +278,8 @@ spgrass7::writeVECT(tmp, "map_inset", v.in.ogr_flags = "overwrite")
 # grassGis(cmd)
 grassGis("v.to.rast --overwrite input=map_inset output=map_inset use=val")
 
+# Geology
+grassGis(paste("v.in.ogr --o input=", dir, "geology.shp output=geology snap=1", sep = ""))
+grassGis("v.info map=geology")
+
 rm(dir)

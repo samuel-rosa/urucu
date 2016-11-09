@@ -63,16 +63,34 @@ rm(p)
 # Figure of the Amazon region #################################################################################
 # Prepare figure of the Amazon region using Google Earth imagery
 
+# Prepare polygons with geological formations
+require(maptools)
+geology <- spgrass7::readVECT("geology")
+geology <- sp::spTransform(geology, sp::CRS("+init=epsg:4326"))
+geology@polygons <- geology@polygons[4]
+# geology@data <- data.frame(id = geology@data[, "geology"])
+geology@data <- data.frame(id = 1)
+# geology@data <- data.frame(id = 1:length(geology))
+geology@data$id <- rownames(geology@data)
+# lab <- geology@bbox
+# lab <- lab[, 1] + apply(lab, 1, diff) * 0.5
+geology <- ggplot2::fortify(geology, region = "id")
+
+# Get google image
 map <- ggmap::get_googlemap(
   center = c(-61, -4.8), zoom = 5, size = c(640, 640 * 0.7), scale = 2, maptype = "hybrid")
+
+# Prepare figure
 p <-
   ggmap::ggmap(map) + 
-  # ggplot2::xlab("Longitude") + ggplot2::ylab("Latitude") + 
-  ggplot2::geom_point(ggplot2::aes(y = -4.095218, x = -63.145973), size = 3, colour = "red") +
+  ggplot2::xlab("Longitude") + ggplot2::ylab("Latitude") +
+  ggplot2::geom_point(ggplot2::aes(y = -4.095218, x = -63.145973), shape = 18, size = 3, colour = "red") +
   ggplot2::geom_text(
-    ggplot2::aes(label = "COARI", y = -4.095218, x = -63.145973), size = 4, colour = "white", 
-    position = ggplot2::position_nudge(x = 2)) +
-  ggplot2::theme_void()
+    ggplot2::aes(label = "COARI", y = -4.095218, x = -63.145973), size = 3, colour = "white", 
+    position = ggplot2::position_nudge(x = 1.5)) +
+  ggplot2::geom_polygon(
+    ggplot2::aes(x = long, y = lat), geology, show.legend = FALSE, colour = "yellow", linetype = "dotted",
+    fill = NA, size = 0.5)
 dev.off()
 png("res/fig/coari.png", width = 480 * 4, height = 480 * 4 * 0.7, res = 72 * 4, bg = "transparent")
 p

@@ -68,12 +68,8 @@ require(maptools)
 geology <- spgrass7::readVECT("geology")
 geology <- sp::spTransform(geology, sp::CRS("+init=epsg:4326"))
 geology@polygons <- geology@polygons[4]
-# geology@data <- data.frame(id = geology@data[, "geology"])
 geology@data <- data.frame(id = 1)
-# geology@data <- data.frame(id = 1:length(geology))
 geology@data$id <- rownames(geology@data)
-# lab <- geology@bbox
-# lab <- lab[, 1] + apply(lab, 1, diff) * 0.5
 geology <- ggplot2::fortify(geology, region = "id")
 
 # Get google image
@@ -86,15 +82,20 @@ p <-
   ggplot2::xlab("Longitude") + ggplot2::ylab("Latitude") +
   ggplot2::geom_point(ggplot2::aes(y = -4.095218, x = -63.145973), shape = 18, size = 3, colour = "red") +
   ggplot2::geom_text(
-    ggplot2::aes(label = "COARI", y = -4.095218, x = -63.145973), size = 3, colour = "white", 
-    position = ggplot2::position_nudge(x = 1.5)) +
+    ggplot2::aes(label = "Coari", y = -4.095218, x = -63.145973), size = 3, colour = "white", 
+    position = ggplot2::position_nudge(x = 1)) +
   ggplot2::geom_polygon(
     ggplot2::aes(x = long, y = lat), geology, show.legend = FALSE, colour = "yellow", linetype = "dotted",
-    fill = NA, size = 0.5)
+    fill = NA, size = 0.5) +
+  ggplot2::geom_point(ggplot2::aes(y = -3.057035, x = -59.985084), shape = 18, size = 3, colour = "red") +
+  ggplot2::geom_text(
+    ggplot2::aes(label = "Manaus", y = -3.057035, x = -59.985084), size = 3, colour = "white", 
+    position = ggplot2::position_nudge(x = 1.3)) 
 dev.off()
 png("res/fig/coari.png", width = 480 * 4, height = 480 * 4 * 0.7, res = 72 * 4, bg = "transparent")
 p
 dev.off()
+rm(p, geology, map)
 
 # Load core packages ##########################################################################################
 require(MASS)

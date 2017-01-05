@@ -298,30 +298,35 @@ dev.off()
 rm(map, xy)
 gc()
 
-# Prepare figure with the distribution of points per category
+# Figure: Distribution of sample points per category of the soil map ####
+# Steps: load calibration points (rda), load the target soil map at the begining of the file, and get 
+# variables 'id' and 'n' from the code chunk above.
 xy <- list(cal_field, cal_expert, cal_random_field, cal_random_expert, cal_random_large)
 xy <- lapply(xy, function (x) x$UM)
 names(xy) <- id
 xy <- lapply(xy, function (x) summary(x) / sum(summary(x))) 
 xy <- cbind(stack(xy), um = names(xy[[1]]))
+ma <- rgeos::gArea(target_soil_map, byid = TRUE)
+ma <- c(by(ma, target_soil_map@data$UM, sum) / rgeos::gArea(target_soil_map))
+ma <- data.frame(values = ma, ind = "Reference soil map", um = xy$um[1:4])
+xy <- rbind(xy, ma)
 p <- lattice::barchart(
   values ~ um | ind, data = xy, col = soil.colors,
   scales = list(x = list(draw = FALSE)), ylab = "Proportion",
   key = list(text = list(as.character(unique(xy$um))), rectangles = list(col = soil.colors)),
   par.settings = list(fontsize = list(text = 8, points = 6)),
   panel = function (...) {
-    lattice::panel.grid(v = -1, h = -1)
+    lattice::panel.grid(v = 0, h = -1)
     lattice::panel.barchart(...)
   }
   )
-p$index.cond[[1]] <- c(4, 5, 3, 2, 1)
+p$index.cond[[1]] <- c(4, 5, 3, 2, 1, 6)
 names(p$legend) <- "bottom"
 dev.off()
 png("res/fig/cal_points_prop.png", width = 480*3, height = 480*2, res = 300)
 p
 dev.off()
-
-rm(p, xy)
+rm(p, xy, ma)
 
 # Figure: Coverage of the marginal distribution of the covariates by the balanced sample ####
 # Steps: load the covariate data (csv) at the beginning of this section and the calibration points (rda).   

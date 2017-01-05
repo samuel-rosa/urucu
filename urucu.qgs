@@ -1,11 +1,20 @@
 <!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
-<qgis projectname="" version="2.16.2">
+<qgis projectname="" version="2.18.2">
   <title></title>
   <autotransaction active="0"/>
   <evaluateDefaultValues active="0"/>
   <layer-tree-group expanded="1" checked="Qt::PartiallyChecked" name="">
     <customproperties/>
-    <layer-tree-group expanded="0" checked="Qt::Unchecked" name="soil_observations">
+    <layer-tree-group expanded="1" checked="Qt::Unchecked" name="covariates">
+      <customproperties/>
+      <layer-tree-layer expanded="0" checked="Qt::Unchecked" id="curvature20161107180919874" name="curvature">
+        <customproperties/>
+      </layer-tree-layer>
+      <layer-tree-layer expanded="0" checked="Qt::Unchecked" id="elevation20161107180503003" name="elevation">
+        <customproperties/>
+      </layer-tree-layer>
+    </layer-tree-group>
+    <layer-tree-group expanded="1" checked="Qt::Unchecked" name="soil_observations">
       <customproperties/>
       <layer-tree-layer expanded="0" checked="Qt::Unchecked" id="Trein_Classes20160704105656155" name="Trein_Classes">
         <customproperties>
@@ -33,46 +42,33 @@
         </customproperties>
       </layer-tree-layer>
     </layer-tree-group>
-    <layer-tree-group expanded="1" checked="Qt::PartiallyChecked" name="limits">
+    <layer-tree-group expanded="1" checked="Qt::Unchecked" name="soil_maps">
       <customproperties/>
-      <layer-tree-layer expanded="1" checked="Qt::Checked" id="outer_area20160727154434717" name="outer_area">
+      <layer-tree-layer expanded="0" checked="Qt::Unchecked" id="target_soil_map20160727153902068" name="target_soil_map">
         <customproperties/>
       </layer-tree-layer>
-<<<<<<< HEAD
+    </layer-tree-group>
+    <layer-tree-group expanded="1" checked="Qt::PartiallyChecked" name="limits">
+      <customproperties/>
+      <layer-tree-layer expanded="1" checked="Qt::Unchecked" id="arches20161108222827404" name="arches">
+        <customproperties/>
+      </layer-tree-layer>
+      <layer-tree-layer expanded="1" checked="Qt::Unchecked" id="outer_area20160727154434717" name="outer_area">
+        <customproperties/>
+      </layer-tree-layer>
+      <layer-tree-layer expanded="1" checked="Qt::Checked" id="access_area20160727154131822" name="access_area">
+        <customproperties/>
+      </layer-tree-layer>
+      <layer-tree-layer expanded="0" checked="Qt::Unchecked" id="geomorphology20161108000930337" name="geomorphology">
+        <customproperties/>
+      </layer-tree-layer>
+      <layer-tree-layer expanded="1" checked="Qt::Unchecked" id="geology20161108234850069" name="geology">
+        <customproperties/>
+      </layer-tree-layer>
       <layer-tree-layer expanded="1" checked="Qt::Checked" id="non_access_area20160720113528485" name="non_access_area">
         <customproperties/>
       </layer-tree-layer>
-      <layer-tree-layer expanded="1" checked="Qt::Checked" id="inset20160902134929549" name="inset">
-=======
-      <layer-tree-layer expanded="1" checked="Qt::Checked" id="map_inset20160902163240167" name="map_inset">
-        <customproperties/>
-      </layer-tree-layer>
-      <layer-tree-layer expanded="1" checked="Qt::Unchecked" id="non_access_area20160720113528485" name="non_access_area">
->>>>>>> 841d68429c85f613be42481631081085b529bd7d
-        <customproperties/>
-      </layer-tree-layer>
-      <layer-tree-layer expanded="1" checked="Qt::Unchecked" id="access_area20160727154131822" name="access_area">
-        <customproperties/>
-      </layer-tree-layer>
       <layer-tree-layer expanded="1" checked="Qt::Unchecked" id="landuse20160713111933971" name="landuse">
-        <customproperties/>
-      </layer-tree-layer>
-    </layer-tree-group>
-<<<<<<< HEAD
-    <layer-tree-group expanded="0" checked="Qt::Checked" name="soil_maps">
-      <customproperties/>
-      <layer-tree-layer expanded="1" checked="Qt::Checked" id="target_soil_map20160727153902068" name="target_soil_map">
-        <customproperties/>
-      </layer-tree-layer>
-    </layer-tree-group>
-    <layer-tree-group expanded="1" checked="Qt::Checked" name="covariates">
-      <customproperties/>
-      <layer-tree-layer expanded="1" checked="Qt::Checked" id="elevation20160902134038578" name="elevation">
-=======
-    <layer-tree-group expanded="1" checked="Qt::Checked" name="soil_maps">
-      <customproperties/>
-      <layer-tree-layer expanded="0" checked="Qt::Checked" id="target_soil_map20160727153902068" name="target_soil_map">
->>>>>>> 841d68429c85f613be42481631081085b529bd7d
         <customproperties/>
       </layer-tree-layer>
     </layer-tree-group>
@@ -81,10 +77,10 @@
   <mapcanvas>
     <units>meters</units>
     <extent>
-      <xmin>247399.06968864222289994</xmin>
-      <ymin>9457208.96430839039385319</ymin>
-      <xmax>256924.01589820778463036</xmax>
-      <ymax>9462599.30243432335555553</ymax>
+      <xmin>229165.39979553420562297</xmin>
+      <ymin>9436256.57369041629135609</ymin>
+      <xmax>280829.69554138375679031</xmax>
+      <ymax>9476197.52947424910962582</ymax>
     </extent>
     <rotation>0</rotation>
     <projections>1</projections>
@@ -102,42 +98,60 @@
     </destinationsrs>
     <rendermaptile>0</rendermaptile>
     <layer_coordinate_transform_info>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="non_access_area20160720113528485"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="flow_up20160721095627934"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="aspect20160720154442110"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="slope20160721095814345"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="flow_dir20160721095454491"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="flow_down20160721095507074"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="Tradagens_Validacao20160704103302490"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="curvature20160720154540833"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="prof_curv20160721095728933"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="Tradagens20160704103302459"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="landuse20160713111933971"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="twi20160727151840187"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="access_area20160727154131822"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="access_area20160727153153157"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="prof_curv20160721095757460"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="elevation20160902134038578"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="arches20161108222616266"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="geology20161108195946130"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:4618" srcDatumTransform="-1" destDatumTransform="-1" layerid="sb20_mpt20161107214714110"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="tmp20161108200125641"/>
       <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="Trein_Classes20160704105656155"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="flow_down20160721095535505"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="twi20160727150807972"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="Lim10000Detal20160704102609571"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="map_inset20160902163240167"/>
       <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="flow_accum20160721095249843"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="outer_area20160727154434717"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="plan_curv20160721095715576"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="flow_up20160721095603159"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="Perfis20160704103155391"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="flow_dir20160721095428548"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="inset20160902134929549"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="target_soil_map20160727153902068"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="slope20160721095843031"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="inset20160902163043514"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="twi20160727150807972"/>
       <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="flow_accum20160721095343753"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="Lim50000Semidet20160704102707688"/>
-      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="MCS_Simplif_Poligon_correct20160704163418626"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="Tradagens_Validacao20160704103302490"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:4618" srcDatumTransform="-1" destDatumTransform="-1" layerid="sb20_grade20161107214528293"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="Symmetrical_difference20161108200419040"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="Tradagens20160704103302459"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="arches20161108222827404"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="flow_up20160721095603159"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="plan_curv20160721095715576"/>
       <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="elevation20160721094513715"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="Lim50000Semidet20160704102707688"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="slope20160721095814345"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="access_area20160727154131822"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:4618" srcDatumTransform="-1" destDatumTransform="-1" layerid="sb20_mar20161107214616028"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="" srcDatumTransform="-1" destDatumTransform="-1" layerid="geology_220161108234439119"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="prof_curv20160721095757460"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="Lim10000Detal20160704102609571"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="geology20161108200518069"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="prof_curv20160721095728933"/>
       <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="plan_curv20160721095643010"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="curvature20160720154540833"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="landuse20160713111933971"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="slope20160721095843031"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="geomorphology20161108000930337"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="curvature20161107180919874"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="aspect20160720154442110"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="access_area20160727153153157"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="geology20161108234850069"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="flow_dir20160721095428548"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="twi20160727151840187"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="Perfis20160704103155391"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="flow_up20160721095627934"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="flow_down20160721095535505"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:4618" srcDatumTransform="-1" destDatumTransform="-1" layerid="sb20_msb_linha20161107214737894"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="target_soil_map20160727153902068"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="non_access_area20160720113528485"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="outer_area20160727154434717"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="tmp220161108200334927"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="geomorpho20161107223115188"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="Difference20161108200356650"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Data_layer20161108221019498"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="flow_dir20160721095454491"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="Clipped__polygon_20161107223146505"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="flow_down20160721095507074"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="Clipped__polygon_20161108000850597"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="elevation20161107180503003"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="EPSG:29190" srcDatumTransform="-1" destDatumTransform="-1" layerid="MCS_Simplif_Poligon_correct20160704163418626"/>
+      <layer_coordinate_transform destAuthId="EPSG:29190" srcAuthId="" srcDatumTransform="-1" destDatumTransform="-1" layerid="geology_220161109000324750"/>
     </layer_coordinate_transform_info>
   </mapcanvas>
   <layer-tree-canvas>
@@ -152,16 +166,27 @@
       <item>target_soil_map20160727153902068</item>
       <item>access_area20160727154131822</item>
       <item>outer_area20160727154434717</item>
-<<<<<<< HEAD
-      <item>elevation20160902134038578</item>
-      <item>inset20160902134929549</item>
-=======
-      <item>map_inset20160902163240167</item>
->>>>>>> 841d68429c85f613be42481631081085b529bd7d
+      <item>elevation20161107180503003</item>
+      <item>curvature20161107180919874</item>
+      <item>geomorphology20161108000930337</item>
+      <item>arches20161108222827404</item>
+      <item>geology20161108234850069</item>
     </custom-order>
   </layer-tree-canvas>
   <legend updateDrawingOrder="true">
-    <legendgroup open="false" checked="Qt::Unchecked" name="soil_observations">
+    <legendgroup open="true" checked="Qt::Unchecked" name="covariates">
+      <legendlayer drawingOrder="-1" open="false" checked="Qt::Unchecked" name="curvature" showFeatureCount="0">
+        <filegroup open="false" hidden="false">
+          <legendlayerfile isInOverview="0" layerid="curvature20161107180919874" visible="0"/>
+        </filegroup>
+      </legendlayer>
+      <legendlayer drawingOrder="-1" open="false" checked="Qt::Unchecked" name="elevation" showFeatureCount="0">
+        <filegroup open="false" hidden="false">
+          <legendlayerfile isInOverview="0" layerid="elevation20161107180503003" visible="0"/>
+        </filegroup>
+      </legendlayer>
+    </legendgroup>
+    <legendgroup open="true" checked="Qt::Unchecked" name="soil_observations">
       <legendlayer drawingOrder="-1" open="false" checked="Qt::Unchecked" name="Trein_Classes" showFeatureCount="1">
         <filegroup open="false" hidden="false">
           <legendlayerfile isInOverview="0" layerid="Trein_Classes20160704105656155" visible="0"/>
@@ -188,64 +213,47 @@
         </filegroup>
       </legendlayer>
     </legendgroup>
+    <legendgroup open="true" checked="Qt::Unchecked" name="soil_maps">
+      <legendlayer drawingOrder="-1" open="false" checked="Qt::Unchecked" name="target_soil_map" showFeatureCount="0">
+        <filegroup open="false" hidden="false">
+          <legendlayerfile isInOverview="0" layerid="target_soil_map20160727153902068" visible="0"/>
+        </filegroup>
+      </legendlayer>
+    </legendgroup>
     <legendgroup open="true" checked="Qt::PartiallyChecked" name="limits">
-<<<<<<< HEAD
-      <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="outer_area" showFeatureCount="0">
+      <legendlayer drawingOrder="-1" open="true" checked="Qt::Unchecked" name="arches" showFeatureCount="0">
         <filegroup open="true" hidden="false">
-          <legendlayerfile isInOverview="0" layerid="outer_area20160727154434717" visible="1"/>
+          <legendlayerfile isInOverview="0" layerid="arches20161108222827404" visible="0"/>
+        </filegroup>
+      </legendlayer>
+      <legendlayer drawingOrder="-1" open="true" checked="Qt::Unchecked" name="outer_area" showFeatureCount="0">
+        <filegroup open="true" hidden="false">
+          <legendlayerfile isInOverview="0" layerid="outer_area20160727154434717" visible="0"/>
+        </filegroup>
+      </legendlayer>
+      <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="access_area" showFeatureCount="0">
+        <filegroup open="true" hidden="false">
+          <legendlayerfile isInOverview="0" layerid="access_area20160727154131822" visible="1"/>
+        </filegroup>
+      </legendlayer>
+      <legendlayer drawingOrder="-1" open="false" checked="Qt::Unchecked" name="geomorphology" showFeatureCount="0">
+        <filegroup open="false" hidden="false">
+          <legendlayerfile isInOverview="0" layerid="geomorphology20161108000930337" visible="0"/>
+        </filegroup>
+      </legendlayer>
+      <legendlayer drawingOrder="-1" open="true" checked="Qt::Unchecked" name="geology" showFeatureCount="0">
+        <filegroup open="true" hidden="false">
+          <legendlayerfile isInOverview="0" layerid="geology20161108234850069" visible="0"/>
         </filegroup>
       </legendlayer>
       <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="non_access_area" showFeatureCount="0">
-=======
-      <legendlayer drawingOrder="-1" open="true" checked="Qt::Unchecked" name="outer_area" showFeatureCount="0">
->>>>>>> 841d68429c85f613be42481631081085b529bd7d
         <filegroup open="true" hidden="false">
           <legendlayerfile isInOverview="0" layerid="non_access_area20160720113528485" visible="1"/>
-        </filegroup>
-      </legendlayer>
-<<<<<<< HEAD
-      <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="inset" showFeatureCount="0">
-=======
-      <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="map_inset" showFeatureCount="0">
-        <filegroup open="true" hidden="false">
-          <legendlayerfile isInOverview="0" layerid="map_inset20160902163240167" visible="1"/>
-        </filegroup>
-      </legendlayer>
-      <legendlayer drawingOrder="-1" open="true" checked="Qt::Unchecked" name="non_access_area" showFeatureCount="0">
->>>>>>> 841d68429c85f613be42481631081085b529bd7d
-        <filegroup open="true" hidden="false">
-          <legendlayerfile isInOverview="0" layerid="inset20160902134929549" visible="1"/>
-        </filegroup>
-      </legendlayer>
-      <legendlayer drawingOrder="-1" open="true" checked="Qt::Unchecked" name="access_area" showFeatureCount="0">
-        <filegroup open="true" hidden="false">
-          <legendlayerfile isInOverview="0" layerid="access_area20160727154131822" visible="0"/>
         </filegroup>
       </legendlayer>
       <legendlayer drawingOrder="-1" open="true" checked="Qt::Unchecked" name="landuse" showFeatureCount="0">
         <filegroup open="true" hidden="false">
           <legendlayerfile isInOverview="0" layerid="landuse20160713111933971" visible="0"/>
-        </filegroup>
-      </legendlayer>
-    </legendgroup>
-<<<<<<< HEAD
-    <legendgroup open="false" checked="Qt::Checked" name="soil_maps">
-      <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="target_soil_map" showFeatureCount="0">
-        <filegroup open="true" hidden="false">
-          <legendlayerfile isInOverview="0" layerid="target_soil_map20160727153902068" visible="1"/>
-        </filegroup>
-      </legendlayer>
-    </legendgroup>
-    <legendgroup open="true" checked="Qt::Checked" name="covariates">
-      <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="elevation" showFeatureCount="0">
-        <filegroup open="true" hidden="false">
-          <legendlayerfile isInOverview="0" layerid="elevation20160902134038578" visible="1"/>
-=======
-    <legendgroup open="true" checked="Qt::Checked" name="soil_maps">
-      <legendlayer drawingOrder="-1" open="false" checked="Qt::Checked" name="target_soil_map" showFeatureCount="0">
-        <filegroup open="false" hidden="false">
-          <legendlayerfile isInOverview="0" layerid="target_soil_map20160727153902068" visible="1"/>
->>>>>>> 841d68429c85f613be42481631081085b529bd7d
         </filegroup>
       </legendlayer>
     </legendgroup>
@@ -403,6 +411,55 @@
       <vectorjoins/>
       <layerDependencies/>
       <expressionfields/>
+      <defaults>
+        <default field="OBJECTID" expression=""/>
+        <default field="ClasseLege" expression=""/>
+        <default field="Código" expression=""/>
+        <default field="Observaçăo" expression=""/>
+        <default field="Classe" expression=""/>
+        <default field="Cor" expression=""/>
+        <default field="Drenagem" expression=""/>
+        <default field="Matiz" expression=""/>
+        <default field="Valor" expression=""/>
+        <default field="Croma" expression=""/>
+        <default field="ICG" expression=""/>
+        <default field="Matiz_B" expression=""/>
+        <default field="Valor_B" expression=""/>
+        <default field="Croma_B" expression=""/>
+        <default field="ICG_B" expression=""/>
+        <default field="Areia" expression=""/>
+        <default field="Silte" expression=""/>
+        <default field="Argila" expression=""/>
+        <default field="Areia_B" expression=""/>
+        <default field="Textura" expression=""/>
+        <default field="Cor_B" expression=""/>
+        <default field="Silte_B" expression=""/>
+        <default field="Argila_B" expression=""/>
+        <default field="Textura_B" expression=""/>
+        <default field="Relaçăo_BA" expression=""/>
+        <default field="Ambiente" expression=""/>
+        <default field="Similar_a" expression=""/>
+        <default field="Observ" expression=""/>
+        <default field="Regiao" expression=""/>
+        <default field="X" expression=""/>
+        <default field="Y" expression=""/>
+        <default field="Altitude" expression=""/>
+        <default field="DirecFlux" expression=""/>
+        <default field="FluxAcum" expression=""/>
+        <default field="CompMon" expression=""/>
+        <default field="CompJuz" expression=""/>
+        <default field="ITU" expression=""/>
+        <default field="DeclivGr" expression=""/>
+        <default field="DeclivPc" expression=""/>
+        <default field="Curvatura" expression=""/>
+        <default field="CurvPlan" expression=""/>
+        <default field="CurvPerf" expression=""/>
+        <default field="Aspecto" expression=""/>
+        <default field="Perda" expression=""/>
+        <default field="Carbono" expression=""/>
+        <default field="MCS" expression=""/>
+        <default field="MDS" expression=""/>
+      </defaults>
       <map-layer-style-manager current="">
         <map-layer-style name=""/>
       </map-layer-style-manager>
@@ -773,11 +830,109 @@
       </SingleCategoryDiagramRenderer>
       <DiagramLayerSettings yPosColumn="-1" showColumn="0" linePlacementFlags="10" placement="0" dist="0" xPosColumn="-1" priority="0" obstacle="0" zIndex="0" showAll="1"/>
       <annotationform>.</annotationform>
+      <aliases>
+        <alias field="OBJECTID" index="0" name=""/>
+        <alias field="ClasseLege" index="1" name=""/>
+        <alias field="Código" index="2" name=""/>
+        <alias field="Observaçăo" index="3" name=""/>
+        <alias field="Classe" index="4" name=""/>
+        <alias field="Cor" index="5" name=""/>
+        <alias field="Drenagem" index="6" name=""/>
+        <alias field="Matiz" index="7" name=""/>
+        <alias field="Valor" index="8" name=""/>
+        <alias field="Croma" index="9" name=""/>
+        <alias field="ICG" index="10" name=""/>
+        <alias field="Matiz_B" index="11" name=""/>
+        <alias field="Valor_B" index="12" name=""/>
+        <alias field="Croma_B" index="13" name=""/>
+        <alias field="ICG_B" index="14" name=""/>
+        <alias field="Areia" index="15" name=""/>
+        <alias field="Silte" index="16" name=""/>
+        <alias field="Argila" index="17" name=""/>
+        <alias field="Areia_B" index="18" name=""/>
+        <alias field="Textura" index="19" name=""/>
+        <alias field="Cor_B" index="20" name=""/>
+        <alias field="Silte_B" index="21" name=""/>
+        <alias field="Argila_B" index="22" name=""/>
+        <alias field="Textura_B" index="23" name=""/>
+        <alias field="Relaçăo_BA" index="24" name=""/>
+        <alias field="Ambiente" index="25" name=""/>
+        <alias field="Similar_a" index="26" name=""/>
+        <alias field="Observ" index="27" name=""/>
+        <alias field="Regiao" index="28" name=""/>
+        <alias field="X" index="29" name=""/>
+        <alias field="Y" index="30" name=""/>
+        <alias field="Altitude" index="31" name=""/>
+        <alias field="DirecFlux" index="32" name=""/>
+        <alias field="FluxAcum" index="33" name=""/>
+        <alias field="CompMon" index="34" name=""/>
+        <alias field="CompJuz" index="35" name=""/>
+        <alias field="ITU" index="36" name=""/>
+        <alias field="DeclivGr" index="37" name=""/>
+        <alias field="DeclivPc" index="38" name=""/>
+        <alias field="Curvatura" index="39" name=""/>
+        <alias field="CurvPlan" index="40" name=""/>
+        <alias field="CurvPerf" index="41" name=""/>
+        <alias field="Aspecto" index="42" name=""/>
+        <alias field="Perda" index="43" name=""/>
+        <alias field="Carbono" index="44" name=""/>
+        <alias field="MCS" index="45" name=""/>
+        <alias field="MDS" index="46" name=""/>
+      </aliases>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
-      <attributeactions default="0"/>
-      <attributetableconfig actionWidgetStyle="dropDown" sortExpression="" sortOrder="0">
-        <columns/>
+      <attributeactions default="-1"/>
+      <attributetableconfig actionWidgetStyle="dropDown" sortExpression="&quot;Classe&quot;" sortOrder="0">
+        <columns>
+          <column width="-1" hidden="0" type="field" name="OBJECTID"/>
+          <column width="174" hidden="0" type="field" name="ClasseLege"/>
+          <column width="-1" hidden="0" type="field" name="Código"/>
+          <column width="342" hidden="0" type="field" name="Observaçăo"/>
+          <column width="213" hidden="0" type="field" name="Classe"/>
+          <column width="-1" hidden="0" type="field" name="Cor"/>
+          <column width="-1" hidden="0" type="field" name="Drenagem"/>
+          <column width="-1" hidden="0" type="field" name="Matiz"/>
+          <column width="-1" hidden="0" type="field" name="Valor"/>
+          <column width="-1" hidden="0" type="field" name="Croma"/>
+          <column width="-1" hidden="0" type="field" name="ICG"/>
+          <column width="-1" hidden="0" type="field" name="Matiz_B"/>
+          <column width="-1" hidden="0" type="field" name="Valor_B"/>
+          <column width="-1" hidden="0" type="field" name="Croma_B"/>
+          <column width="-1" hidden="0" type="field" name="ICG_B"/>
+          <column width="-1" hidden="0" type="field" name="Areia"/>
+          <column width="-1" hidden="0" type="field" name="Silte"/>
+          <column width="-1" hidden="0" type="field" name="Argila"/>
+          <column width="-1" hidden="0" type="field" name="Areia_B"/>
+          <column width="-1" hidden="0" type="field" name="Textura"/>
+          <column width="-1" hidden="0" type="field" name="Cor_B"/>
+          <column width="-1" hidden="0" type="field" name="Silte_B"/>
+          <column width="-1" hidden="0" type="field" name="Argila_B"/>
+          <column width="-1" hidden="0" type="field" name="Textura_B"/>
+          <column width="-1" hidden="0" type="field" name="Relaçăo_BA"/>
+          <column width="-1" hidden="0" type="field" name="Ambiente"/>
+          <column width="-1" hidden="0" type="field" name="Similar_a"/>
+          <column width="-1" hidden="0" type="field" name="Observ"/>
+          <column width="-1" hidden="0" type="field" name="Regiao"/>
+          <column width="-1" hidden="0" type="field" name="X"/>
+          <column width="-1" hidden="0" type="field" name="Y"/>
+          <column width="-1" hidden="0" type="field" name="Altitude"/>
+          <column width="-1" hidden="0" type="field" name="DirecFlux"/>
+          <column width="-1" hidden="0" type="field" name="FluxAcum"/>
+          <column width="-1" hidden="0" type="field" name="CompMon"/>
+          <column width="-1" hidden="0" type="field" name="CompJuz"/>
+          <column width="-1" hidden="0" type="field" name="ITU"/>
+          <column width="-1" hidden="0" type="field" name="DeclivGr"/>
+          <column width="-1" hidden="0" type="field" name="DeclivPc"/>
+          <column width="-1" hidden="0" type="field" name="Curvatura"/>
+          <column width="-1" hidden="0" type="field" name="CurvPlan"/>
+          <column width="-1" hidden="0" type="field" name="CurvPerf"/>
+          <column width="-1" hidden="0" type="field" name="Aspecto"/>
+          <column width="-1" hidden="0" type="field" name="Perda"/>
+          <column width="-1" hidden="0" type="field" name="Carbono"/>
+          <column width="-1" hidden="0" type="field" name="MCS"/>
+          <column width="-1" hidden="0" type="field" name="MDS"/>
+          <column width="-1" hidden="1" type="actions"/>
+        </columns>
       </attributetableconfig>
       <editform>.</editform>
       <editforminit/>
@@ -832,6 +987,23 @@ def my_form_open(dialog, layer, feature):
       <vectorjoins/>
       <layerDependencies/>
       <expressionfields/>
+      <defaults>
+        <default field="OID_" expression=""/>
+        <default field="CID" expression=""/>
+        <default field="MCS_simpli" expression=""/>
+        <default field="MDS_Discri" expression=""/>
+        <default field="_MdeHC5x5" expression=""/>
+        <default field="_Direçăo_d" expression=""/>
+        <default field="_Fluxo_Acu" expression=""/>
+        <default field="_Comprimen" expression=""/>
+        <default field="_Comprim_1" expression=""/>
+        <default field="_Índice_To" expression=""/>
+        <default field="_DeclGrauH" expression=""/>
+        <default field="_Curvatura" expression=""/>
+        <default field="_CurvPlan5" expression=""/>
+        <default field="_CurvPerf5" expression=""/>
+        <default field="Aspect5x_1" expression=""/>
+      </defaults>
       <map-layer-style-manager current="">
         <map-layer-style name=""/>
       </map-layer-style-manager>
@@ -1106,6 +1278,23 @@ def my_form_open(dialog, layer, feature):
       </SingleCategoryDiagramRenderer>
       <DiagramLayerSettings yPosColumn="-1" showColumn="0" linePlacementFlags="10" placement="0" dist="0" xPosColumn="-1" priority="0" obstacle="0" zIndex="0" showAll="1"/>
       <annotationform>.</annotationform>
+      <aliases>
+        <alias field="OID_" index="0" name=""/>
+        <alias field="CID" index="1" name=""/>
+        <alias field="MCS_simpli" index="2" name=""/>
+        <alias field="MDS_Discri" index="3" name=""/>
+        <alias field="_MdeHC5x5" index="4" name=""/>
+        <alias field="_Direçăo_d" index="5" name=""/>
+        <alias field="_Fluxo_Acu" index="6" name=""/>
+        <alias field="_Comprimen" index="7" name=""/>
+        <alias field="_Comprim_1" index="8" name=""/>
+        <alias field="_Índice_To" index="9" name=""/>
+        <alias field="_DeclGrauH" index="10" name=""/>
+        <alias field="_Curvatura" index="11" name=""/>
+        <alias field="_CurvPlan5" index="12" name=""/>
+        <alias field="_CurvPerf5" index="13" name=""/>
+        <alias field="Aspect5x_1" index="14" name=""/>
+      </aliases>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
       <attributeactions default="0"/>
@@ -1166,6 +1355,43 @@ def my_form_open(dialog, layer, feature):
       <vectorjoins/>
       <layerDependencies/>
       <expressionfields/>
+      <defaults>
+        <default field="OBJECTID" expression=""/>
+        <default field="Observaçăo" expression=""/>
+        <default field="Código" expression=""/>
+        <default field="Cor" expression=""/>
+        <default field="Valor" expression=""/>
+        <default field="Croma" expression=""/>
+        <default field="ICG" expression=""/>
+        <default field="Matiz_B" expression=""/>
+        <default field="Valor_B" expression=""/>
+        <default field="Croma_B" expression=""/>
+        <default field="ICG_B" expression=""/>
+        <default field="Cor_B" expression=""/>
+        <default field="Ambiente" expression=""/>
+        <default field="Similar_a" expression=""/>
+        <default field="Observ" expression=""/>
+        <default field="Matiz" expression=""/>
+        <default field="Regiao" expression=""/>
+        <default field="X" expression=""/>
+        <default field="Y" expression=""/>
+        <default field="Altitude" expression=""/>
+        <default field="DirecFlux" expression=""/>
+        <default field="FluxAcum" expression=""/>
+        <default field="CompMon" expression=""/>
+        <default field="ITU" expression=""/>
+        <default field="DeclivGr" expression=""/>
+        <default field="DeclivPc" expression=""/>
+        <default field="Curvatura" expression=""/>
+        <default field="CurvPlan" expression=""/>
+        <default field="CurvPerf" expression=""/>
+        <default field="Aspecto" expression=""/>
+        <default field="Perda" expression=""/>
+        <default field="Carbono" expression=""/>
+        <default field="MCS" expression=""/>
+        <default field="MDS" expression=""/>
+        <default field="CompJuz" expression=""/>
+      </defaults>
       <map-layer-style-manager current="">
         <map-layer-style name=""/>
       </map-layer-style-manager>
@@ -1500,11 +1726,85 @@ def my_form_open(dialog, layer, feature):
       </SingleCategoryDiagramRenderer>
       <DiagramLayerSettings yPosColumn="-1" showColumn="0" linePlacementFlags="10" placement="0" dist="0" xPosColumn="-1" priority="0" obstacle="0" zIndex="0" showAll="1"/>
       <annotationform>.</annotationform>
+      <aliases>
+        <alias field="OBJECTID" index="0" name=""/>
+        <alias field="Observaçăo" index="1" name=""/>
+        <alias field="Código" index="2" name=""/>
+        <alias field="Cor" index="3" name=""/>
+        <alias field="Valor" index="4" name=""/>
+        <alias field="Croma" index="5" name=""/>
+        <alias field="ICG" index="6" name=""/>
+        <alias field="Matiz_B" index="7" name=""/>
+        <alias field="Valor_B" index="8" name=""/>
+        <alias field="Croma_B" index="9" name=""/>
+        <alias field="ICG_B" index="10" name=""/>
+        <alias field="Cor_B" index="11" name=""/>
+        <alias field="Ambiente" index="12" name=""/>
+        <alias field="Similar_a" index="13" name=""/>
+        <alias field="Observ" index="14" name=""/>
+        <alias field="Matiz" index="15" name=""/>
+        <alias field="Regiao" index="16" name=""/>
+        <alias field="X" index="17" name=""/>
+        <alias field="Y" index="18" name=""/>
+        <alias field="Altitude" index="19" name=""/>
+        <alias field="DirecFlux" index="20" name=""/>
+        <alias field="FluxAcum" index="21" name=""/>
+        <alias field="CompMon" index="22" name=""/>
+        <alias field="ITU" index="23" name=""/>
+        <alias field="DeclivGr" index="24" name=""/>
+        <alias field="DeclivPc" index="25" name=""/>
+        <alias field="Curvatura" index="26" name=""/>
+        <alias field="CurvPlan" index="27" name=""/>
+        <alias field="CurvPerf" index="28" name=""/>
+        <alias field="Aspecto" index="29" name=""/>
+        <alias field="Perda" index="30" name=""/>
+        <alias field="Carbono" index="31" name=""/>
+        <alias field="MCS" index="32" name=""/>
+        <alias field="MDS" index="33" name=""/>
+        <alias field="CompJuz" index="34" name=""/>
+      </aliases>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
-      <attributeactions default="0"/>
+      <attributeactions default="-1"/>
       <attributetableconfig actionWidgetStyle="dropDown" sortExpression="" sortOrder="0">
-        <columns/>
+        <columns>
+          <column width="-1" hidden="0" type="field" name="OBJECTID"/>
+          <column width="-1" hidden="0" type="field" name="Observaçăo"/>
+          <column width="-1" hidden="0" type="field" name="Código"/>
+          <column width="-1" hidden="0" type="field" name="Cor"/>
+          <column width="-1" hidden="0" type="field" name="Valor"/>
+          <column width="-1" hidden="0" type="field" name="Croma"/>
+          <column width="-1" hidden="0" type="field" name="ICG"/>
+          <column width="-1" hidden="0" type="field" name="Matiz_B"/>
+          <column width="-1" hidden="0" type="field" name="Valor_B"/>
+          <column width="-1" hidden="0" type="field" name="Croma_B"/>
+          <column width="-1" hidden="0" type="field" name="ICG_B"/>
+          <column width="-1" hidden="0" type="field" name="Cor_B"/>
+          <column width="-1" hidden="0" type="field" name="Ambiente"/>
+          <column width="-1" hidden="0" type="field" name="Similar_a"/>
+          <column width="324" hidden="0" type="field" name="Observ"/>
+          <column width="-1" hidden="0" type="field" name="Matiz"/>
+          <column width="-1" hidden="0" type="field" name="Regiao"/>
+          <column width="-1" hidden="0" type="field" name="X"/>
+          <column width="-1" hidden="0" type="field" name="Y"/>
+          <column width="-1" hidden="0" type="field" name="Altitude"/>
+          <column width="-1" hidden="0" type="field" name="DirecFlux"/>
+          <column width="-1" hidden="0" type="field" name="FluxAcum"/>
+          <column width="-1" hidden="0" type="field" name="CompMon"/>
+          <column width="-1" hidden="0" type="field" name="ITU"/>
+          <column width="-1" hidden="0" type="field" name="DeclivGr"/>
+          <column width="-1" hidden="0" type="field" name="DeclivPc"/>
+          <column width="-1" hidden="0" type="field" name="Curvatura"/>
+          <column width="-1" hidden="0" type="field" name="CurvPlan"/>
+          <column width="-1" hidden="0" type="field" name="CurvPerf"/>
+          <column width="-1" hidden="0" type="field" name="Aspecto"/>
+          <column width="-1" hidden="0" type="field" name="Perda"/>
+          <column width="-1" hidden="0" type="field" name="Carbono"/>
+          <column width="-1" hidden="0" type="field" name="MCS"/>
+          <column width="-1" hidden="0" type="field" name="MDS"/>
+          <column width="-1" hidden="0" type="field" name="CompJuz"/>
+          <column width="-1" hidden="1" type="actions"/>
+        </columns>
       </attributetableconfig>
       <editform>.</editform>
       <editforminit/>
@@ -1559,6 +1859,51 @@ def my_form_open(dialog, layer, feature):
       <vectorjoins/>
       <layerDependencies/>
       <expressionfields/>
+      <defaults>
+        <default field="OBJECTID" expression=""/>
+        <default field="Layer" expression=""/>
+        <default field="Ident" expression=""/>
+        <default field="Cor" expression=""/>
+        <default field="ICG" expression=""/>
+        <default field="Cor_Solo" expression=""/>
+        <default field="ICG_B" expression=""/>
+        <default field="Matiz_B" expression=""/>
+        <default field="Valor_B" expression=""/>
+        <default field="Croma_B" expression=""/>
+        <default field="Matiz_S" expression=""/>
+        <default field="Valor_S" expression=""/>
+        <default field="Croma_S" expression=""/>
+        <default field="Areia" expression=""/>
+        <default field="Silte" expression=""/>
+        <default field="Argila" expression=""/>
+        <default field="Areia_B" expression=""/>
+        <default field="Silte_B" expression=""/>
+        <default field="Argila_B" expression=""/>
+        <default field="Textura" expression=""/>
+        <default field="Textura_B" expression=""/>
+        <default field="Ambiente" expression=""/>
+        <default field="Similar_a" expression=""/>
+        <default field="Observ" expression=""/>
+        <default field="Regiao" expression=""/>
+        <default field="X" expression=""/>
+        <default field="Y" expression=""/>
+        <default field="Altitude" expression=""/>
+        <default field="DirecFlux" expression=""/>
+        <default field="FluxAcum" expression=""/>
+        <default field="CompMon" expression=""/>
+        <default field="CompJuz" expression=""/>
+        <default field="ITU" expression=""/>
+        <default field="DeclivGr" expression=""/>
+        <default field="DeclivPc" expression=""/>
+        <default field="Curvatura" expression=""/>
+        <default field="CurvPlan" expression=""/>
+        <default field="CurvPerf" expression=""/>
+        <default field="Aspecto" expression=""/>
+        <default field="Perda" expression=""/>
+        <default field="Carbono" expression=""/>
+        <default field="MCS" expression=""/>
+        <default field="MDS" expression=""/>
+      </defaults>
       <map-layer-style-manager current="">
         <map-layer-style name=""/>
       </map-layer-style-manager>
@@ -1917,11 +2262,101 @@ def my_form_open(dialog, layer, feature):
       </SingleCategoryDiagramRenderer>
       <DiagramLayerSettings yPosColumn="-1" showColumn="0" linePlacementFlags="10" placement="0" dist="0" xPosColumn="-1" priority="0" obstacle="0" zIndex="0" showAll="1"/>
       <annotationform>.</annotationform>
+      <aliases>
+        <alias field="OBJECTID" index="0" name=""/>
+        <alias field="Layer" index="1" name=""/>
+        <alias field="Ident" index="2" name=""/>
+        <alias field="Cor" index="3" name=""/>
+        <alias field="ICG" index="4" name=""/>
+        <alias field="Cor_Solo" index="5" name=""/>
+        <alias field="ICG_B" index="6" name=""/>
+        <alias field="Matiz_B" index="7" name=""/>
+        <alias field="Valor_B" index="8" name=""/>
+        <alias field="Croma_B" index="9" name=""/>
+        <alias field="Matiz_S" index="10" name=""/>
+        <alias field="Valor_S" index="11" name=""/>
+        <alias field="Croma_S" index="12" name=""/>
+        <alias field="Areia" index="13" name=""/>
+        <alias field="Silte" index="14" name=""/>
+        <alias field="Argila" index="15" name=""/>
+        <alias field="Areia_B" index="16" name=""/>
+        <alias field="Silte_B" index="17" name=""/>
+        <alias field="Argila_B" index="18" name=""/>
+        <alias field="Textura" index="19" name=""/>
+        <alias field="Textura_B" index="20" name=""/>
+        <alias field="Ambiente" index="21" name=""/>
+        <alias field="Similar_a" index="22" name=""/>
+        <alias field="Observ" index="23" name=""/>
+        <alias field="Regiao" index="24" name=""/>
+        <alias field="X" index="25" name=""/>
+        <alias field="Y" index="26" name=""/>
+        <alias field="Altitude" index="27" name=""/>
+        <alias field="DirecFlux" index="28" name=""/>
+        <alias field="FluxAcum" index="29" name=""/>
+        <alias field="CompMon" index="30" name=""/>
+        <alias field="CompJuz" index="31" name=""/>
+        <alias field="ITU" index="32" name=""/>
+        <alias field="DeclivGr" index="33" name=""/>
+        <alias field="DeclivPc" index="34" name=""/>
+        <alias field="Curvatura" index="35" name=""/>
+        <alias field="CurvPlan" index="36" name=""/>
+        <alias field="CurvPerf" index="37" name=""/>
+        <alias field="Aspecto" index="38" name=""/>
+        <alias field="Perda" index="39" name=""/>
+        <alias field="Carbono" index="40" name=""/>
+        <alias field="MCS" index="41" name=""/>
+        <alias field="MDS" index="42" name=""/>
+      </aliases>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
-      <attributeactions default="0"/>
+      <attributeactions default="-1"/>
       <attributetableconfig actionWidgetStyle="dropDown" sortExpression="" sortOrder="0">
-        <columns/>
+        <columns>
+          <column width="-1" hidden="0" type="field" name="OBJECTID"/>
+          <column width="149" hidden="0" type="field" name="Layer"/>
+          <column width="-1" hidden="0" type="field" name="Ident"/>
+          <column width="-1" hidden="0" type="field" name="Cor"/>
+          <column width="-1" hidden="0" type="field" name="ICG"/>
+          <column width="-1" hidden="0" type="field" name="Cor_Solo"/>
+          <column width="-1" hidden="0" type="field" name="ICG_B"/>
+          <column width="-1" hidden="0" type="field" name="Matiz_B"/>
+          <column width="-1" hidden="0" type="field" name="Valor_B"/>
+          <column width="-1" hidden="0" type="field" name="Croma_B"/>
+          <column width="-1" hidden="0" type="field" name="Matiz_S"/>
+          <column width="-1" hidden="0" type="field" name="Valor_S"/>
+          <column width="-1" hidden="0" type="field" name="Croma_S"/>
+          <column width="-1" hidden="0" type="field" name="Areia"/>
+          <column width="-1" hidden="0" type="field" name="Silte"/>
+          <column width="-1" hidden="0" type="field" name="Argila"/>
+          <column width="-1" hidden="0" type="field" name="Areia_B"/>
+          <column width="-1" hidden="0" type="field" name="Silte_B"/>
+          <column width="-1" hidden="0" type="field" name="Argila_B"/>
+          <column width="-1" hidden="0" type="field" name="Textura"/>
+          <column width="-1" hidden="0" type="field" name="Textura_B"/>
+          <column width="-1" hidden="0" type="field" name="Ambiente"/>
+          <column width="-1" hidden="0" type="field" name="Similar_a"/>
+          <column width="-1" hidden="0" type="field" name="Observ"/>
+          <column width="-1" hidden="0" type="field" name="Regiao"/>
+          <column width="-1" hidden="0" type="field" name="X"/>
+          <column width="-1" hidden="0" type="field" name="Y"/>
+          <column width="-1" hidden="0" type="field" name="Altitude"/>
+          <column width="-1" hidden="0" type="field" name="DirecFlux"/>
+          <column width="-1" hidden="0" type="field" name="FluxAcum"/>
+          <column width="-1" hidden="0" type="field" name="CompMon"/>
+          <column width="-1" hidden="0" type="field" name="CompJuz"/>
+          <column width="-1" hidden="0" type="field" name="ITU"/>
+          <column width="-1" hidden="0" type="field" name="DeclivGr"/>
+          <column width="-1" hidden="0" type="field" name="DeclivPc"/>
+          <column width="-1" hidden="0" type="field" name="Curvatura"/>
+          <column width="-1" hidden="0" type="field" name="CurvPlan"/>
+          <column width="-1" hidden="0" type="field" name="CurvPerf"/>
+          <column width="-1" hidden="0" type="field" name="Aspecto"/>
+          <column width="-1" hidden="0" type="field" name="Perda"/>
+          <column width="-1" hidden="0" type="field" name="Carbono"/>
+          <column width="-1" hidden="0" type="field" name="MCS"/>
+          <column width="-1" hidden="0" type="field" name="MDS"/>
+          <column width="-1" hidden="1" type="actions"/>
+        </columns>
       </attributetableconfig>
       <editform>.</editform>
       <editforminit/>
@@ -1977,6 +2412,33 @@ def my_form_open(dialog, layer, feature):
       <vectorjoins/>
       <layerDependencies/>
       <expressionfields/>
+      <defaults>
+        <default field="Id" expression=""/>
+        <default field="Regiao" expression=""/>
+        <default field="Observ" expression=""/>
+        <default field="Similar_a" expression=""/>
+        <default field="Ambiente" expression=""/>
+        <default field="Cor_B" expression=""/>
+        <default field="Cor" expression=""/>
+        <default field="X" expression=""/>
+        <default field="Y" expression=""/>
+        <default field="Altitude" expression=""/>
+        <default field="DirecFlux" expression=""/>
+        <default field="FluxAcum" expression=""/>
+        <default field="CompMon" expression=""/>
+        <default field="CompJuz" expression=""/>
+        <default field="ITU" expression=""/>
+        <default field="DeclivGr" expression=""/>
+        <default field="DeclivPc" expression=""/>
+        <default field="Curvatura" expression=""/>
+        <default field="CurvPlan" expression=""/>
+        <default field="CurvPerf" expression=""/>
+        <default field="Aspecto" expression=""/>
+        <default field="Perda" expression=""/>
+        <default field="Carbono" expression=""/>
+        <default field="MCS" expression=""/>
+        <default field="MDS" expression=""/>
+      </defaults>
       <map-layer-style-manager current="">
         <map-layer-style name=""/>
       </map-layer-style-manager>
@@ -2423,11 +2885,65 @@ def my_form_open(dialog, layer, feature):
       </SingleCategoryDiagramRenderer>
       <DiagramLayerSettings yPosColumn="-1" showColumn="0" linePlacementFlags="10" placement="0" dist="0" xPosColumn="-1" priority="0" obstacle="0" zIndex="0" showAll="1"/>
       <annotationform>.</annotationform>
+      <aliases>
+        <alias field="Id" index="0" name=""/>
+        <alias field="Regiao" index="1" name=""/>
+        <alias field="Observ" index="2" name=""/>
+        <alias field="Similar_a" index="3" name=""/>
+        <alias field="Ambiente" index="4" name=""/>
+        <alias field="Cor_B" index="5" name=""/>
+        <alias field="Cor" index="6" name=""/>
+        <alias field="X" index="7" name=""/>
+        <alias field="Y" index="8" name=""/>
+        <alias field="Altitude" index="9" name=""/>
+        <alias field="DirecFlux" index="10" name=""/>
+        <alias field="FluxAcum" index="11" name=""/>
+        <alias field="CompMon" index="12" name=""/>
+        <alias field="CompJuz" index="13" name=""/>
+        <alias field="ITU" index="14" name=""/>
+        <alias field="DeclivGr" index="15" name=""/>
+        <alias field="DeclivPc" index="16" name=""/>
+        <alias field="Curvatura" index="17" name=""/>
+        <alias field="CurvPlan" index="18" name=""/>
+        <alias field="CurvPerf" index="19" name=""/>
+        <alias field="Aspecto" index="20" name=""/>
+        <alias field="Perda" index="21" name=""/>
+        <alias field="Carbono" index="22" name=""/>
+        <alias field="MCS" index="23" name=""/>
+        <alias field="MDS" index="24" name=""/>
+      </aliases>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
-      <attributeactions default="0"/>
+      <attributeactions default="-1"/>
       <attributetableconfig actionWidgetStyle="dropDown" sortExpression="" sortOrder="0">
-        <columns/>
+        <columns>
+          <column width="-1" hidden="0" type="field" name="Id"/>
+          <column width="-1" hidden="0" type="field" name="Regiao"/>
+          <column width="188" hidden="0" type="field" name="Observ"/>
+          <column width="-1" hidden="0" type="field" name="Similar_a"/>
+          <column width="167" hidden="0" type="field" name="Ambiente"/>
+          <column width="-1" hidden="0" type="field" name="Cor_B"/>
+          <column width="-1" hidden="0" type="field" name="Cor"/>
+          <column width="-1" hidden="0" type="field" name="X"/>
+          <column width="-1" hidden="0" type="field" name="Y"/>
+          <column width="-1" hidden="0" type="field" name="Altitude"/>
+          <column width="-1" hidden="0" type="field" name="DirecFlux"/>
+          <column width="-1" hidden="0" type="field" name="FluxAcum"/>
+          <column width="-1" hidden="0" type="field" name="CompMon"/>
+          <column width="-1" hidden="0" type="field" name="CompJuz"/>
+          <column width="-1" hidden="0" type="field" name="ITU"/>
+          <column width="-1" hidden="0" type="field" name="DeclivGr"/>
+          <column width="-1" hidden="0" type="field" name="DeclivPc"/>
+          <column width="-1" hidden="0" type="field" name="Curvatura"/>
+          <column width="-1" hidden="0" type="field" name="CurvPlan"/>
+          <column width="-1" hidden="0" type="field" name="CurvPerf"/>
+          <column width="-1" hidden="0" type="field" name="Aspecto"/>
+          <column width="-1" hidden="0" type="field" name="Perda"/>
+          <column width="-1" hidden="0" type="field" name="Carbono"/>
+          <column width="-1" hidden="0" type="field" name="MCS"/>
+          <column width="-1" hidden="0" type="field" name="MDS"/>
+          <column width="-1" hidden="1" type="actions"/>
+        </columns>
       </attributetableconfig>
       <editform>.</editform>
       <editforminit/>
@@ -2459,6 +2975,12 @@ def my_form_open(dialog, layer, feature):
       </conditionalstyles>
     </maplayer>
     <maplayer simplifyAlgorithm="0" minimumScale="-4.65661e-10" maximumScale="1e+08" simplifyDrawingHints="1" readOnly="0" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Polygon" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
+      <extent>
+        <xmin>236469.04404785297811031</xmin>
+        <ymin>9446822.66443189792335033</ymin>
+        <xmax>275309.04404785297811031</xmax>
+        <ymax>9474508.71577806025743484</ymax>
+      </extent>
       <id>access_area20160727154131822</id>
       <datasource>./data/vector/access_area.shp</datasource>
       <keywordList>
@@ -2482,11 +3004,18 @@ def my_form_open(dialog, layer, feature):
       <vectorjoins/>
       <layerDependencies/>
       <expressionfields/>
+      <defaults>
+        <default field="OBJECTID" expression=""/>
+        <default field="area" expression=""/>
+      </defaults>
       <map-layer-style-manager current="">
         <map-layer-style name=""/>
       </map-layer-style-manager>
       <edittypes>
         <edittype widgetv2type="TextEdit" name="OBJECTID">
+          <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
+        </edittype>
+        <edittype widgetv2type="TextEdit" name="area">
           <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
         </edittype>
       </edittypes>
@@ -2707,11 +3236,18 @@ def my_form_open(dialog, layer, feature):
       </SingleCategoryDiagramRenderer>
       <DiagramLayerSettings yPosColumn="-1" showColumn="0" linePlacementFlags="10" placement="0" dist="0" xPosColumn="-1" priority="0" obstacle="0" zIndex="0" showAll="1"/>
       <annotationform>.</annotationform>
+      <aliases>
+        <alias field="OBJECTID" index="0" name=""/>
+        <alias field="area" index="1" name=""/>
+      </aliases>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
       <attributeactions default="-1"/>
       <attributetableconfig actionWidgetStyle="dropDown" sortExpression="" sortOrder="0">
-        <columns/>
+        <columns>
+          <column width="-1" hidden="0" type="field" name="OBJECTID"/>
+          <column width="-1" hidden="1" type="actions"/>
+        </columns>
       </attributetableconfig>
       <editform>.</editform>
       <editforminit/>
@@ -2742,19 +3278,19 @@ def my_form_open(dialog, layer, feature):
         <fieldstyles/>
       </conditionalstyles>
     </maplayer>
-    <maplayer minimumScale="100000" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
+    <maplayer simplifyAlgorithm="0" minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" readOnly="0" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Line" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
       <extent>
-        <xmin>220727.19091797000146471</xmin>
-        <ymin>9432780</ymin>
-        <xmax>279702.19091796997236088</xmax>
-        <ymax>9475670</ymax>
+        <xmin>-617954.91605112398974597</xmin>
+        <ymin>8831359.34666057676076889</ymin>
+        <xmax>1973920.49585476564243436</xmax>
+        <ymax>10037920.28096679598093033</ymax>
       </extent>
-      <id>elevation20160902134038578</id>
-      <datasource>./data/grid/new_dem/elevation.tif</datasource>
+      <id>arches20161108222827404</id>
+      <datasource>./data/vector/arches.shp</datasource>
       <keywordList>
         <value></value>
       </keywordList>
-      <layername>elevation</layername>
+      <layername>arches</layername>
       <srs>
         <spatialrefsys>
           <proj4>+proj=utm +zone=20 +south +ellps=aust_SA +towgs84=-57,1,-41,0,0,0,0 +units=m +no_defs</proj4>
@@ -2767,89 +3303,45 @@ def my_form_open(dialog, layer, feature):
           <geographicflag>false</geographicflag>
         </spatialrefsys>
       </srs>
-      <customproperties>
-        <property key="embeddedWidgets/count" value="0"/>
-        <property key="identify/format" value="Value"/>
-      </customproperties>
-      <provider>gdal</provider>
-      <noData>
-        <noDataList bandNo="1" useSrcNoData="1"/>
-      </noData>
-      <map-layer-style-manager current="">
-        <map-layer-style name=""/>
-      </map-layer-style-manager>
-      <pipe>
-        <rasterrenderer opacity="1" alphaBand="-1" classificationMax="80.3679" classificationMinMaxOrigin="CumulativeCutFullExtentEstimated" band="1" classificationMin="47.9234" type="singlebandpseudocolor">
-          <rasterTransparency/>
-          <rastershader>
-            <colorrampshader colorRampType="INTERPOLATED" clip="0">
-              <item alpha="255" value="47.9" label="47.9" color="#0868ac"/>
-              <item alpha="255" value="56" label="56" color="#43a2ca"/>
-              <item alpha="255" value="64.1" label="64.1" color="#7bccc4"/>
-              <item alpha="255" value="72.3" label="72.3" color="#bae4bc"/>
-              <item alpha="255" value="80.4" label="80.4" color="#f0f9e8"/>
-            </colorrampshader>
-          </rastershader>
-        </rasterrenderer>
-        <brightnesscontrast brightness="0" contrast="0"/>
-        <huesaturation colorizeGreen="128" colorizeOn="0" colorizeRed="255" colorizeBlue="128" grayscaleMode="0" saturation="0" colorizeStrength="100"/>
-        <rasterresampler maxOversampling="2"/>
-      </pipe>
-      <blendMode>0</blendMode>
-    </maplayer>
-    <maplayer simplifyAlgorithm="0" minimumScale="100000" maximumScale="1e+08" simplifyDrawingHints="1" readOnly="0" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Polygon" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
-      <extent>
-        <xmin>-65.27601095766283379</xmin>
-        <ymin>-4.90601150086985349</ymin>
-        <xmax>-65.1944083814069586</xmax>
-        <ymax>-4.85987607798838805</ymax>
-      </extent>
-      <id>inset20160902134929549</id>
-      <datasource>./data/vector/inset.shp</datasource>
-      <keywordList>
-        <value></value>
-      </keywordList>
-      <layername>inset</layername>
-      <srs>
-        <spatialrefsys>
-          <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
-          <srsid>3452</srsid>
-          <srid>4326</srid>
-          <authid>EPSG:4326</authid>
-          <description>WGS 84</description>
-          <projectionacronym>longlat</projectionacronym>
-          <ellipsoidacronym>WGS84</ellipsoidacronym>
-          <geographicflag>true</geographicflag>
-        </spatialrefsys>
-      </srs>
       <provider encoding="System">ogr</provider>
-      <previewExpression></previewExpression>
+      <previewExpression>COALESCE( "myid", '&lt;NULL>' )</previewExpression>
       <vectorjoins/>
       <layerDependencies/>
       <expressionfields/>
+      <defaults>
+        <default field="myid" expression=""/>
+        <default field="name" expression=""/>
+      </defaults>
       <map-layer-style-manager current="">
         <map-layer-style name=""/>
       </map-layer-style-manager>
       <edittypes>
-        <edittype widgetv2type="TextEdit" name="id">
+        <edittype widgetv2type="TextEdit" name="myid">
+          <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
+        </edittype>
+        <edittype widgetv2type="TextEdit" name="name">
           <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
         </edittype>
       </edittypes>
       <renderer-v2 forceraster="0" symbollevels="0" type="singleSymbol" enableorderby="0">
         <symbols>
-          <symbol alpha="1" clip_to_extent="1" type="fill" name="0">
-            <layer pass="0" class="SimpleFill" locked="0">
-              <prop k="border_width_map_unit_scale" v="0,0,0,0,0,0"/>
-              <prop k="color" v="141,247,189,255"/>
+          <symbol alpha="1" clip_to_extent="1" type="line" name="0">
+            <layer pass="0" class="SimpleLine" locked="0">
+              <prop k="capstyle" v="square"/>
+              <prop k="customdash" v="5;2"/>
+              <prop k="customdash_map_unit_scale" v="0,0,0,0,0,0"/>
+              <prop k="customdash_unit" v="MM"/>
+              <prop k="draw_inside_polygon" v="0"/>
               <prop k="joinstyle" v="bevel"/>
-              <prop k="offset" v="0,0"/>
+              <prop k="line_color" v="0,0,0,255"/>
+              <prop k="line_style" v="solid"/>
+              <prop k="line_width" v="1"/>
+              <prop k="line_width_unit" v="MM"/>
+              <prop k="offset" v="0"/>
               <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
               <prop k="offset_unit" v="MM"/>
-              <prop k="outline_color" v="255,0,0,255"/>
-              <prop k="outline_style" v="solid"/>
-              <prop k="outline_width" v="0.26"/>
-              <prop k="outline_width_unit" v="MM"/>
-              <prop k="style" v="no"/>
+              <prop k="use_custom_dash" v="0"/>
+              <prop k="width_map_unit_scale" v="0,0,0,0,0,0"/>
             </layer>
           </symbol>
         </symbols>
@@ -2869,7 +3361,7 @@ def my_form_open(dialog, layer, feature):
         <property key="labeling/bufferColorG" value="255"/>
         <property key="labeling/bufferColorR" value="255"/>
         <property key="labeling/bufferDraw" value="false"/>
-        <property key="labeling/bufferJoinStyle" value="64"/>
+        <property key="labeling/bufferJoinStyle" value="128"/>
         <property key="labeling/bufferNoFill" value="false"/>
         <property key="labeling/bufferSize" value="1"/>
         <property key="labeling/bufferSizeInMapUnits" value="false"/>
@@ -2882,13 +3374,13 @@ def my_form_open(dialog, layer, feature):
         <property key="labeling/dist" value="0"/>
         <property key="labeling/distInMapUnits" value="false"/>
         <property key="labeling/distMapUnitScale" value="0,0,0,0,0,0"/>
-        <property key="labeling/drawLabels" value="false"/>
-        <property key="labeling/enabled" value="false"/>
-        <property key="labeling/fieldName" value=""/>
+        <property key="labeling/drawLabels" value="true"/>
+        <property key="labeling/enabled" value="true"/>
+        <property key="labeling/fieldName" value="name"/>
         <property key="labeling/fitInPolygonOnly" value="false"/>
         <property key="labeling/fontCapitals" value="0"/>
-        <property key="labeling/fontFamily" value="Ubuntu"/>
-        <property key="labeling/fontItalic" value="false"/>
+        <property key="labeling/fontFamily" value="Waree"/>
+        <property key="labeling/fontItalic" value="true"/>
         <property key="labeling/fontLetterSpacing" value="0"/>
         <property key="labeling/fontLimitPixelSize" value="false"/>
         <property key="labeling/fontMaxPixelSize" value="10000"/>
@@ -2901,26 +3393,26 @@ def my_form_open(dialog, layer, feature):
         <property key="labeling/fontWeight" value="50"/>
         <property key="labeling/fontWordSpacing" value="0"/>
         <property key="labeling/formatNumbers" value="false"/>
-        <property key="labeling/isExpression" value="true"/>
+        <property key="labeling/isExpression" value="false"/>
         <property key="labeling/labelOffsetInMapUnits" value="true"/>
         <property key="labeling/labelOffsetMapUnitScale" value="0,0,0,0,0,0"/>
         <property key="labeling/labelPerPart" value="false"/>
         <property key="labeling/leftDirectionSymbol" value="&lt;"/>
         <property key="labeling/limitNumLabels" value="false"/>
-        <property key="labeling/maxCurvedCharAngleIn" value="20"/>
-        <property key="labeling/maxCurvedCharAngleOut" value="-20"/>
+        <property key="labeling/maxCurvedCharAngleIn" value="25"/>
+        <property key="labeling/maxCurvedCharAngleOut" value="-25"/>
         <property key="labeling/maxNumLabels" value="2000"/>
         <property key="labeling/mergeLines" value="false"/>
         <property key="labeling/minFeatureSize" value="0"/>
-        <property key="labeling/multilineAlign" value="0"/>
+        <property key="labeling/multilineAlign" value="4294967295"/>
         <property key="labeling/multilineHeight" value="1"/>
-        <property key="labeling/namedStyle" value="Medium Italic"/>
+        <property key="labeling/namedStyle" value="Oblique"/>
         <property key="labeling/obstacle" value="true"/>
         <property key="labeling/obstacleFactor" value="1"/>
         <property key="labeling/obstacleType" value="0"/>
         <property key="labeling/offsetType" value="0"/>
         <property key="labeling/placeDirectionSymbol" value="0"/>
-        <property key="labeling/placement" value="1"/>
+        <property key="labeling/placement" value="2"/>
         <property key="labeling/placementFlags" value="10"/>
         <property key="labeling/plussign" value="false"/>
         <property key="labeling/predefinedPositionOrder" value="TR,TL,BR,BL,R,L,TSR,BSR"/>
@@ -2985,12 +3477,14 @@ def my_form_open(dialog, layer, feature):
         <property key="labeling/shapeSizeY" value="0"/>
         <property key="labeling/shapeTransparency" value="0"/>
         <property key="labeling/shapeType" value="0"/>
+        <property key="labeling/substitutions" value="&lt;substitutions/>"/>
         <property key="labeling/textColorA" value="255"/>
         <property key="labeling/textColorB" value="0"/>
         <property key="labeling/textColorG" value="0"/>
         <property key="labeling/textColorR" value="0"/>
         <property key="labeling/textTransp" value="0"/>
         <property key="labeling/upsidedownLabels" value="0"/>
+        <property key="labeling/useSubstitutions" value="false"/>
         <property key="labeling/wrapChar" value=""/>
         <property key="labeling/xOffset" value="0"/>
         <property key="labeling/yOffset" value="0"/>
@@ -3001,11 +3495,11 @@ def my_form_open(dialog, layer, feature):
       <blendMode>0</blendMode>
       <featureBlendMode>0</featureBlendMode>
       <layerTransparency>0</layerTransparency>
-      <displayfield>id</displayfield>
+      <displayfield>myid</displayfield>
       <label>0</label>
       <labelattributes>
         <label fieldname="" text="Label"/>
-        <family fieldname="" name="Ubuntu"/>
+        <family fieldname="" name="Waree"/>
         <size fieldname="" units="pt" value="12"/>
         <bold fieldname="" on="0"/>
         <italic fieldname="" on="0"/>
@@ -3024,8 +3518,697 @@ def my_form_open(dialog, layer, feature):
         <selectedonly on=""/>
       </labelattributes>
       <SingleCategoryDiagramRenderer diagramType="Histogram" sizeLegend="0" attributeLegend="1">
-        <DiagramCategory penColor="#000000" labelPlacementMethod="XHeight" penWidth="0" diagramOrientation="Up" sizeScale="0,0,0,0,0,0" minimumSize="0" barWidth="5" penAlpha="255" maxScaleDenominator="1e+08" backgroundColor="#ffffff" transparency="0" width="15" scaleDependency="Area" backgroundAlpha="255" angleOffset="1440" scaleBasedVisibility="0" enabled="0" height="15" lineSizeScale="0,0,0,0,0,0" sizeType="MM" lineSizeType="MM" minScaleDenominator="100000">
-          <fontProperties description="Ubuntu,11,-1,5,50,0,0,0,0,0" style=""/>
+        <DiagramCategory penColor="#000000" labelPlacementMethod="XHeight" penWidth="0" diagramOrientation="Up" sizeScale="0,0,0,0,0,0" minimumSize="0" barWidth="5" penAlpha="255" maxScaleDenominator="1e+08" backgroundColor="#ffffff" transparency="0" width="15" scaleDependency="Area" backgroundAlpha="255" angleOffset="1440" scaleBasedVisibility="0" enabled="0" height="15" lineSizeScale="0,0,0,0,0,0" sizeType="MM" lineSizeType="MM" minScaleDenominator="inf">
+          <fontProperties description="Waree,11,-1,5,50,0,0,0,0,0" style=""/>
+          <attribute field="" color="#000000" label=""/>
+        </DiagramCategory>
+        <symbol alpha="1" clip_to_extent="1" type="marker" name="sizeSymbol">
+          <layer pass="0" class="SimpleMarker" locked="0">
+            <prop k="angle" v="0"/>
+            <prop k="color" v="255,0,0,255"/>
+            <prop k="horizontal_anchor_point" v="1"/>
+            <prop k="joinstyle" v="bevel"/>
+            <prop k="name" v="circle"/>
+            <prop k="offset" v="0,0"/>
+            <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
+            <prop k="offset_unit" v="MM"/>
+            <prop k="outline_color" v="0,0,0,255"/>
+            <prop k="outline_style" v="solid"/>
+            <prop k="outline_width" v="0"/>
+            <prop k="outline_width_map_unit_scale" v="0,0,0,0,0,0"/>
+            <prop k="outline_width_unit" v="MM"/>
+            <prop k="scale_method" v="diameter"/>
+            <prop k="size" v="2"/>
+            <prop k="size_map_unit_scale" v="0,0,0,0,0,0"/>
+            <prop k="size_unit" v="MM"/>
+            <prop k="vertical_anchor_point" v="1"/>
+          </layer>
+        </symbol>
+      </SingleCategoryDiagramRenderer>
+      <DiagramLayerSettings yPosColumn="-1" showColumn="-1" linePlacementFlags="10" placement="2" dist="0" xPosColumn="-1" priority="0" obstacle="0" zIndex="0" showAll="1"/>
+      <annotationform>.</annotationform>
+      <aliases>
+        <alias field="myid" index="0" name=""/>
+        <alias field="name" index="1" name=""/>
+      </aliases>
+      <excludeAttributesWMS/>
+      <excludeAttributesWFS/>
+      <attributeactions default="-1"/>
+      <attributetableconfig actionWidgetStyle="dropDown" sortExpression="" sortOrder="-556221920">
+        <columns>
+          <column width="-1" hidden="0" type="field" name="myid"/>
+          <column width="-1" hidden="1" type="actions"/>
+          <column width="-1" hidden="0" type="field" name="name"/>
+        </columns>
+      </attributetableconfig>
+      <editform>.</editform>
+      <editforminit/>
+      <editforminitcodesource>0</editforminitcodesource>
+      <editforminitfilepath>.</editforminitfilepath>
+      <editforminitcode><![CDATA[# -*- coding: utf-8 -*-
+"""
+QGIS forms can have a Python function that is called when the form is
+opened.
+
+Use this function to add extra logic to your forms.
+
+Enter the name of the function in the "Python Init function"
+field.
+An example follows:
+"""
+from qgis.PyQt.QtWidgets import QWidget
+
+def my_form_open(dialog, layer, feature):
+	geom = feature.geometry()
+	control = dialog.findChild(QWidget, "MyLineEdit")
+]]></editforminitcode>
+      <featformsuppress>0</featformsuppress>
+      <editorlayout>generatedlayout</editorlayout>
+      <widgets/>
+      <conditionalstyles>
+        <rowstyles/>
+        <fieldstyles/>
+      </conditionalstyles>
+    </maplayer>
+    <maplayer minimumScale="0" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
+      <extent>
+        <xmin>220727.19091797000146471</xmin>
+        <ymin>9432780</ymin>
+        <xmax>279702.19091796997236088</xmax>
+        <ymax>9475670</ymax>
+      </extent>
+      <id>curvature20161107180919874</id>
+      <datasource>./data/grid/curvature.tif</datasource>
+      <keywordList>
+        <value></value>
+      </keywordList>
+      <layername>curvature</layername>
+      <srs>
+        <spatialrefsys>
+          <proj4>+proj=utm +zone=20 +south +ellps=aust_SA +towgs84=-57,1,-41,0,0,0,0 +units=m +no_defs</proj4>
+          <srsid>2542</srsid>
+          <srid>29190</srid>
+          <authid>EPSG:29190</authid>
+          <description>SAD69 / UTM zone 20S</description>
+          <projectionacronym>utm</projectionacronym>
+          <ellipsoidacronym>aust_SA</ellipsoidacronym>
+          <geographicflag>false</geographicflag>
+        </spatialrefsys>
+      </srs>
+      <customproperties>
+        <property key="identify/format" value="Value"/>
+      </customproperties>
+      <provider>gdal</provider>
+      <noData>
+        <noDataList bandNo="1" useSrcNoData="1"/>
+      </noData>
+      <map-layer-style-manager current="">
+        <map-layer-style name=""/>
+      </map-layer-style-manager>
+      <pipe>
+        <rasterrenderer gradient="BlackToWhite" opacity="1" alphaBand="-1" type="singlebandgray" grayBand="1">
+          <rasterTransparency/>
+          <contrastEnhancement>
+            <minValue>-0.800313781738244</minValue>
+            <maxValue>0.678059631347688</maxValue>
+            <algorithm>StretchToMinimumMaximum</algorithm>
+          </contrastEnhancement>
+        </rasterrenderer>
+        <brightnesscontrast brightness="0" contrast="0"/>
+        <huesaturation colorizeGreen="128" colorizeOn="0" colorizeRed="255" colorizeBlue="128" grayscaleMode="0" saturation="0" colorizeStrength="100"/>
+        <rasterresampler maxOversampling="2"/>
+      </pipe>
+      <blendMode>0</blendMode>
+    </maplayer>
+    <maplayer minimumScale="inf" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
+      <extent>
+        <xmin>220727.19091797000146471</xmin>
+        <ymin>9432780</ymin>
+        <xmax>279702.19091796997236088</xmax>
+        <ymax>9475670</ymax>
+      </extent>
+      <id>elevation20161107180503003</id>
+      <datasource>./data/grid/elevation.tif</datasource>
+      <keywordList>
+        <value></value>
+      </keywordList>
+      <layername>elevation</layername>
+      <srs>
+        <spatialrefsys>
+          <proj4>+proj=utm +zone=20 +south +ellps=aust_SA +towgs84=-57,1,-41,0,0,0,0 +units=m +no_defs</proj4>
+          <srsid>2542</srsid>
+          <srid>29190</srid>
+          <authid>EPSG:29190</authid>
+          <description>SAD69 / UTM zone 20S</description>
+          <projectionacronym>utm</projectionacronym>
+          <ellipsoidacronym>aust_SA</ellipsoidacronym>
+          <geographicflag>false</geographicflag>
+        </spatialrefsys>
+      </srs>
+      <customproperties>
+        <property key="embeddedWidgets/count" value="0"/>
+        <property key="identify/format" value="Value"/>
+      </customproperties>
+      <provider>gdal</provider>
+      <noData>
+        <noDataList bandNo="1" useSrcNoData="1"/>
+      </noData>
+      <map-layer-style-manager current="">
+        <map-layer-style name=""/>
+      </map-layer-style-manager>
+      <pipe>
+        <rasterrenderer opacity="1" alphaBand="0" classificationMax="80.3679" classificationMinMaxOrigin="CumulativeCutFullExtentEstimated" band="1" classificationMin="47.9234" type="singlebandpseudocolor">
+          <rasterTransparency/>
+          <rastershader>
+            <colorrampshader colorRampType="INTERPOLATED" clip="0">
+              <item alpha="255" value="47.9" label="47.9" color="#a6611a"/>
+              <item alpha="255" value="52.6" label="52.6" color="#c79952"/>
+              <item alpha="255" value="57.2" label="57.2" color="#e3ca8e"/>
+              <item alpha="255" value="61.8" label="61.8" color="#efe7d3"/>
+              <item alpha="255" value="66.5" label="66.5" color="#d4eae7"/>
+              <item alpha="255" value="71.1" label="71.1" color="#91d3c9"/>
+              <item alpha="255" value="75.7" label="75.7" color="#49ae9f"/>
+              <item alpha="255" value="80.4" label="80.4" color="#018571"/>
+            </colorrampshader>
+          </rastershader>
+        </rasterrenderer>
+        <brightnesscontrast brightness="0" contrast="0"/>
+        <huesaturation colorizeGreen="128" colorizeOn="0" colorizeRed="255" colorizeBlue="128" grayscaleMode="0" saturation="0" colorizeStrength="100"/>
+        <rasterresampler maxOversampling="2"/>
+      </pipe>
+      <blendMode>0</blendMode>
+    </maplayer>
+    <maplayer simplifyAlgorithm="0" minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" readOnly="0" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Polygon" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
+      <extent>
+        <xmin>-721002.68452423741109669</xmin>
+        <ymin>8761775.41988185979425907</ymin>
+        <xmax>1973920.49585476564243436</xmax>
+        <ymax>10218126.51927091367542744</ymax>
+      </extent>
+      <id>geology20161108234850069</id>
+      <datasource>./data/vector/geology.shp</datasource>
+      <keywordList>
+        <value></value>
+      </keywordList>
+      <layername>geology</layername>
+      <srs>
+        <spatialrefsys>
+          <proj4>+proj=utm +zone=20 +south +ellps=aust_SA +towgs84=-57,1,-41,0,0,0,0 +units=m +no_defs</proj4>
+          <srsid>2542</srsid>
+          <srid>29190</srid>
+          <authid>EPSG:29190</authid>
+          <description>SAD69 / UTM zone 20S</description>
+          <projectionacronym>utm</projectionacronym>
+          <ellipsoidacronym>aust_SA</ellipsoidacronym>
+          <geographicflag>false</geographicflag>
+        </spatialrefsys>
+      </srs>
+      <provider encoding="System">ogr</provider>
+      <previewExpression>COALESCE( "id", '&lt;NULL>' )</previewExpression>
+      <vectorjoins/>
+      <layerDependencies/>
+      <expressionfields/>
+      <defaults>
+        <default field="id" expression=""/>
+        <default field="geology" expression=""/>
+      </defaults>
+      <map-layer-style-manager current="">
+        <map-layer-style name=""/>
+      </map-layer-style-manager>
+      <edittypes>
+        <edittype widgetv2type="TextEdit" name="id">
+          <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
+        </edittype>
+        <edittype widgetv2type="TextEdit" name="geology">
+          <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
+        </edittype>
+      </edittypes>
+      <renderer-v2 forceraster="0" symbollevels="0" type="singleSymbol" enableorderby="0">
+        <symbols>
+          <symbol alpha="1" clip_to_extent="1" type="fill" name="0">
+            <layer pass="0" class="SimpleFill" locked="0">
+              <prop k="border_width_map_unit_scale" v="0,0,0,0,0,0"/>
+              <prop k="color" v="125,157,172,255"/>
+              <prop k="joinstyle" v="bevel"/>
+              <prop k="offset" v="0,0"/>
+              <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
+              <prop k="offset_unit" v="MM"/>
+              <prop k="outline_color" v="0,0,0,255"/>
+              <prop k="outline_style" v="solid"/>
+              <prop k="outline_width" v="0.26"/>
+              <prop k="outline_width_unit" v="MM"/>
+              <prop k="style" v="solid"/>
+            </layer>
+          </symbol>
+        </symbols>
+        <rotation/>
+        <sizescale scalemethod="diameter"/>
+      </renderer-v2>
+      <labeling type="simple"/>
+      <customproperties/>
+      <blendMode>0</blendMode>
+      <featureBlendMode>0</featureBlendMode>
+      <layerTransparency>0</layerTransparency>
+      <displayfield>id</displayfield>
+      <label>0</label>
+      <labelattributes>
+        <label fieldname="" text="Label"/>
+        <family fieldname="" name="Waree"/>
+        <size fieldname="" units="pt" value="12"/>
+        <bold fieldname="" on="0"/>
+        <italic fieldname="" on="0"/>
+        <underline fieldname="" on="0"/>
+        <strikeout fieldname="" on="0"/>
+        <color fieldname="" red="0" blue="0" green="0"/>
+        <x fieldname=""/>
+        <y fieldname=""/>
+        <offset x="0" y="0" units="pt" yfieldname="" xfieldname=""/>
+        <angle fieldname="" value="0" auto="0"/>
+        <alignment fieldname="" value="center"/>
+        <buffercolor fieldname="" red="255" blue="255" green="255"/>
+        <buffersize fieldname="" units="pt" value="1"/>
+        <bufferenabled fieldname="" on=""/>
+        <multilineenabled fieldname="" on=""/>
+        <selectedonly on=""/>
+      </labelattributes>
+      <annotationform>.</annotationform>
+      <aliases>
+        <alias field="id" index="0" name=""/>
+        <alias field="geology" index="1" name=""/>
+      </aliases>
+      <excludeAttributesWMS/>
+      <excludeAttributesWFS/>
+      <attributeactions default="-1"/>
+      <attributetableconfig actionWidgetStyle="dropDown" sortExpression="" sortOrder="1867653239">
+        <columns>
+          <column width="-1" hidden="0" type="field" name="id"/>
+          <column width="-1" hidden="0" type="field" name="geology"/>
+          <column width="-1" hidden="1" type="actions"/>
+        </columns>
+      </attributetableconfig>
+      <editform>.</editform>
+      <editforminit/>
+      <editforminitcodesource>0</editforminitcodesource>
+      <editforminitfilepath>.</editforminitfilepath>
+      <editforminitcode><![CDATA[]]></editforminitcode>
+      <featformsuppress>0</featformsuppress>
+      <editorlayout>generatedlayout</editorlayout>
+      <widgets/>
+      <conditionalstyles>
+        <rowstyles/>
+        <fieldstyles/>
+      </conditionalstyles>
+    </maplayer>
+    <maplayer simplifyAlgorithm="0" minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" readOnly="0" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Polygon" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
+      <extent>
+        <xmin>230395.50207519729156047</xmin>
+        <ymin>9437207.548828125</ymin>
+        <xmax>279517.40775439102435485</xmax>
+        <ymax>9475245.35369578562676907</ymax>
+      </extent>
+      <id>geomorphology20161108000930337</id>
+      <datasource>./data/vector/geomorphology.shp</datasource>
+      <keywordList>
+        <value></value>
+      </keywordList>
+      <layername>geomorphology</layername>
+      <srs>
+        <spatialrefsys>
+          <proj4>+proj=utm +zone=20 +south +ellps=aust_SA +towgs84=-57,1,-41,0,0,0,0 +units=m +no_defs</proj4>
+          <srsid>2542</srsid>
+          <srid>29190</srid>
+          <authid>EPSG:29190</authid>
+          <description>SAD69 / UTM zone 20S</description>
+          <projectionacronym>utm</projectionacronym>
+          <ellipsoidacronym>aust_SA</ellipsoidacronym>
+          <geographicflag>false</geographicflag>
+        </spatialrefsys>
+      </srs>
+      <provider encoding="System">ogr</provider>
+      <previewExpression>COALESCE( "ID_UNDGEOM", '&lt;NULL>' )</previewExpression>
+      <vectorjoins/>
+      <layerDependencies/>
+      <expressionfields/>
+      <defaults>
+        <default field="MSLINK" expression=""/>
+        <default field="LEG_CARGA" expression=""/>
+        <default field="ID_UNDGEOM" expression=""/>
+        <default field="UNDGEOM" expression=""/>
+        <default field="NM_DOMINIO" expression=""/>
+        <default field="SIMB_MOD" expression=""/>
+        <default field="NATURE_MOD" expression=""/>
+        <default field="DESC_NATUR" expression=""/>
+        <default field="DESC_FORM" expression=""/>
+        <default field="DESC_CARAC" expression=""/>
+        <default field="DENS_DREN" expression=""/>
+        <default field="DESC_DENS" expression=""/>
+        <default field="APROF_INCI" expression=""/>
+        <default field="DESC_APROF" expression=""/>
+        <default field="NIVEL_ALTI" expression=""/>
+        <default field="DESC_NIVEL" expression=""/>
+        <default field="CATEG_MOD" expression=""/>
+        <default field="DS_CATG_MO" expression=""/>
+        <default field="DS_OC_CATG" expression=""/>
+        <default field="MD_AR_POLI" expression=""/>
+        <default field="MD_PM_POLI" expression=""/>
+      </defaults>
+      <map-layer-style-manager current="">
+        <map-layer-style name=""/>
+      </map-layer-style-manager>
+      <edittypes>
+        <edittype widgetv2type="TextEdit" name="MSLINK">
+          <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
+        </edittype>
+        <edittype widgetv2type="TextEdit" name="LEG_CARGA">
+          <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
+        </edittype>
+        <edittype widgetv2type="TextEdit" name="ID_UNDGEOM">
+          <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
+        </edittype>
+        <edittype widgetv2type="TextEdit" name="UNDGEOM">
+          <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
+        </edittype>
+        <edittype widgetv2type="TextEdit" name="NM_DOMINIO">
+          <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
+        </edittype>
+        <edittype widgetv2type="TextEdit" name="SIMB_MOD">
+          <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
+        </edittype>
+        <edittype widgetv2type="TextEdit" name="NATURE_MOD">
+          <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
+        </edittype>
+        <edittype widgetv2type="TextEdit" name="DESC_NATUR">
+          <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
+        </edittype>
+        <edittype widgetv2type="TextEdit" name="DESC_FORM">
+          <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
+        </edittype>
+        <edittype widgetv2type="TextEdit" name="DESC_CARAC">
+          <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
+        </edittype>
+        <edittype widgetv2type="TextEdit" name="DENS_DREN">
+          <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
+        </edittype>
+        <edittype widgetv2type="TextEdit" name="DESC_DENS">
+          <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
+        </edittype>
+        <edittype widgetv2type="TextEdit" name="APROF_INCI">
+          <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
+        </edittype>
+        <edittype widgetv2type="TextEdit" name="DESC_APROF">
+          <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
+        </edittype>
+        <edittype widgetv2type="TextEdit" name="NIVEL_ALTI">
+          <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
+        </edittype>
+        <edittype widgetv2type="TextEdit" name="DESC_NIVEL">
+          <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
+        </edittype>
+        <edittype widgetv2type="TextEdit" name="CATEG_MOD">
+          <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
+        </edittype>
+        <edittype widgetv2type="TextEdit" name="DS_CATG_MO">
+          <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
+        </edittype>
+        <edittype widgetv2type="TextEdit" name="DS_OC_CATG">
+          <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
+        </edittype>
+        <edittype widgetv2type="TextEdit" name="MD_AR_POLI">
+          <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
+        </edittype>
+        <edittype widgetv2type="TextEdit" name="MD_PM_POLI">
+          <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
+        </edittype>
+      </edittypes>
+      <renderer-v2 attr="SIMB_MOD" forceraster="0" symbollevels="0" type="categorizedSymbol" enableorderby="0">
+        <categories>
+          <category render="true" symbol="0" value="Af" label="Af"/>
+          <category render="true" symbol="1" value="Dc" label="Dc"/>
+          <category render="true" symbol="2" value="Pri" label="Pri"/>
+          <category render="true" symbol="3" value="" label=""/>
+        </categories>
+        <symbols>
+          <symbol alpha="1" clip_to_extent="1" type="fill" name="0">
+            <layer pass="0" class="SimpleFill" locked="0">
+              <prop k="border_width_map_unit_scale" v="0,0,0,0,0,0"/>
+              <prop k="color" v="166,97,26,255"/>
+              <prop k="joinstyle" v="bevel"/>
+              <prop k="offset" v="0,0"/>
+              <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
+              <prop k="offset_unit" v="MM"/>
+              <prop k="outline_color" v="0,0,0,255"/>
+              <prop k="outline_style" v="solid"/>
+              <prop k="outline_width" v="0.26"/>
+              <prop k="outline_width_unit" v="MM"/>
+              <prop k="style" v="solid"/>
+            </layer>
+          </symbol>
+          <symbol alpha="1" clip_to_extent="1" type="fill" name="1">
+            <layer pass="0" class="SimpleFill" locked="0">
+              <prop k="border_width_map_unit_scale" v="0,0,0,0,0,0"/>
+              <prop k="color" v="231,211,165,255"/>
+              <prop k="joinstyle" v="bevel"/>
+              <prop k="offset" v="0,0"/>
+              <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
+              <prop k="offset_unit" v="MM"/>
+              <prop k="outline_color" v="0,0,0,255"/>
+              <prop k="outline_style" v="solid"/>
+              <prop k="outline_width" v="0.26"/>
+              <prop k="outline_width_unit" v="MM"/>
+              <prop k="style" v="solid"/>
+            </layer>
+          </symbol>
+          <symbol alpha="1" clip_to_extent="1" type="fill" name="2">
+            <layer pass="0" class="SimpleFill" locked="0">
+              <prop k="border_width_map_unit_scale" v="0,0,0,0,0,0"/>
+              <prop k="color" v="167,219,211,255"/>
+              <prop k="joinstyle" v="bevel"/>
+              <prop k="offset" v="0,0"/>
+              <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
+              <prop k="offset_unit" v="MM"/>
+              <prop k="outline_color" v="0,0,0,255"/>
+              <prop k="outline_style" v="solid"/>
+              <prop k="outline_width" v="0.26"/>
+              <prop k="outline_width_unit" v="MM"/>
+              <prop k="style" v="solid"/>
+            </layer>
+          </symbol>
+          <symbol alpha="1" clip_to_extent="1" type="fill" name="3">
+            <layer pass="0" class="SimpleFill" locked="0">
+              <prop k="border_width_map_unit_scale" v="0,0,0,0,0,0"/>
+              <prop k="color" v="1,133,113,255"/>
+              <prop k="joinstyle" v="bevel"/>
+              <prop k="offset" v="0,0"/>
+              <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
+              <prop k="offset_unit" v="MM"/>
+              <prop k="outline_color" v="0,0,0,255"/>
+              <prop k="outline_style" v="solid"/>
+              <prop k="outline_width" v="0.26"/>
+              <prop k="outline_width_unit" v="MM"/>
+              <prop k="style" v="solid"/>
+            </layer>
+          </symbol>
+        </symbols>
+        <source-symbol>
+          <symbol alpha="1" clip_to_extent="1" type="fill" name="0">
+            <layer pass="0" class="SimpleFill" locked="0">
+              <prop k="border_width_map_unit_scale" v="0,0,0,0,0,0"/>
+              <prop k="color" v="230,99,141,255"/>
+              <prop k="joinstyle" v="bevel"/>
+              <prop k="offset" v="0,0"/>
+              <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
+              <prop k="offset_unit" v="MM"/>
+              <prop k="outline_color" v="0,0,0,255"/>
+              <prop k="outline_style" v="solid"/>
+              <prop k="outline_width" v="0.26"/>
+              <prop k="outline_width_unit" v="MM"/>
+              <prop k="style" v="solid"/>
+            </layer>
+          </symbol>
+        </source-symbol>
+        <colorramp type="gradient" name="[source]">
+          <prop k="color1" v="166,97,26,255"/>
+          <prop k="color2" v="1,133,113,255"/>
+          <prop k="discrete" v="0"/>
+          <prop k="stops" v="0.25;223,194,125,255:0.5;245,245,245,255:0.75;128,205,193,255"/>
+        </colorramp>
+        <invertedcolorramp value="0"/>
+        <rotation/>
+        <sizescale scalemethod="diameter"/>
+      </renderer-v2>
+      <labeling type="simple"/>
+      <customproperties>
+        <property key="embeddedWidgets/count" value="0"/>
+        <property key="labeling" value="pal"/>
+        <property key="labeling/addDirectionSymbol" value="false"/>
+        <property key="labeling/angleOffset" value="0"/>
+        <property key="labeling/blendMode" value="0"/>
+        <property key="labeling/bufferBlendMode" value="0"/>
+        <property key="labeling/bufferColorA" value="255"/>
+        <property key="labeling/bufferColorB" value="255"/>
+        <property key="labeling/bufferColorG" value="255"/>
+        <property key="labeling/bufferColorR" value="255"/>
+        <property key="labeling/bufferDraw" value="false"/>
+        <property key="labeling/bufferJoinStyle" value="128"/>
+        <property key="labeling/bufferNoFill" value="false"/>
+        <property key="labeling/bufferSize" value="1"/>
+        <property key="labeling/bufferSizeInMapUnits" value="false"/>
+        <property key="labeling/bufferSizeMapUnitScale" value="0,0,0,0,0,0"/>
+        <property key="labeling/bufferTransp" value="0"/>
+        <property key="labeling/centroidInside" value="false"/>
+        <property key="labeling/centroidWhole" value="false"/>
+        <property key="labeling/decimals" value="3"/>
+        <property key="labeling/displayAll" value="false"/>
+        <property key="labeling/dist" value="0"/>
+        <property key="labeling/distInMapUnits" value="false"/>
+        <property key="labeling/distMapUnitScale" value="0,0,0,0,0,0"/>
+        <property key="labeling/drawLabels" value="true"/>
+        <property key="labeling/enabled" value="true"/>
+        <property key="labeling/fieldName" value="SIMB_MOD"/>
+        <property key="labeling/fitInPolygonOnly" value="false"/>
+        <property key="labeling/fontCapitals" value="0"/>
+        <property key="labeling/fontFamily" value="Waree"/>
+        <property key="labeling/fontItalic" value="true"/>
+        <property key="labeling/fontLetterSpacing" value="0"/>
+        <property key="labeling/fontLimitPixelSize" value="false"/>
+        <property key="labeling/fontMaxPixelSize" value="10000"/>
+        <property key="labeling/fontMinPixelSize" value="3"/>
+        <property key="labeling/fontSize" value="11"/>
+        <property key="labeling/fontSizeInMapUnits" value="false"/>
+        <property key="labeling/fontSizeMapUnitScale" value="0,0,0,0,0,0"/>
+        <property key="labeling/fontStrikeout" value="false"/>
+        <property key="labeling/fontUnderline" value="false"/>
+        <property key="labeling/fontWeight" value="50"/>
+        <property key="labeling/fontWordSpacing" value="0"/>
+        <property key="labeling/formatNumbers" value="false"/>
+        <property key="labeling/isExpression" value="false"/>
+        <property key="labeling/labelOffsetInMapUnits" value="true"/>
+        <property key="labeling/labelOffsetMapUnitScale" value="0,0,0,0,0,0"/>
+        <property key="labeling/labelPerPart" value="false"/>
+        <property key="labeling/leftDirectionSymbol" value="&lt;"/>
+        <property key="labeling/limitNumLabels" value="false"/>
+        <property key="labeling/maxCurvedCharAngleIn" value="25"/>
+        <property key="labeling/maxCurvedCharAngleOut" value="-25"/>
+        <property key="labeling/maxNumLabels" value="2000"/>
+        <property key="labeling/mergeLines" value="false"/>
+        <property key="labeling/minFeatureSize" value="0"/>
+        <property key="labeling/multilineAlign" value="4294967295"/>
+        <property key="labeling/multilineHeight" value="1"/>
+        <property key="labeling/namedStyle" value="Oblique"/>
+        <property key="labeling/obstacle" value="true"/>
+        <property key="labeling/obstacleFactor" value="1"/>
+        <property key="labeling/obstacleType" value="0"/>
+        <property key="labeling/offsetType" value="0"/>
+        <property key="labeling/placeDirectionSymbol" value="0"/>
+        <property key="labeling/placement" value="0"/>
+        <property key="labeling/placementFlags" value="10"/>
+        <property key="labeling/plussign" value="false"/>
+        <property key="labeling/predefinedPositionOrder" value="TR,TL,BR,BL,R,L,TSR,BSR"/>
+        <property key="labeling/preserveRotation" value="true"/>
+        <property key="labeling/previewBkgrdColor" value="#ffffff"/>
+        <property key="labeling/priority" value="5"/>
+        <property key="labeling/quadOffset" value="4"/>
+        <property key="labeling/repeatDistance" value="0"/>
+        <property key="labeling/repeatDistanceMapUnitScale" value="0,0,0,0,0,0"/>
+        <property key="labeling/repeatDistanceUnit" value="1"/>
+        <property key="labeling/reverseDirectionSymbol" value="false"/>
+        <property key="labeling/rightDirectionSymbol" value=">"/>
+        <property key="labeling/scaleMax" value="10000000"/>
+        <property key="labeling/scaleMin" value="1"/>
+        <property key="labeling/scaleVisibility" value="false"/>
+        <property key="labeling/shadowBlendMode" value="6"/>
+        <property key="labeling/shadowColorB" value="0"/>
+        <property key="labeling/shadowColorG" value="0"/>
+        <property key="labeling/shadowColorR" value="0"/>
+        <property key="labeling/shadowDraw" value="false"/>
+        <property key="labeling/shadowOffsetAngle" value="135"/>
+        <property key="labeling/shadowOffsetDist" value="1"/>
+        <property key="labeling/shadowOffsetGlobal" value="true"/>
+        <property key="labeling/shadowOffsetMapUnitScale" value="0,0,0,0,0,0"/>
+        <property key="labeling/shadowOffsetUnits" value="1"/>
+        <property key="labeling/shadowRadius" value="1.5"/>
+        <property key="labeling/shadowRadiusAlphaOnly" value="false"/>
+        <property key="labeling/shadowRadiusMapUnitScale" value="0,0,0,0,0,0"/>
+        <property key="labeling/shadowRadiusUnits" value="1"/>
+        <property key="labeling/shadowScale" value="100"/>
+        <property key="labeling/shadowTransparency" value="30"/>
+        <property key="labeling/shadowUnder" value="0"/>
+        <property key="labeling/shapeBlendMode" value="0"/>
+        <property key="labeling/shapeBorderColorA" value="255"/>
+        <property key="labeling/shapeBorderColorB" value="128"/>
+        <property key="labeling/shapeBorderColorG" value="128"/>
+        <property key="labeling/shapeBorderColorR" value="128"/>
+        <property key="labeling/shapeBorderWidth" value="0"/>
+        <property key="labeling/shapeBorderWidthMapUnitScale" value="0,0,0,0,0,0"/>
+        <property key="labeling/shapeBorderWidthUnits" value="1"/>
+        <property key="labeling/shapeDraw" value="false"/>
+        <property key="labeling/shapeFillColorA" value="255"/>
+        <property key="labeling/shapeFillColorB" value="255"/>
+        <property key="labeling/shapeFillColorG" value="255"/>
+        <property key="labeling/shapeFillColorR" value="255"/>
+        <property key="labeling/shapeJoinStyle" value="64"/>
+        <property key="labeling/shapeOffsetMapUnitScale" value="0,0,0,0,0,0"/>
+        <property key="labeling/shapeOffsetUnits" value="1"/>
+        <property key="labeling/shapeOffsetX" value="0"/>
+        <property key="labeling/shapeOffsetY" value="0"/>
+        <property key="labeling/shapeRadiiMapUnitScale" value="0,0,0,0,0,0"/>
+        <property key="labeling/shapeRadiiUnits" value="1"/>
+        <property key="labeling/shapeRadiiX" value="0"/>
+        <property key="labeling/shapeRadiiY" value="0"/>
+        <property key="labeling/shapeRotation" value="0"/>
+        <property key="labeling/shapeRotationType" value="0"/>
+        <property key="labeling/shapeSVGFile" value=""/>
+        <property key="labeling/shapeSizeMapUnitScale" value="0,0,0,0,0,0"/>
+        <property key="labeling/shapeSizeType" value="0"/>
+        <property key="labeling/shapeSizeUnits" value="1"/>
+        <property key="labeling/shapeSizeX" value="0"/>
+        <property key="labeling/shapeSizeY" value="0"/>
+        <property key="labeling/shapeTransparency" value="0"/>
+        <property key="labeling/shapeType" value="0"/>
+        <property key="labeling/substitutions" value="&lt;substitutions/>"/>
+        <property key="labeling/textColorA" value="255"/>
+        <property key="labeling/textColorB" value="0"/>
+        <property key="labeling/textColorG" value="0"/>
+        <property key="labeling/textColorR" value="0"/>
+        <property key="labeling/textTransp" value="0"/>
+        <property key="labeling/upsidedownLabels" value="0"/>
+        <property key="labeling/useSubstitutions" value="false"/>
+        <property key="labeling/wrapChar" value=""/>
+        <property key="labeling/xOffset" value="0"/>
+        <property key="labeling/yOffset" value="0"/>
+        <property key="labeling/zIndex" value="0"/>
+        <property key="variableNames" value="_fields_"/>
+        <property key="variableValues" value=""/>
+      </customproperties>
+      <blendMode>0</blendMode>
+      <featureBlendMode>0</featureBlendMode>
+      <layerTransparency>0</layerTransparency>
+      <displayfield>ID_UNDGEOM</displayfield>
+      <label>0</label>
+      <labelattributes>
+        <label fieldname="" text="Label"/>
+        <family fieldname="" name="Waree"/>
+        <size fieldname="" units="pt" value="12"/>
+        <bold fieldname="" on="0"/>
+        <italic fieldname="" on="0"/>
+        <underline fieldname="" on="0"/>
+        <strikeout fieldname="" on="0"/>
+        <color fieldname="" red="0" blue="0" green="0"/>
+        <x fieldname=""/>
+        <y fieldname=""/>
+        <offset x="0" y="0" units="pt" yfieldname="" xfieldname=""/>
+        <angle fieldname="" value="0" auto="0"/>
+        <alignment fieldname="" value="center"/>
+        <buffercolor fieldname="" red="255" blue="255" green="255"/>
+        <buffersize fieldname="" units="pt" value="1"/>
+        <bufferenabled fieldname="" on=""/>
+        <multilineenabled fieldname="" on=""/>
+        <selectedonly on=""/>
+      </labelattributes>
+      <SingleCategoryDiagramRenderer diagramType="Histogram" sizeLegend="0" attributeLegend="1">
+        <DiagramCategory penColor="#000000" labelPlacementMethod="XHeight" penWidth="0" diagramOrientation="Up" sizeScale="0,0,0,0,0,0" minimumSize="0" barWidth="5" penAlpha="255" maxScaleDenominator="1e+08" backgroundColor="#ffffff" transparency="0" width="15" scaleDependency="Area" backgroundAlpha="255" angleOffset="1440" scaleBasedVisibility="0" enabled="0" height="15" lineSizeScale="0,0,0,0,0,0" sizeType="MM" lineSizeType="MM" minScaleDenominator="inf">
+          <fontProperties description="Waree,11,-1,5,50,0,0,0,0,0" style=""/>
+          <attribute field="" color="#000000" label=""/>
         </DiagramCategory>
         <symbol alpha="1" clip_to_extent="1" type="marker" name="sizeSymbol">
           <layer pass="0" class="SimpleMarker" locked="0">
@@ -3051,20 +4234,63 @@ def my_form_open(dialog, layer, feature):
         </symbol>
       </SingleCategoryDiagramRenderer>
       <DiagramLayerSettings yPosColumn="-1" showColumn="-1" linePlacementFlags="10" placement="0" dist="0" xPosColumn="-1" priority="0" obstacle="0" zIndex="0" showAll="1"/>
-      <annotationform></annotationform>
+      <annotationform>.</annotationform>
+      <aliases>
+        <alias field="MSLINK" index="0" name=""/>
+        <alias field="LEG_CARGA" index="1" name=""/>
+        <alias field="ID_UNDGEOM" index="2" name=""/>
+        <alias field="UNDGEOM" index="3" name=""/>
+        <alias field="NM_DOMINIO" index="4" name=""/>
+        <alias field="SIMB_MOD" index="5" name=""/>
+        <alias field="NATURE_MOD" index="6" name=""/>
+        <alias field="DESC_NATUR" index="7" name=""/>
+        <alias field="DESC_FORM" index="8" name=""/>
+        <alias field="DESC_CARAC" index="9" name=""/>
+        <alias field="DENS_DREN" index="10" name=""/>
+        <alias field="DESC_DENS" index="11" name=""/>
+        <alias field="APROF_INCI" index="12" name=""/>
+        <alias field="DESC_APROF" index="13" name=""/>
+        <alias field="NIVEL_ALTI" index="14" name=""/>
+        <alias field="DESC_NIVEL" index="15" name=""/>
+        <alias field="CATEG_MOD" index="16" name=""/>
+        <alias field="DS_CATG_MO" index="17" name=""/>
+        <alias field="DS_OC_CATG" index="18" name=""/>
+        <alias field="MD_AR_POLI" index="19" name=""/>
+        <alias field="MD_PM_POLI" index="20" name=""/>
+      </aliases>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
       <attributeactions default="-1"/>
-      <attributetableconfig actionWidgetStyle="dropDown" sortExpression="" sortOrder="118495776">
+      <attributetableconfig actionWidgetStyle="dropDown" sortExpression="" sortOrder="18344">
         <columns>
-          <column width="-1" hidden="0" type="field" name="id"/>
+          <column width="-1" hidden="0" type="field" name="MSLINK"/>
+          <column width="-1" hidden="0" type="field" name="LEG_CARGA"/>
+          <column width="-1" hidden="0" type="field" name="ID_UNDGEOM"/>
+          <column width="-1" hidden="0" type="field" name="UNDGEOM"/>
+          <column width="-1" hidden="0" type="field" name="NM_DOMINIO"/>
+          <column width="-1" hidden="0" type="field" name="SIMB_MOD"/>
+          <column width="-1" hidden="0" type="field" name="NATURE_MOD"/>
+          <column width="-1" hidden="0" type="field" name="DESC_NATUR"/>
+          <column width="-1" hidden="0" type="field" name="DESC_FORM"/>
+          <column width="-1" hidden="0" type="field" name="DESC_CARAC"/>
+          <column width="-1" hidden="0" type="field" name="DENS_DREN"/>
+          <column width="-1" hidden="0" type="field" name="DESC_DENS"/>
+          <column width="-1" hidden="0" type="field" name="APROF_INCI"/>
+          <column width="-1" hidden="0" type="field" name="DESC_APROF"/>
+          <column width="-1" hidden="0" type="field" name="NIVEL_ALTI"/>
+          <column width="-1" hidden="0" type="field" name="DESC_NIVEL"/>
+          <column width="-1" hidden="0" type="field" name="CATEG_MOD"/>
+          <column width="-1" hidden="0" type="field" name="DS_CATG_MO"/>
+          <column width="-1" hidden="0" type="field" name="DS_OC_CATG"/>
+          <column width="-1" hidden="0" type="field" name="MD_AR_POLI"/>
+          <column width="-1" hidden="0" type="field" name="MD_PM_POLI"/>
           <column width="-1" hidden="1" type="actions"/>
         </columns>
       </attributetableconfig>
-      <editform></editform>
+      <editform>.</editform>
       <editforminit/>
       <editforminitcodesource>0</editforminitcodesource>
-      <editforminitfilepath></editforminitfilepath>
+      <editforminitfilepath>.</editforminitfilepath>
       <editforminitcode><![CDATA[# -*- coding: utf-8 -*-
 """
 QGIS forms can have a Python function that is called when the form is
@@ -3114,6 +4340,16 @@ def my_form_open(dialog, layer, feature):
       <vectorjoins/>
       <layerDependencies/>
       <expressionfields/>
+      <defaults>
+        <default field="FID_" expression=""/>
+        <default field="Entity" expression=""/>
+        <default field="Layer" expression=""/>
+        <default field="Color" expression=""/>
+        <default field="Linetype" expression=""/>
+        <default field="Elevation" expression=""/>
+        <default field="LineWt" expression=""/>
+        <default field="RefName" expression=""/>
+      </defaults>
       <map-layer-style-manager current="">
         <map-layer-style name=""/>
       </map-layer-style-manager>
@@ -3360,6 +4596,16 @@ def my_form_open(dialog, layer, feature):
       </SingleCategoryDiagramRenderer>
       <DiagramLayerSettings yPosColumn="-1" showColumn="0" linePlacementFlags="10" placement="0" dist="0" xPosColumn="-1" priority="0" obstacle="0" zIndex="0" showAll="1"/>
       <annotationform>.</annotationform>
+      <aliases>
+        <alias field="FID_" index="0" name=""/>
+        <alias field="Entity" index="1" name=""/>
+        <alias field="Layer" index="2" name=""/>
+        <alias field="Color" index="3" name=""/>
+        <alias field="Linetype" index="4" name=""/>
+        <alias field="Elevation" index="5" name=""/>
+        <alias field="LineWt" index="6" name=""/>
+        <alias field="RefName" index="7" name=""/>
+      </aliases>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
       <attributeactions default="-1"/>
@@ -3395,106 +4641,6 @@ def my_form_open(dialog, layer, feature):
         <fieldstyles/>
       </conditionalstyles>
     </maplayer>
-    <maplayer simplifyAlgorithm="0" minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" readOnly="0" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Polygon" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
-      <id>map_inset20160902163240167</id>
-      <datasource>./data/vector/map_inset.shp</datasource>
-      <keywordList>
-        <value></value>
-      </keywordList>
-      <layername>map_inset</layername>
-      <srs>
-        <spatialrefsys>
-          <proj4>+proj=utm +zone=20 +south +ellps=aust_SA +towgs84=-57,1,-41,0,0,0,0 +units=m +no_defs</proj4>
-          <srsid>2542</srsid>
-          <srid>29190</srid>
-          <authid>EPSG:29190</authid>
-          <description>SAD69 / UTM zone 20S</description>
-          <projectionacronym>utm</projectionacronym>
-          <ellipsoidacronym>aust_SA</ellipsoidacronym>
-          <geographicflag>false</geographicflag>
-        </spatialrefsys>
-      </srs>
-      <provider encoding="System">ogr</provider>
-      <previewExpression></previewExpression>
-      <vectorjoins/>
-      <layerDependencies/>
-      <expressionfields/>
-      <map-layer-style-manager current="">
-        <map-layer-style name=""/>
-      </map-layer-style-manager>
-      <edittypes>
-        <edittype widgetv2type="TextEdit" name="id">
-          <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
-        </edittype>
-      </edittypes>
-      <renderer-v2 forceraster="0" symbollevels="0" type="singleSymbol" enableorderby="0">
-        <symbols>
-          <symbol alpha="1" clip_to_extent="1" type="fill" name="0">
-            <layer pass="0" class="SimpleFill" locked="0">
-              <prop k="border_width_map_unit_scale" v="0,0,0,0,0,0"/>
-              <prop k="color" v="246,45,252,255"/>
-              <prop k="joinstyle" v="bevel"/>
-              <prop k="offset" v="0,0"/>
-              <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
-              <prop k="offset_unit" v="MM"/>
-              <prop k="outline_color" v="0,0,0,255"/>
-              <prop k="outline_style" v="solid"/>
-              <prop k="outline_width" v="0.26"/>
-              <prop k="outline_width_unit" v="MM"/>
-              <prop k="style" v="solid"/>
-            </layer>
-          </symbol>
-        </symbols>
-        <rotation/>
-        <sizescale scalemethod="diameter"/>
-      </renderer-v2>
-      <labeling type="simple"/>
-      <customproperties/>
-      <blendMode>0</blendMode>
-      <featureBlendMode>0</featureBlendMode>
-      <layerTransparency>0</layerTransparency>
-      <displayfield>id</displayfield>
-      <label>0</label>
-      <labelattributes>
-        <label fieldname="" text="Label"/>
-        <family fieldname="" name="Waree"/>
-        <size fieldname="" units="pt" value="12"/>
-        <bold fieldname="" on="0"/>
-        <italic fieldname="" on="0"/>
-        <underline fieldname="" on="0"/>
-        <strikeout fieldname="" on="0"/>
-        <color fieldname="" red="0" blue="0" green="0"/>
-        <x fieldname=""/>
-        <y fieldname=""/>
-        <offset x="0" y="0" units="pt" yfieldname="" xfieldname=""/>
-        <angle fieldname="" value="0" auto="0"/>
-        <alignment fieldname="" value="center"/>
-        <buffercolor fieldname="" red="255" blue="255" green="255"/>
-        <buffersize fieldname="" units="pt" value="1"/>
-        <bufferenabled fieldname="" on=""/>
-        <multilineenabled fieldname="" on=""/>
-        <selectedonly on=""/>
-      </labelattributes>
-      <annotationform></annotationform>
-      <excludeAttributesWMS/>
-      <excludeAttributesWFS/>
-      <attributeactions default="-1"/>
-      <attributetableconfig actionWidgetStyle="dropDown" sortExpression="" sortOrder="754435376">
-        <columns/>
-      </attributetableconfig>
-      <editform></editform>
-      <editforminit/>
-      <editforminitcodesource>0</editforminitcodesource>
-      <editforminitfilepath></editforminitfilepath>
-      <editforminitcode><![CDATA[]]></editforminitcode>
-      <featformsuppress>0</featformsuppress>
-      <editorlayout>generatedlayout</editorlayout>
-      <widgets/>
-      <conditionalstyles>
-        <rowstyles/>
-        <fieldstyles/>
-      </conditionalstyles>
-    </maplayer>
     <maplayer simplifyAlgorithm="0" minimumScale="-4.65661e-10" maximumScale="1e+08" simplifyDrawingHints="1" readOnly="0" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Polygon" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
       <extent>
         <xmin>230395.50207519729156047</xmin>
@@ -3521,10 +4667,15 @@ def my_form_open(dialog, layer, feature):
         </spatialrefsys>
       </srs>
       <provider encoding="System">ogr</provider>
-      <previewExpression></previewExpression>
+      <previewExpression>COALESCE( "GRIDCODE", '&lt;NULL>' )</previewExpression>
       <vectorjoins/>
       <layerDependencies/>
       <expressionfields/>
+      <defaults>
+        <default field="GRIDCODE" expression=""/>
+        <default field="MEAN_GRIDC" expression=""/>
+        <default field="area" expression=""/>
+      </defaults>
       <map-layer-style-manager current="">
         <map-layer-style name=""/>
       </map-layer-style-manager>
@@ -3533,6 +4684,9 @@ def my_form_open(dialog, layer, feature):
           <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
         </edittype>
         <edittype widgetv2type="TextEdit" name="MEAN_GRIDC">
+          <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
+        </edittype>
+        <edittype widgetv2type="TextEdit" name="area">
           <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
         </edittype>
       </edittypes>
@@ -3753,11 +4907,20 @@ def my_form_open(dialog, layer, feature):
       </SingleCategoryDiagramRenderer>
       <DiagramLayerSettings yPosColumn="-1" showColumn="0" linePlacementFlags="10" placement="0" dist="0" xPosColumn="-1" priority="0" obstacle="0" zIndex="0" showAll="1"/>
       <annotationform>.</annotationform>
+      <aliases>
+        <alias field="GRIDCODE" index="0" name=""/>
+        <alias field="MEAN_GRIDC" index="1" name=""/>
+        <alias field="area" index="2" name=""/>
+      </aliases>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
       <attributeactions default="-1"/>
       <attributetableconfig actionWidgetStyle="dropDown" sortExpression="" sortOrder="0">
-        <columns/>
+        <columns>
+          <column width="-1" hidden="0" type="field" name="GRIDCODE"/>
+          <column width="166" hidden="0" type="field" name="MEAN_GRIDC"/>
+          <column width="-1" hidden="1" type="actions"/>
+        </columns>
       </attributetableconfig>
       <editform>.</editform>
       <editforminit/>
@@ -3818,6 +4981,11 @@ def my_form_open(dialog, layer, feature):
       <vectorjoins/>
       <layerDependencies/>
       <expressionfields/>
+      <defaults>
+        <default field="OBJECTID" expression=""/>
+        <default field="Shape_Leng" expression=""/>
+        <default field="Shape_Area" expression=""/>
+      </defaults>
       <map-layer-style-manager current="">
         <map-layer-style name=""/>
       </map-layer-style-manager>
@@ -4049,9 +5217,14 @@ def my_form_open(dialog, layer, feature):
       </SingleCategoryDiagramRenderer>
       <DiagramLayerSettings yPosColumn="-1" showColumn="0" linePlacementFlags="10" placement="0" dist="0" xPosColumn="-1" priority="0" obstacle="0" zIndex="0" showAll="1"/>
       <annotationform>.</annotationform>
+      <aliases>
+        <alias field="OBJECTID" index="0" name=""/>
+        <alias field="Shape_Leng" index="1" name=""/>
+        <alias field="Shape_Area" index="2" name=""/>
+      </aliases>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
-      <attributeactions default="0"/>
+      <attributeactions default="-1"/>
       <attributetableconfig actionWidgetStyle="dropDown" sortExpression="" sortOrder="0">
         <columns/>
       </attributetableconfig>
@@ -4084,13 +5257,7 @@ def my_form_open(dialog, layer, feature):
         <fieldstyles/>
       </conditionalstyles>
     </maplayer>
-    <maplayer simplifyAlgorithm="0" minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" readOnly="0" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Polygon" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
-      <extent>
-        <xmin>236469.04404785297811031</xmin>
-        <ymin>9446822.66443189792335033</ymin>
-        <xmax>275309.04404785297811031</xmax>
-        <ymax>9474508.71577806025743484</ymax>
-      </extent>
+    <maplayer simplifyAlgorithm="0" minimumScale="-4.65661e-10" maximumScale="1e+08" simplifyDrawingHints="1" readOnly="0" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Polygon" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
       <id>target_soil_map20160727153902068</id>
       <datasource>./data/vector/target_soil_map.shp</datasource>
       <keywordList>
@@ -4114,6 +5281,14 @@ def my_form_open(dialog, layer, feature):
       <vectorjoins/>
       <layerDependencies/>
       <expressionfields/>
+      <defaults>
+        <default field="OBJECTID" expression=""/>
+        <default field="Id" expression=""/>
+        <default field="grid_code" expression=""/>
+        <default field="Shape_Leng" expression=""/>
+        <default field="Shape_Area" expression=""/>
+        <default field="UM" expression=""/>
+      </defaults>
       <map-layer-style-manager current="">
         <map-layer-style name=""/>
       </map-layer-style-manager>
@@ -4149,12 +5324,12 @@ def my_form_open(dialog, layer, feature):
           <symbol alpha="1" clip_to_extent="1" type="fill" name="0">
             <layer pass="0" class="SimpleFill" locked="0">
               <prop k="border_width_map_unit_scale" v="0,0,0,0,0,0"/>
-              <prop k="color" v="240,165,157,255"/>
+              <prop k="color" v="166,97,26,255"/>
               <prop k="joinstyle" v="bevel"/>
               <prop k="offset" v="0,0"/>
               <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
               <prop k="offset_unit" v="MM"/>
-              <prop k="outline_color" v="145,145,145,255"/>
+              <prop k="outline_color" v="0,0,0,255"/>
               <prop k="outline_style" v="solid"/>
               <prop k="outline_width" v="0.26"/>
               <prop k="outline_width_unit" v="MM"/>
@@ -4164,12 +5339,12 @@ def my_form_open(dialog, layer, feature):
           <symbol alpha="1" clip_to_extent="1" type="fill" name="1">
             <layer pass="0" class="SimpleFill" locked="0">
               <prop k="border_width_map_unit_scale" v="0,0,0,0,0,0"/>
-              <prop k="color" v="182,216,238,255"/>
+              <prop k="color" v="223,194,125,255"/>
               <prop k="joinstyle" v="bevel"/>
               <prop k="offset" v="0,0"/>
               <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
               <prop k="offset_unit" v="MM"/>
-              <prop k="outline_color" v="145,145,145,255"/>
+              <prop k="outline_color" v="0,0,0,255"/>
               <prop k="outline_style" v="solid"/>
               <prop k="outline_width" v="0.26"/>
               <prop k="outline_width_unit" v="MM"/>
@@ -4179,12 +5354,12 @@ def my_form_open(dialog, layer, feature):
           <symbol alpha="1" clip_to_extent="1" type="fill" name="2">
             <layer pass="0" class="SimpleFill" locked="0">
               <prop k="border_width_map_unit_scale" v="0,0,0,0,0,0"/>
-              <prop k="color" v="207,206,206,255"/>
+              <prop k="color" v="245,245,245,255"/>
               <prop k="joinstyle" v="bevel"/>
               <prop k="offset" v="0,0"/>
               <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
               <prop k="offset_unit" v="MM"/>
-              <prop k="outline_color" v="145,145,145,255"/>
+              <prop k="outline_color" v="0,0,0,255"/>
               <prop k="outline_style" v="solid"/>
               <prop k="outline_width" v="0.26"/>
               <prop k="outline_width_unit" v="MM"/>
@@ -4194,12 +5369,12 @@ def my_form_open(dialog, layer, feature):
           <symbol alpha="1" clip_to_extent="1" type="fill" name="3">
             <layer pass="0" class="SimpleFill" locked="0">
               <prop k="border_width_map_unit_scale" v="0,0,0,0,0,0"/>
-              <prop k="color" v="236,213,131,255"/>
+              <prop k="color" v="128,205,193,255"/>
               <prop k="joinstyle" v="bevel"/>
               <prop k="offset" v="0,0"/>
               <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
               <prop k="offset_unit" v="MM"/>
-              <prop k="outline_color" v="145,145,145,255"/>
+              <prop k="outline_color" v="0,0,0,255"/>
               <prop k="outline_style" v="solid"/>
               <prop k="outline_width" v="0.26"/>
               <prop k="outline_width_unit" v="MM"/>
@@ -4251,7 +5426,6 @@ def my_form_open(dialog, layer, feature):
       </renderer-v2>
       <labeling type="simple"/>
       <customproperties>
-        <property key="embeddedWidgets/count" value="0"/>
         <property key="labeling" value="pal"/>
         <property key="labeling/addDirectionSymbol" value="false"/>
         <property key="labeling/angleOffset" value="0"/>
@@ -4291,7 +5465,7 @@ def my_form_open(dialog, layer, feature):
         <property key="labeling/fontSizeMapUnitScale" value="0,0,0,0,0,0"/>
         <property key="labeling/fontStrikeout" value="false"/>
         <property key="labeling/fontUnderline" value="false"/>
-        <property key="labeling/fontWeight" value="63"/>
+        <property key="labeling/fontWeight" value="50"/>
         <property key="labeling/fontWordSpacing" value="0"/>
         <property key="labeling/formatNumbers" value="false"/>
         <property key="labeling/isExpression" value="true"/>
@@ -4417,7 +5591,7 @@ def my_form_open(dialog, layer, feature):
         <selectedonly on=""/>
       </labelattributes>
       <SingleCategoryDiagramRenderer diagramType="Pie" sizeLegend="0" attributeLegend="1">
-        <DiagramCategory penColor="#000000" labelPlacementMethod="XHeight" penWidth="0" diagramOrientation="Up" sizeScale="0,0,0,0,0,0" minimumSize="0" barWidth="5" penAlpha="255" maxScaleDenominator="1e+08" backgroundColor="#ffffff" transparency="0" width="15" scaleDependency="Area" backgroundAlpha="255" angleOffset="1440" scaleBasedVisibility="0" enabled="0" height="15" lineSizeScale="0,0,0,0,0,0" sizeType="MM" lineSizeType="MM" minScaleDenominator="0">
+        <DiagramCategory penColor="#000000" labelPlacementMethod="XHeight" penWidth="0" diagramOrientation="Up" sizeScale="0,0,0,0,0,0" minimumSize="0" barWidth="5" penAlpha="255" maxScaleDenominator="1e+08" backgroundColor="#ffffff" transparency="0" width="15" scaleDependency="Area" backgroundAlpha="255" angleOffset="1440" scaleBasedVisibility="0" enabled="0" height="15" lineSizeScale="0,0,0,0,0,0" sizeType="MM" lineSizeType="MM" minScaleDenominator="-4.65661e-10">
           <fontProperties description="Ubuntu,11,-1,5,50,0,0,0,0,0" style=""/>
           <attribute field="" color="#000000" label=""/>
         </DiagramCategory>
@@ -4446,19 +5620,19 @@ def my_form_open(dialog, layer, feature):
       </SingleCategoryDiagramRenderer>
       <DiagramLayerSettings yPosColumn="-1" showColumn="0" linePlacementFlags="10" placement="0" dist="0" xPosColumn="-1" priority="0" obstacle="0" zIndex="0" showAll="1"/>
       <annotationform>.</annotationform>
+      <aliases>
+        <alias field="OBJECTID" index="0" name=""/>
+        <alias field="Id" index="1" name=""/>
+        <alias field="grid_code" index="2" name=""/>
+        <alias field="Shape_Leng" index="3" name=""/>
+        <alias field="Shape_Area" index="4" name=""/>
+        <alias field="UM" index="5" name=""/>
+      </aliases>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
       <attributeactions default="-1"/>
       <attributetableconfig actionWidgetStyle="dropDown" sortExpression="" sortOrder="0">
-        <columns>
-          <column width="-1" hidden="0" type="field" name="OBJECTID"/>
-          <column width="-1" hidden="0" type="field" name="Id"/>
-          <column width="-1" hidden="0" type="field" name="grid_code"/>
-          <column width="-1" hidden="0" type="field" name="Shape_Leng"/>
-          <column width="-1" hidden="0" type="field" name="Shape_Area"/>
-          <column width="-1" hidden="0" type="field" name="UM"/>
-          <column width="-1" hidden="1" type="actions"/>
-        </columns>
+        <columns/>
       </attributetableconfig>
       <editform>.</editform>
       <editforminit/>
@@ -4502,6 +5676,7 @@ def my_form_open(dialog, layer, feature):
     <WMSKeywordList type="QStringList">
       <value></value>
     </WMSKeywordList>
+    <WFSUrl type="QString"></WFSUrl>
     <Topol>
       <tolerance_0 type="QString">0</tolerance_0>
       <tolerance_1 type="QString">0</tolerance_1>
@@ -4511,21 +5686,20 @@ def my_form_open(dialog, layer, feature):
       <layer2_0 type="QString">No layer</layer2_0>
       <layer2_1 type="QString">No layer</layer2_1>
       <layer2_2 type="QString">No layer</layer2_2>
-      <layer1_0 type="QString">tmp_lim720160720104634823</layer1_0>
+      <layer1_0 type="QString">geology20161108200518069</layer1_0>
       <layer2_3 type="QString">No layer</layer2_3>
-      <layer1_1 type="QString">tmp_lim720160720104634823</layer1_1>
+      <layer1_1 type="QString">geology20161108200518069</layer1_1>
       <testname_0 type="QString">must not have duplicates</testname_0>
       <layer2_4 type="QString">No layer</layer2_4>
-      <layer1_2 type="QString">tmp_lim720160720104634823</layer1_2>
+      <layer1_2 type="QString">geology20161108200518069</layer1_2>
       <testname_1 type="QString">must not have gaps</testname_1>
-      <layer1_3 type="QString">tmp_lim720160720104634823</layer1_3>
+      <layer1_3 type="QString">geology20161108200518069</layer1_3>
       <testname_2 type="QString">must not have invalid geometries</testname_2>
       <testname_3 type="QString">must not have multi-part geometries</testname_3>
       <testCount type="int">5</testCount>
-      <layer1_4 type="QString">tmp_lim720160720104634823</layer1_4>
+      <layer1_4 type="QString">geology20161108200518069</layer1_4>
       <testname_4 type="QString">must not overlap</testname_4>
     </Topol>
-    <WFSUrl type="QString"></WFSUrl>
     <Paths>
       <Absolute type="bool">false</Absolute>
     </Paths>
@@ -4538,8 +5712,8 @@ def my_form_open(dialog, layer, feature):
       <DegreeFormat type="QString">MU</DegreeFormat>
     </PositionPrecision>
     <WCSUrl type="QString"></WCSUrl>
-    <WMSServiceCapabilities type="bool">false</WMSServiceCapabilities>
     <WMSContactPhone type="QString"></WMSContactPhone>
+    <WMSServiceCapabilities type="bool">false</WMSServiceCapabilities>
     <WMSServiceAbstract type="QString"></WMSServiceAbstract>
     <WMSContactPosition type="QString"></WMSContactPosition>
     <WMSAddWktGeometry type="bool">false</WMSAddWktGeometry>
@@ -4570,15 +5744,13 @@ def my_form_open(dialog, layer, feature):
         <value>Tradagens_Validacao20160704103302490</value>
         <value>Trein_Classes20160704105656155</value>
         <value>access_area20160727154131822</value>
+        <value>arches20161108222827404</value>
+        <value>geomorphology20161108000930337</value>
         <value>landuse20160713111933971</value>
         <value>non_access_area20160720113528485</value>
         <value>outer_area20160727154434717</value>
         <value>target_soil_map20160727153902068</value>
-<<<<<<< HEAD
-        <value>inset20160902134929549</value>
-=======
-        <value>map_inset20160902163240167</value>
->>>>>>> 841d68429c85f613be42481631081085b529bd7d
+        <value>geology20161108234850069</value>
       </LayerSnappingList>
       <LayerSnappingEnabledList type="QStringList">
         <value>disabled</value>
@@ -4592,10 +5764,12 @@ def my_form_open(dialog, layer, feature):
         <value>disabled</value>
         <value>disabled</value>
         <value>disabled</value>
+        <value>disabled</value>
+        <value>disabled</value>
       </LayerSnappingEnabledList>
-      <SnappingMode type="QString">all_layers</SnappingMode>
+      <SnappingMode type="QString">current_layer</SnappingMode>
       <AvoidIntersectionsList type="QStringList"/>
-      <IntersectionSnapping type="bool">false</IntersectionSnapping>
+      <IntersectionSnapping type="bool">true</IntersectionSnapping>
       <LayerSnappingToleranceUnitList type="QStringList">
         <value>1</value>
         <value>1</value>
@@ -4603,15 +5777,13 @@ def my_form_open(dialog, layer, feature):
         <value>1</value>
         <value>1</value>
         <value>1</value>
-        <value>1</value>
-        <value>1</value>
-        <value>1</value>
-        <value>1</value>
-<<<<<<< HEAD
-        <value>1</value>
-=======
         <value>2</value>
->>>>>>> 841d68429c85f613be42481631081085b529bd7d
+        <value>2</value>
+        <value>1</value>
+        <value>1</value>
+        <value>1</value>
+        <value>1</value>
+        <value>2</value>
       </LayerSnappingToleranceUnitList>
       <LayerSnapToList type="QStringList">
         <value>to_vertex_and_segment</value>
@@ -4625,11 +5797,15 @@ def my_form_open(dialog, layer, feature):
         <value>to_vertex_and_segment</value>
         <value>to_vertex_and_segment</value>
         <value>to_vertex_and_segment</value>
+        <value>to_vertex_and_segment</value>
+        <value>to_vertex_and_segment</value>
       </LayerSnapToList>
-      <DefaultSnapType type="QString">off</DefaultSnapType>
-      <DefaultSnapTolerance type="double">10</DefaultSnapTolerance>
-      <TopologicalEditing type="bool">false</TopologicalEditing>
+      <DefaultSnapType type="QString">to vertex</DefaultSnapType>
+      <DefaultSnapTolerance type="double">20</DefaultSnapTolerance>
+      <TopologicalEditing type="bool">true</TopologicalEditing>
       <LayerSnappingToleranceList type="QStringList">
+        <value>0.000000</value>
+        <value>0.000000</value>
         <value>0.000000</value>
         <value>0.000000</value>
         <value>0.000000</value>
@@ -4660,6 +5836,7 @@ def my_form_open(dialog, layer, feature):
   &lt;prop k="angle" v="0"/>
   &lt;prop k="color" v="255,0,0,255"/>
   &lt;prop k="horizontal_anchor_point" v="1"/>
+  &lt;prop k="joinstyle" v="bevel"/>
   &lt;prop k="name" v="cross"/>
   &lt;prop k="offset" v="0,0"/>
   &lt;prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
@@ -4677,7 +5854,7 @@ def my_form_open(dialog, layer, feature):
  &lt;/layer>
 &lt;/symbol>
 </MarkerSymbol>
-      <Enabled type="bool">true</Enabled>
+      <Enabled type="bool">false</Enabled>
       <AnnotationDirection type="int">0</AnnotationDirection>
       <LineSymbol type="QString">&lt;symbol alpha="1" clip_to_extent="1" type="line" name="line symbol">
  &lt;layer pass="0" class="SimpleLine" locked="0">

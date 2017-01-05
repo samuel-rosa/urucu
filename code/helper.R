@@ -122,3 +122,14 @@ spPredict <-
     }
     return (res)
   }
+
+# Compute area of spatial polygons by category ----
+gAreaBy <-
+  function (spgeom, z, relative = TRUE) {
+    res <- rgeos::gArea(spgeom, byid = TRUE)
+    res <- c(by(res, spgeom@data[, z], sum))
+    if (relative) {
+      res <- res / rgeos::gArea(spgeom)
+    }
+    return (res)
+  }

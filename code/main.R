@@ -306,9 +306,7 @@ xy <- lapply(xy, function (x) x$UM)
 names(xy) <- id
 xy <- lapply(xy, function (x) summary(x) / sum(summary(x))) 
 xy <- cbind(stack(xy), um = names(xy[[1]]))
-ma <- rgeos::gArea(target_soil_map, byid = TRUE)
-ma <- c(by(ma, target_soil_map@data$UM, sum) / rgeos::gArea(target_soil_map))
-ma <- data.frame(values = ma, ind = "Reference soil map", um = xy$um[1:4])
+ma <- data.frame(values = gAreaBy(target_soil_map, "UM"), ind = "Reference soil map", um = xy$um[1:4])
 xy <- rbind(xy, ma)
 p <- lattice::barchart(
   values ~ um | ind, data = xy, col = soil.colors,

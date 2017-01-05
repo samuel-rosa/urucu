@@ -261,6 +261,7 @@ rm(cols)
 # Save calibration points
 save(cal_field, cal_expert, cal_random_field, cal_random_expert, cal_random_large, 
      file = "data/R/calibration_points.rda")
+# load("data/R/calibration_points.rda")
 
 # Prepare figure with calibration observations
 # Transform coordinates to kilometres to improve plotting
@@ -322,16 +323,17 @@ dev.off()
 
 rm(p, xy)
 
-# Check how well the random samples representat the covariate data
+# Figure: Coverage of the marginal distribution of the covariates by the balanced sample ####
+# Steps: load the covariate data (csv) at the beginning of this section and the calibration points (rda).   
 tmp <- rbind(
-  cbind(stack(covars[, 3:ncol(covars)]), id = "pop"), 
-  cbind(stack(cal_random_field@data[, -ncol(cal_random_field@data)]), id = "n = 383"), 
-  cbind(stack(cal_random_expert@data[, -ncol(cal_random_expert@data)]), id = "n = 838"),
-  cbind(stack(cal_random_large@data[, -ncol(cal_random_large@data)]), id = "n = 2003"))
+  cbind(stack(covars[, 3:ncol(covars)]), id = "goal"), 
+  cbind(stack(cal_random_field@data[, -ncol(cal_random_field@data)]), id = "383"), 
+  cbind(stack(cal_random_expert@data[, -ncol(cal_random_expert@data)]), id = "838"),
+  cbind(stack(cal_random_large@data[, -ncol(cal_random_large@data)]), id = "2003"))
 p <- lattice::bwplot(
-  values ~ id | ind, data = tmp, scales = list(y = list(relation = "free")),
+  values ~ id | ind, data = tmp, scales = list(y = list(relation = "free")), ylab = "",
   panel = function (...) {
-    lattice::panel.grid(v = -1, h = -1)
+    lattice::panel.grid(h = -1, v = 0)
     lattice::panel.bwplot(...)
   })
 p$par.settings <- list(plot.symbol = list(cex = 0.2), box.dot = list(cex = 0.5))

@@ -116,6 +116,28 @@ covars <- read.table("data/tmp/access_covars.csv", sep = "|")
 colnames(covars) <- c("x", "y", id_covars)
 head(covars)
 
+# Table: Descriptive statistics of the covariates in each map unit of the reference soil map. ----
+cmd <- paste("r.univar -t map=", id_covars, " zones=target_soil_map", sep = "")
+covar_stats <- lapply(cmd, grassGis, capture = TRUE)
+nam <- levels(raster::shapefile("data/vector/target_soil_map.shp", stringsAsFactors = TRUE)$UM)
+tmp <- 
+  lapply(covar_stats, function (x) {
+    res <- data.frame(sapply(x, strsplit, split = "|", fixed = TRUE))
+    rownames(res) <- res[, 1]
+    res <- t(res[c("mean", "stddev"), -1])
+    res <- apply(res, 2, function (x) round(as.numeric(x), 2))
+    res <- apply(res, 1, function (x) paste(x[1], " (", x[2], ")", sep = ""))
+    res
+  })
+tmp <- as.data.frame(tmp)
+colnames(tmp) <- id_covars
+rownames(tmp) <- nam
+tmp <- tmp[c(3, 4, 1, 2), ]
+tmp
+write.csv(tmp, "res/tab/summary_covariates.csv")
+rm(tmp, nam, covar_stats)
+gc()
+
 # Load necessary vector data
 cal_profiles <- raster::shapefile("data/vector/Perfis.shp")
 cal_boreholes <- raster::shapefile("data/vector/Tradagens.shp")

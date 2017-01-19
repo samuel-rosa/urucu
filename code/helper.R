@@ -6,11 +6,11 @@ if (.Platform$OS.type == "unix") {
 }
 
 # OS dependent function to run GRASS features ----
-grassGis <- function (cmd) {
+grassGis <- function (cmd, capture = FALSE) {
   if (.Platform$OS.type == "unix") {
-    system(cmd)
+    system(cmd, intern = capture)
   } else {
-    shell(cmd)
+    shell(cmd, intern = capture)
   }
 }
 

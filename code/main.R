@@ -27,7 +27,7 @@ target_soil_map <- spgrass7::readVECT("target_soil_map")
 access_limit <- spgrass7::readVECT("access_limit")
 non_access_limit <- spgrass7::readVECT("non_access_limit")
 
-# Prepare figure of study area
+# Figure: Study area ----
 p <- 
   sp::spplot(
     raster::shapefile("data/vector/target_soil_map.shp", stringsAsFactors = TRUE), "UM", lwd = 0, 
@@ -62,7 +62,7 @@ p
 dev.off()
 rm(p)
 
-# Figure of the Amazon region #################################################################################
+# Figure: The Amazon region ----
 # Prepare figure of the Amazon region using Google Earth imagery
 
 # Prepare polygons with geological formations
@@ -267,11 +267,11 @@ save(cal_field, cal_expert, cal_random_field, cal_random_expert, cal_random_larg
      file = "data/R/calibration_points.rda")
 # load("data/R/calibration_points.rda")
 
-# Prepare figure with calibration observations
+# Figure: Spatial distribution of calibration observations ----
 # Transform coordinates to kilometres to improve plotting
 # This is to see the spatial distribution of the sample point in the accessible area.
 n <- sapply(list(cal_field, cal_expert, cal_random_field, cal_random_expert, cal_random_large), nrow)
-id <- c("Field", "Expert", rep("Random", 3))
+id <- c("Field", "Expert", rep("Map", 3))
 id <- paste(id, " (n = ", n, ")", sep = "")
 xy <- list(cal_field, cal_expert, cal_random_field, cal_random_expert, cal_random_large)
 xy <- lapply(seq_along(xy), function (i) {
@@ -302,7 +302,7 @@ dev.off()
 rm(map, xy)
 gc()
 
-# Figure: Distribution of sample points per category of the soil map ####
+# Figure: Distribution of sample points per category of the soil map ----
 # Steps: load calibration points (rda), load the target soil map at the begining of the file, and get 
 # variables 'id' and 'n' from the code chunk above.
 xy <- list(cal_field, cal_expert, cal_random_field, cal_random_expert, cal_random_large)
@@ -312,10 +312,12 @@ xy <- lapply(xy, function (x) summary(x) / sum(summary(x)))
 xy <- cbind(stack(xy), um = names(xy[[1]]))
 ma <- data.frame(values = gAreaBy(target_soil_map, "UM"), ind = "Reference soil map", um = xy$um[1:4])
 xy <- rbind(xy, ma)
+xy$um <- ordered(xy$um, levels = unique(as.character(xy$um))[c(3, 4, 1, 2)])
 p <- lattice::barchart(
   values ~ um | ind, data = xy, col = soil.colors,
   scales = list(x = list(draw = FALSE)), ylab = "Proportion",
-  key = list(text = list(as.character(unique(xy$um))), rect = list(col = soil.colors), columns = 2),
+  key = list(text = list(as.character(unique(xy$um))[c(3, 4, 1, 2)]), 
+             rect = list(col = soil.colors[c(3, 4, 1, 2)]), columns = 2),
   par.settings = list(fontsize = list(text = 8, points = 6)),
   panel = function (...) {
     lattice::panel.grid(v = 0, h = -1)
@@ -350,7 +352,7 @@ p
 dev.off()
 rm(p, tmp, id, n)
 
-# Figure. Order in which map units were "sampled" by the expert.
+# Figure: Order in which map units were "sampled" by the expert ----
 x <- data.frame(y = 1, x = 1:length(cal_expert$UM))
 p <- lattice::xyplot(
   y ~ x, data = x, col = soil.colors[cal_expert$UM], pch = 15, cex = 0.25, type = "h", ylim = c(0, 1),
@@ -358,6 +360,8 @@ p <- lattice::xyplot(
   ylab = "", xlab = "Sampling order", scales = list(y = list(draw = FALSE)), 
   xlim = c(1, length(cal_expert$UM)))
 p$x.scales$at <- seq(1, length(cal_expert$UM), length.out = 5)
+p$legend$top$args$key$text$labels <- p$legend$top$args$key$text$labels[c(3, 4, 1, 2)]
+p$legend$top$args$key$rect$col <- p$legend$top$args$key$rect$col[c(3, 4, 1, 2)]
 dev.off()
 png("res/fig/expert_sampling_order.png", width = 480 * 4, height = 480 * 1, res = 250)
 p

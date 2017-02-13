@@ -663,8 +663,10 @@ inset_covars <- read.table("data/tmp/inset_covars.csv", sep = "|")
 colnames(inset_covars) <- c("x", "y", id_covars)
 str(inset_covars)
 
-# Predictions
+# Make predictions using all models at one.
+# If starting from here, load the calibrated models and the randomForest package.
 # load("data/R/calibrated_models.rda")
+# library(randomForest)
 pred_um <- spPredict(fit_field_lda, inset_covars)
 colnames(pred_um@data) <- paste("field_lda.", colnames(pred_um@data), sep = "")
 pred_um@data <- cbind(
@@ -692,7 +694,7 @@ save(pred_um, file = "data/R/map_inset_pred.rda")
 # load("data/R/map_inset_pred.rda")
 # load("data/R/calibration_points.rda")
 
-# Prepare data for figures with predictions
+# Figure: Predictions in the small evaluation area ----
 levels <- c("Field", "Expert")
 levels <- c(rep(levels, each = 2), rep(paste(rep("Map", 3)), each = 2))
 n <- 
@@ -709,9 +711,10 @@ p1 <- sp::spplot(
   strip = lattice::strip.custom(factor.levels = levels[1:4]), layout = c(2, 2)) + 
   latticeExtra::as.layer(sp::spplot(target_soil_map, "UM", col.regions = "transparent"))
 p1$par.settings <- list(fontsize = list(text = 12 * 3, points = 8))
-p1$legend$bottom$args$key$labels$labels <- as.character(um_levels)
 p1$legend$bottom$args$key$width <- 1
 p1$legend$bottom$args$key$height <- 1
+p1$legend$bottom$args$key$labels$labels <- levels(cal_field$UM)[c(3, 4, 1, 2)]
+p1$legend$bottom$args$key$col <- p1$legend$bottom$args$key$col[c(3, 4, 1, 2)]
 dev.off()
 # png("res/fig/map_inset_predictions.png", width = 480*3, height = 480*6)
 jpeg("res/fig/map_inset_predictions_field_expert.jpg", width = 480 * 4, height = 480 * 3.5)
@@ -725,9 +728,10 @@ p1 <- sp::spplot(
   strip = lattice::strip.custom(factor.levels = levels[-c(1:4)]), layout = c(2, 3)) + 
   latticeExtra::as.layer(sp::spplot(target_soil_map, "UM", col.regions = "transparent"))
 p1$par.settings <- list(fontsize = list(text = 12 * 3, points = 8))
-p1$legend$bottom$args$key$labels$labels <- as.character(um_levels)
 p1$legend$bottom$args$key$width <- 1
 p1$legend$bottom$args$key$height <- 1
+p1$legend$bottom$args$key$labels$labels <- levels(cal_field$UM)[c(3, 4, 1, 2)]
+p1$legend$bottom$args$key$col <- p1$legend$bottom$args$key$col[c(3, 4, 1, 2)]
 dev.off()
 # png("res/fig/map_inset_predictions.png", width = 480*3, height = 480*6)
 jpeg("res/fig/map_inset_predictions_random.jpg", width = 480 * 4, height = 480 * 5)
@@ -777,25 +781,25 @@ grassGis(cmd)
 pred_field_lca <- read.table("data/tmp/inset_land_class.csv", sep = "|")
 colnames(pred_field_lca) <- c("x", "y", "UM")
 pred_field_lca$UM <- as.factor(pred_field_lca$UM)
-levels(pred_field_lca$UM) <- um_levels
+levels(pred_field_lca$UM) <- levels(cal_field$UM)
 sp::gridded(pred_field_lca) <- ~ x + y
 
-# Prepare figure
+# Figure: Predictions using the landform classification algorithm ----
 p <- sp::spplot(
   pred_field_lca, col.regions = soil.colors, colorkey = list(space = "bottom"),
   strip = lattice::strip.custom(factor.levels = levels[-c(1:4)])) + 
   latticeExtra::as.layer(sp::spplot(target_soil_map, "UM", col.regions = "transparent"))
 p$par.settings <- list(fontsize = list(text = 12 * 2, points = 8))
-p$legend$bottom$args$key$labels$labels <- as.character(um_levels)
 p$legend$bottom$args$key$width <- 1
 p$legend$bottom$args$key$height <- 1
+p$legend$bottom$args$key$labels$labels <- levels(cal_field$UM)[c(3, 4, 1, 2)]
+p$legend$bottom$args$key$col <- p$legend$bottom$args$key$col[c(3, 4, 1, 2)]
 dev.off()
 # png("res/fig/map_inset_predictions.png", width = 480*3, height = 480*6)
 jpeg("res/fig/map_inset_predictions_geoforms_tmp.jpg", width = 480 * 2, height = 480 * 2.5)
 p
 dev.off()
 rm(p)
-
 
 
 

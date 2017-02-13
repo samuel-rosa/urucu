@@ -54,6 +54,8 @@ p$par.settings <- list(fontsize = list(text = 12 * 2.5))
 names(p$legend) <- "inside"
 p$legend$inside$x <- 0.025
 p$legend$inside$y <- 0.875
+p$legend$inside$args$key$labels$labels <- p$legend$inside$args$key$labels$labels[c(3, 4, 1, 2)]
+p$legend$inside$args$key$col <- p$legend$inside$args$key$col[c(3, 4, 1, 2)]
 dev.off()
 png("res/fig/study_area.png", width = 480 * 2.5, height = 480 * 2)
 p

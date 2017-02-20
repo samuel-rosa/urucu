@@ -451,6 +451,7 @@ overallPurity(obs = cal_field$UM, fit = fit_lca)
 save(fit_land_classification, fit_field_rf, fit_field_lda, fit_expert_rf, fit_expert_lda, fit_random_field_rf,
      fit_random_field_lda, fit_random_expert_rf, fit_random_expert_lda, fit_random_large_rf, 
      fit_random_large_lda, file = "data/R/calibrated_models.rda")
+# load("data/R/calibrated_models.rda")
 
 # Compute calibration purity and save as a csv file
 cal_purity <- 
@@ -504,6 +505,7 @@ str(val_sample$data)
 
 # save data
 save(val_sample, file = "data/R/validation_points.rda")
+# load("data/R/validation_points.rda")
 
 # Validation ##################################################################################################
 # We compute the overall actual purity for each sampling strata, which are used to compute a weigthed average
@@ -512,6 +514,7 @@ save(val_sample, file = "data/R/validation_points.rda")
 # purity is equivalent to the class representation (producer's accuracy), i.e. the proportion of the area
 # occupied with a given class that is mapped as that class.
 
+# library(randomForest)
 validation <- data.frame(
   observed = val_sample$data$UM,
   strata = as.factor(val_sample$sample$Stratum),
@@ -801,82 +804,81 @@ p
 dev.off()
 rm(p)
 
-
-
-
-
-
-
-
-
-
-# Field calibration data (n = 383)
-pred_field_lda <- spPredict(fit_field_lda, inset_covars)
-pred_field_rf <- spPredict(fit_field_rf, inset_covars)
-fit_land_classification(tool = "grass", vname = "inset_land_class")
-cmd <- paste("r.out.xyz --overwrite input=inset_land_class output=data/tmp/inset_land_class.csv", sep = "")
-grassGis(cmd)
-pred_field_lca <- read.table("data/tmp/inset_land_class.csv", sep = "|")
-colnames(pred_field_lca) <- c("x", "y", "UM")
-pred_field_lca$UM <- as.factor(pred_field_lca$UM)
-levels(pred_field_lca$UM) <- um_levels
-sp::gridded(pred_field_lca) <- ~ x + y
-
-# Expert calibration data (n = 837)
-pred_expert_lda <- spPredict(fit_expert_lda, inset_covars)
-pred_expert_rf <- spPredict(fit_expert_rf, inset_covars)
-
-# Random calibration data (n = 383)
-pred_random_field_lda <- spPredict(fit_random_field_lda, inset_covars)
-pred_random_field_rf <- spPredict(fit_random_field_rf, inset_covars)
-
-# Random calibration data (n = 837)
-pred_random_expert_lda <- spPredict(fit_random_expert_lda, inset_covars)
-pred_random_expert_rf <- spPredict(fit_random_expert_rf, inset_covars)
-
-# Random calibration data (n = 2000)
-pred_random_large_lda <- spPredict(fit_random_large_lda, inset_covars)
-pred_random_large_rf <- spPredict(fit_random_large_rf, inset_covars)
-
-
-
-sp::spplot(pred_field_lca, "UM", col.regions = soil.colors)
-
-
-
-
-
-
-
-
-# We export a text file containing only the data from inside the prediction region (NAs are not exported).
-# Attention: processing the full grid at once requires a lot of RAM (16 Gb).
+# Predictions
+rm(fit_expert_lda, fit_expert_rf, fit_field_lda, fit_field_rf, fit_random_expert_lda, fit_random_expert_rf, 
+   fit_random_field_lda, fit_random_field_rf, fit_random_large_lda)
+gc()
 grassGis("r.mask --o non_access_limit")
-
-
+id_covars <- c("elevation", "curvature", "plan_curv", "slope", "flow_down", "twi")
+cmd <- paste(
+  "r.out.xyz --overwrite input=", paste(id_covars, collapse = ","), " output=data/tmp/full_covars.csv", 
+  sep = "")
 grassGis(cmd)
-covars <- read.table("data/tmp/non_access_covars.csv", sep = "|")
-colnames(covars) <- c("x", "y", id_covars)
-head(covars)
-str(covars)
-
-# Field calibration data
-pred_field_lda <- predict(fit_field_lda, newdata = covars)$posterior
-save(pred_field_lda, file = "data/R/pred_field_lda.rda")
-rm(pred_field_lda)
+full_covars <- read.table("data/tmp/full_covars.csv", sep = "|")
+colnames(full_covars) <- c("x", "y", id_covars)
+str(full_covars)
+# idx <- quantile(1:(nrow(full_covars) - 1), probs = seq(0, 1, 1 / 1000))  
+# idx <- cbind(floor(idx[-5]), ceiling(idx[-1] + 1))
+pred <- function (x, y) {
+  x <- predict(x, y, type = "prob")
+  x <- cbind(y[, 1:2], apply(x, 1, entropy), max.col(x))
+  colnames(x) <- c("x", "y", "entropy", "pred")
+  sp::gridded(x) <- ~ x + y
+  x
+} 
+pred <- pred(x = fit_random_large_rf, y = full_covars)
+pred$pred <- as.factor(pred$pred)
+levels(pred$pred) <- c("MU3", "MU4", "MU1", "MU2")
+rm(full_covars, fit_random_large_rf)
 gc()
 
-pred_field_rf <- predict(fit_field_rf, newdata = covars, type = "prob")
-save(pred_field_rf, file = "data/R/pred_field_rf.rda")
-rm(pred_field_rf)
+# Save file with predictions for the entire study area, including the poorly-accessible expansion area.
+save(pred, file = "data/R/final_pred.rda")
+# load("data/R/final_pred.rda")
+
+# Figure: Soil predictions for the entire study area  ----  
+p <- sp::spplot(
+  pred, "pred", col.regions = soil.colors, colorkey = list(space = "top"),
+  scales = list(draw = TRUE, x = list(labels = pretty(sp::bbox(pred)[1, ]) / 1000),
+                y = list(labels = pretty(sp::bbox(pred)[2, ]) / 1000)),
+  xlab = "Easting (km)", ylab = "Northing (km)",
+  panel = function (...) {
+    lattice::panel.levelplot(...)
+    lattice::panel.grid(h = -1, v = -1)
+    }) + latticeExtra::as.layer(sp::spplot(access_limit, 1, col.regions = "transparent"))
+p$legend$top$args$key$width <- 1
+p$legend$top$args$key$height <- 1
+p$legend$top$args$key$labels$labels <- p$legend$top$args$key$labels$labels[c(3, 4, 1, 2)]
+p$legend$top$args$key$col <- p$legend$top$args$key$col[c(3, 4, 1, 2)]
+f <- 3
+p$par.settings <- list(fontsize = list(text = 12 * f * 1.5, points = 8 * f * 1.5))
+dev.off()
+jpeg("res/fig/final_pred.jpg", width = 480 * f * 1.5, height = 480 * f * 1.2)
+p
+dev.off()
+rm(p)
 gc()
 
-coords <- covars[, 1:2]
-rm(covars)
-gc()
-
-load("data/R/pred_field_rf.rda")
-coords <- cbind(coords, pred_field_rf)
-write.csv(coords, file = "data/tmp/pred_rf.csv")
-rm(coords)
+# Figure: Entropy of soil predictions for the entire study area ----
+col <- uncertainty.colors(10)
+col <- c(col[1], col, col[10])
+p <- sp::spplot(
+  pred, "entropy", col.regions = col, at = c(-0.01, seq(0, 1, 0.1), 1.01),
+  colorkey = list(space = "top", at = c(-0.01, seq(0, 1, 0.1), 1.01)),
+  scales = list(draw = TRUE, x = list(labels = pretty(sp::bbox(pred)[1, ]) / 1000),
+                y = list(labels = pretty(sp::bbox(pred)[2, ]) / 1000)),
+  xlab = "Easting (km)", ylab = "Northing (km)",
+  panel = function (...) {
+    lattice::panel.levelplot(...)
+    lattice::panel.grid(h = -1, v = -1)
+  }) + latticeExtra::as.layer(sp::spplot(access_limit, 1, col.regions = "transparent"))
+p$legend$top$args$key$width <- 1
+p$legend$top$args$key$height <- 1
+f <- 3
+p$par.settings <- list(fontsize = list(text = 12 * f * 1.5, points = 8 * f * 1.5))
+dev.off()
+jpeg("res/fig/final_entropy.jpg", width = 480 * f * 1.5, height = 480 * f * 1.2)
+p
+dev.off()
+rm(p)
 gc()

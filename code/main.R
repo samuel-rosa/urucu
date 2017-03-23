@@ -317,7 +317,7 @@ p <- lattice::barchart(
   values ~ um | ind, data = xy, col = soil.colors,
   scales = list(x = list(draw = FALSE)), ylab = "Proportion",
   key = list(text = list(as.character(unique(xy$um))[c(3, 4, 1, 2)]), 
-             rect = list(col = soil.colors[c(3, 4, 1, 2)]), columns = 2),
+             rect = list(col = soil.colors[c(3, 4, 1, 2)]), columns = 4),
   par.settings = list(fontsize = list(text = 8, points = 6)),
   panel = function (...) {
     lattice::panel.grid(v = 0, h = -1)
@@ -326,6 +326,7 @@ p <- lattice::barchart(
   )
 p$index.cond[[1]] <- c(4, 5, 3, 2, 1, 6)
 names(p$legend) <- "bottom"
+p$legend$bottom$args$key$text[[1]] <- paste("MU", 1:4, sep = "")
 dev.off()
 png("res/fig/cal_points_prop.png", width = 480*3, height = 480*2, res = 300)
 p
@@ -339,6 +340,7 @@ tmp <- rbind(
   cbind(stack(cal_random_field@data[, -ncol(cal_random_field@data)]), id = "383"), 
   cbind(stack(cal_random_expert@data[, -ncol(cal_random_expert@data)]), id = "838"),
   cbind(stack(cal_random_large@data[, -ncol(cal_random_large@data)]), id = "2003"))
+tmp$ind <- gsub("_", "", tmp$ind)
 p <- lattice::bwplot(
   values ~ id | ind, data = tmp, scales = list(y = list(relation = "free")), ylab = "",
   panel = function (...) {
@@ -356,12 +358,13 @@ rm(p, tmp, id, n)
 x <- data.frame(y = 1, x = 1:length(cal_expert$UM))
 p <- lattice::xyplot(
   y ~ x, data = x, col = soil.colors[cal_expert$UM], pch = 15, cex = 0.25, type = "h", ylim = c(0, 1),
-  key = list(text = list(labels = levels(cal_expert$UM)), rect = list(col = soil.colors), columns = 2),
+  key = list(text = list(labels = levels(cal_expert$UM)), rect = list(col = soil.colors), columns = 4),
   ylab = "", xlab = "Sampling order", scales = list(y = list(draw = FALSE)), 
   xlim = c(1, length(cal_expert$UM)))
 p$x.scales$at <- seq(1, length(cal_expert$UM), length.out = 5)
 p$legend$top$args$key$text$labels <- p$legend$top$args$key$text$labels[c(3, 4, 1, 2)]
 p$legend$top$args$key$rect$col <- p$legend$top$args$key$rect$col[c(3, 4, 1, 2)]
+p$legend$top$args$key$text$labels <- paste("MU", 1:4, sep = "")
 dev.off()
 png("res/fig/expert_sampling_order.png", width = 480 * 4, height = 480 * 1, res = 250)
 p
@@ -718,6 +721,7 @@ p1$legend$bottom$args$key$width <- 1
 p1$legend$bottom$args$key$height <- 1
 p1$legend$bottom$args$key$labels$labels <- levels(cal_field$UM)[c(3, 4, 1, 2)]
 p1$legend$bottom$args$key$col <- p1$legend$bottom$args$key$col[c(3, 4, 1, 2)]
+p1$legend$bottom$args$key$labels$labels <- paste("MU", 1:4, sep = "")
 dev.off()
 # png("res/fig/map_inset_predictions.png", width = 480*3, height = 480*6)
 jpeg("res/fig/map_inset_predictions_field_expert.jpg", width = 480 * 4, height = 480 * 3.5)
@@ -735,6 +739,7 @@ p1$legend$bottom$args$key$width <- 1
 p1$legend$bottom$args$key$height <- 1
 p1$legend$bottom$args$key$labels$labels <- levels(cal_field$UM)[c(3, 4, 1, 2)]
 p1$legend$bottom$args$key$col <- p1$legend$bottom$args$key$col[c(3, 4, 1, 2)]
+p1$legend$bottom$args$key$labels$labels <- paste("MU", 1:4, sep = "")
 dev.off()
 # png("res/fig/map_inset_predictions.png", width = 480*3, height = 480*6)
 jpeg("res/fig/map_inset_predictions_random.jpg", width = 480 * 4, height = 480 * 5)
@@ -797,9 +802,10 @@ p$legend$bottom$args$key$width <- 1
 p$legend$bottom$args$key$height <- 1
 p$legend$bottom$args$key$labels$labels <- levels(cal_field$UM)[c(3, 4, 1, 2)]
 p$legend$bottom$args$key$col <- p$legend$bottom$args$key$col[c(3, 4, 1, 2)]
+p$legend$bottom$args$key$labels$labels <- paste("MU", 1:4, sep = "")
 dev.off()
 # png("res/fig/map_inset_predictions.png", width = 480*3, height = 480*6)
-jpeg("res/fig/map_inset_predictions_geoforms_tmp.jpg", width = 480 * 2, height = 480 * 2.5)
+jpeg("res/fig/map_inset_predictions_geoforms_tmp.jpg", width = 480 * 2, height = 480 * 1.8)
 p
 dev.off()
 rm(p)
@@ -827,8 +833,6 @@ pred <- function (x, y) {
   x
 } 
 pred <- pred(x = fit_random_large_rf, y = full_covars)
-pred$pred <- as.factor(pred$pred)
-levels(pred$pred) <- c("MU3", "MU4", "MU1", "MU2")
 rm(full_covars, fit_random_large_rf)
 gc()
 
@@ -837,6 +841,8 @@ save(pred, file = "data/R/final_pred.rda")
 # load("data/R/final_pred.rda")
 
 # Figure: Soil predictions for the entire study area  ----  
+pred$pred <- as.factor(pred$pred)
+levels(pred$pred) <- c("MU3", "MU4", "MU1", "MU2")
 p <- sp::spplot(
   pred, "pred", col.regions = soil.colors, colorkey = list(space = "top"),
   scales = list(draw = TRUE, x = list(labels = pretty(sp::bbox(pred)[1, ]) / 1000),
@@ -845,13 +851,16 @@ p <- sp::spplot(
   panel = function (...) {
     lattice::panel.levelplot(...)
     lattice::panel.grid(h = -1, v = -1)
-    }) + latticeExtra::as.layer(sp::spplot(access_limit, 1, col.regions = "transparent"))
+    },
+  page = function (...) {
+    lattice::panel.text(x = 0.02, y = 0.95, label = "(a)")
+  }) + latticeExtra::as.layer(sp::spplot(access_limit, 1, col.regions = "transparent"))
 p$legend$top$args$key$width <- 1
 p$legend$top$args$key$height <- 1
 p$legend$top$args$key$labels$labels <- p$legend$top$args$key$labels$labels[c(3, 4, 1, 2)]
 p$legend$top$args$key$col <- p$legend$top$args$key$col[c(3, 4, 1, 2)]
 f <- 3
-p$par.settings <- list(fontsize = list(text = 12 * f * 1.5, points = 8 * f * 1.5))
+p$par.settings <- list(fontsize = list(text = 12 * f * 2, points = 8 * f * 2))
 dev.off()
 jpeg("res/fig/final_pred.jpg", width = 480 * f * 1.5, height = 480 * f * 1.2)
 p
@@ -871,11 +880,14 @@ p <- sp::spplot(
   panel = function (...) {
     lattice::panel.levelplot(...)
     lattice::panel.grid(h = -1, v = -1)
+  },
+  page = function (...) {
+    lattice::panel.text(x = 0.02, y = 0.95, label = "(b)")
   }) + latticeExtra::as.layer(sp::spplot(access_limit, 1, col.regions = "transparent"))
 p$legend$top$args$key$width <- 1
 p$legend$top$args$key$height <- 1
 f <- 3
-p$par.settings <- list(fontsize = list(text = 12 * f * 1.5, points = 8 * f * 1.5))
+p$par.settings <- list(fontsize = list(text = 12 * f * 2, points = 8 * f * 2))
 dev.off()
 jpeg("res/fig/final_entropy.jpg", width = 480 * f * 1.5, height = 480 * f * 1.2)
 p
